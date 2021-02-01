@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %}Accueil{% endblock %}
+{% block description %}{% endblock %}
+{% block image %}http://www.example.com/image.jpg{% endblock %}
+{% block type %}article ou website{% endblock %}
+{% block url %}http://www.example.com/{% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <h1>Blabla !</h1>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
