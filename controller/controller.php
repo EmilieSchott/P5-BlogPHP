@@ -6,11 +6,18 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
 // Alias the League Google OAuth2 provider class
 use League\OAuth2\Client\Provider\Google;
+// Import Emilie Schott classes into the global namespace
+use EmilieSchott\BlogPHP\Model\PostManager; 
 
+// Load Postmanager class
+require_once dirname(__DIR__) . '/model/PostManager.php';
+
+// Display homepage
 function homePage($twig) {
-    echo $twig->render('homeView.twig');
+    echo $twig->render('homeView.html.twig');
 }
 
+// Send a contact form
 function contactMe() {
     if(
         empty($_POST['name']) ||
@@ -116,5 +123,45 @@ function contactMe() {
 
 }
 
+
+// Determine the posts list and page number to display them :
+function postsPager() {
+    
+    //obtain posts :
+    $postManager = new postManager();
+    $posts=$postManager->getList();
+
+    //Determine pages number to display 3 posts at a time
+    $posts=array_chunk($posts, 3);
+    $p_pages_nbr=array_key_last($posts)+1;
+    
+    /*
+    // determine number of posts :
+    $posts_nbr=array_key_last($posts)+1;
+
+    // determine number of pages to display posts :
+    if ($posts_nbr%3 == 0) {
+        $p_pages_nbr=$posts_nbr/3;
+    }
+    else {
+        $p_pages_nbr=$posts_nbr/3;
+        $p_pages_nbr= (int)$p_pages_nbr+1;
+    } */
+
+    // Return datas :
+    return $postsPager = [
+        'posts' => $posts, 
+        'p_pages_nbr' => $p_pages_nbr
+    ];
+}
+
+// Display blog posts :
+function blog($twig, $page, $posts) {
+    $offset=$page-1;
+    $posts=array_slice($posts, $offset, 1);
+
+    $posts=$posts[0];
+    echo $twig->render('blogView.html.twig', ['posts' => $posts]);
+}
 
 
