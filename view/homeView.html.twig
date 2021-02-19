@@ -1,4 +1,4 @@
-{% extends "base.twig" %}
+{% extends "base.html.twig" %}
 
 {% block stylesheet %}
     <link href="public/theme/css/style.css" rel="stylesheet">
@@ -7,9 +7,9 @@
 {% block description %}
     Si vous souhaitez en apprendre plus sur l'autrice de ce blog, vous trouverez tout ce qu'il vous faut sur cette page.
 {% endblock %}
-{% block image %}http://www.example.com/image.jpg{% endblock %}
+{% block image %}<!-- <img src="public/theme/img/X.jpg" alt="description de X"/> -->{% endblock %}
 {% block type %}website{% endblock %}
-{% block url %}http://www.example.com/{% endblock %}
+{% block url %}<!-- http://www.example.com/-->{% endblock %}
 {% block author %}Emilie Schott{% endblock %}
 
 {% block head %}
@@ -24,7 +24,7 @@
     <section class="page-section clearfix">
         <div class="container">
             <div class="intro">
-                <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="public/theme/img/portrait ES.jpg" alt="">
+                <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="public/theme/img/portrait ES.jpg" alt="Portrait d'Emilie Schott"/>
                 <div class="intro-text col-11 text-center bg-faded mx-auto left-md-0 p-3 p-md-4 p-lg-5 rounded">
                     <h2 class="section-heading mb-4">
                         <span class="section-heading-upper">Développeuse de solutions</span>
