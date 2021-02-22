@@ -13,9 +13,10 @@ require __DIR__ . '/controller/controller.php';
 
 //Routing
 if (isset($_GET['action'])) {
+    $action = htmlspecialchars($_GET['action']);
     switch ($_GET['action']) {
         case 'homePage':
-            homePage($twig);
+            homePage($twig, $action);
             break;
 
         case 'contactMe':
@@ -37,7 +38,8 @@ if (isset($_GET['action'])) {
                 header('Location: index.php?action=blog&page=1');
             }
 
- /*            if (isset($_GET['page']) && is_int($_GET['page'])===true && $_GET['page'] > 0 && $_GET['page'] <= $p_pages_nbr) {
+ /*         //Why is_int() doesn't work ?   
+            if (isset($_GET['page']) && is_int($_GET['page'])===true && $_GET['page'] > 0 && $_GET['page'] <= $p_pages_nbr) {
                 $page=htmlspecialchars($_GET['page']); 
                 echo var_dump(__FILE__.' '. __LINE__);
             }   
@@ -46,16 +48,17 @@ if (isset($_GET['action'])) {
                 echo var_dump(__FILE__.' '. __LINE__);
             }*/
 
-            blog($twig, $page, $posts);
+            blog($twig, $page, $p_pages_nbr, $posts, $action);
             break;
 
         default:
-            homepage($twig);
+            homepage($twig, $action);
     }
 }
 
 else {
-    homePage($twig);
+    $action = 'homePage';
+    homePage($twig, $action);
 }
 
 

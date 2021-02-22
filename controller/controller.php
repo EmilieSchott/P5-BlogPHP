@@ -13,8 +13,8 @@ use EmilieSchott\BlogPHP\Model\PostManager;
 require_once dirname(__DIR__) . '/model/PostManager.php';
 
 // Display homepage
-function homePage($twig) {
-    echo $twig->render('homeView.html.twig');
+function homePage($twig, $action) {
+    echo $twig->render('homeView.html.twig', ['action' => $action]);
 }
 
 // Send a contact form
@@ -156,12 +156,13 @@ function postsPager() {
 }
 
 // Display blog posts :
-function blog($twig, $page, $posts) {
+function blog($twig, $page, $p_pages_nbr, $posts, $action) {
+    
     $offset=$page-1;
     $posts=array_slice($posts, $offset, 1);
 
     $posts=$posts[0];
-    echo $twig->render('blogView.html.twig', ['posts' => $posts]);
+    echo $twig->render('blogView.html.twig', ['posts' => $posts, 'page' => $page, 'pages' => $p_pages_nbr, 'action' => $action]);
 }
 
 
