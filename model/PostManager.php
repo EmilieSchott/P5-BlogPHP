@@ -19,7 +19,7 @@ class PostManager extends Manager {
     //Get posts list
     public function getList() {
         $posts=[];
-        $q=$this->db->query('SELECT id, title, standfirst, DATE_FORMAT(createdAt, "%d-%m-%Y") AS createdAt, picture FROM posts ORDER BY id DESC');
+        $q=$this->db->query('SELECT id, title, standfirst, DATE_FORMAT(createdAt, "%d-%m-%Y") AS createdAt, picture, pictureDescription FROM posts ORDER BY id DESC');
         while($datas=$q->fetch(\PDO::FETCH_ASSOC)) {
             $posts[] = new Post($datas);
         }
