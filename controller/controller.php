@@ -135,19 +135,6 @@ function postsPager() {
     $posts=array_chunk($posts, 3);
     $p_pages_nbr=array_key_last($posts)+1;
     
-    /*
-    // determine number of posts :
-    $posts_nbr=array_key_last($posts)+1;
-
-    // determine number of pages to display posts :
-    if ($posts_nbr%3 == 0) {
-        $p_pages_nbr=$posts_nbr/3;
-    }
-    else {
-        $p_pages_nbr=$posts_nbr/3;
-        $p_pages_nbr= (int)$p_pages_nbr+1;
-    } */
-
     // Return datas :
     return $postsPager = [
         'posts' => $posts, 
