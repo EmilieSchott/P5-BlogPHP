@@ -7,9 +7,9 @@
 {% block description %}
     Si vous souhaitez en apprendre plus sur l'autrice de ce blog, vous trouverez tout ce qu'il vous faut sur cette page.
 {% endblock %}
-{% block image %}<!-- <img src="public/theme/img/X.jpg" alt="description de X"/> -->{% endblock %}
+{% block image %}<!-- Summary card for socialmedia with large image must be at least 280x200px To complete: <img src="public/theme/img/X.jpg" alt="description de X"/>  -->{% endblock %}
 {% block type %}website{% endblock %}
-{% block url %}<!-- http://www.example.com/-->{% endblock %}
+{% block url %}<!-- Site URL to complete : http://www.example.com/ -->{% endblock %}
 {% block author %}Emilie Schott{% endblock %}
 
 {% block head %}
@@ -45,19 +45,14 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="page-section contact clearfix">
         <div class="container">
             <div class="contact-tool">
-                
-                <!-- contact form : -->
                 <div class="contact-inner text-center p-3 pb-5 p-md-4 p-lg-5 rounded">
-
                     <h2 class="section-heading mb-4">
                         <span class="section-heading-upper">Me</span>
                         <span class="section-heading-lower">contacter</span>
                     </h2>
-
                     <form name="sentMessage" id="contactForm" action="index.php?action=contactMe" method="post" novalidate>
                         <div class="row">
                             <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
@@ -66,34 +61,29 @@
                                     <input type="text" class="form-control" placeholder="Nom" name="name" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait.">
                                     <p class="help-block text-danger"></p>
                                 </div>
-
                                 <div class="form-group floating-label-form-group controls">
                                     <label>Prénom</label>
                                     <input type="text" class="form-control" placeholder="Prénom" name="firstName" id="firstName" required data-validation-required-message="Entrez votre prénom, s'il vous plait.">
                                     <p class="help-block text-danger"></p>
                                 </div>
-
                                 <div class="form-group floating-label-form-group controls">
                                     <label>Addresse email </label>
                                     <input type="email" class="form-control" placeholder="Addresse Email" name="email" id="email" required data-validation-required-message="Entrez votre email, s'il vous plait.">
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
-
                             <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
                                 <label>Message</label>
                                 <textarea rows="5" class="form-control" placeholder="Message" name="message" id="message" required data-validation-required-message="Tapez un message, s'il vous plait."></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
-
                         <div class="row">
                             <button type="submit" class="btn btn-primary btn-xl submit-button">Envoyer</button>
                         </div>            
                     </form>
                 </div>
             
-                <!-- social networks : -->
                 <div class="RS-border col-10 offset-1 col-md-6 offset-md-5 col-xl-6 offset-xl-4  rounded ">
                     <div class="contact-RS text-center p-3  rounded">
                         <h2 class="section-heading mb-4">
@@ -101,7 +91,6 @@
                             <span class="section-heading-lower">réseaux sociaux</span>
                         </h2>
 
-                        <!-- git hub : -->
                         <a href="https://github.com/EmilieSchott/">
                             <svg xmlns="http://www.w3.org/2000/svg"   viewBox="20 20.2 50 50">
                                 <g>
@@ -112,7 +101,6 @@
                             </svg>
                         </a>
 
-                        <!-- linked in : -->
                         <a href="https://www.linkedin.com/in/emilie-schott-91bb61192/">
                             <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="20 20.2 50 50">
                                 <g>    
@@ -128,7 +116,6 @@
                             </svg>
                         </a>
 
-                        <!-- twitter : -->
                         <a href="https://twitter.com/SchottEmilie1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="20 20.2 50 50">
                                 <g>    

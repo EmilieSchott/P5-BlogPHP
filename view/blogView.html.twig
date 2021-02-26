@@ -1,14 +1,13 @@
 {% extends "base.html.twig" %}
 
-<!-- header informations -->
 {% block stylesheet %}
     <link href="public/theme/css/style.css" rel="stylesheet">
 {% endblock %}
 {% block title %}Blog{% endblock %}
 {% block description %}Accédez aux différents billets du blog Web-Link.{% endblock %}
-{% block image %}  <img src="public/theme/img/X.jpg" alt="description de X"/> <!-- A compléter --> {% endblock %}  
+{% block image %} <!-- Summary card for socialmedia with large image must be at least 280x200px. To complete : <img src="public/theme/img/X.jpg" alt="description de X"/> --> {% endblock %}  
 {% block type %}website{% endblock %}
-{% block url %} http://www.example.com/ <!-- A compléter -->{% endblock %} 
+{% block url %} <!--Site URL to complete : http://www.example.com/ -->{% endblock %} 
 {% block author %}Emilie Schott{% endblock %}
 
 {% block head %}
@@ -20,7 +19,6 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Display posts list-->
     {% for post in posts %}
         <section class="page-section">
             <div class="container">
@@ -47,11 +45,9 @@
         </section> 
     {% endfor %}
 
-    <!-- Pages navigation.-->
     <section class="page-section page-nbr-section py-3 clearfix"> 
         <div class="container text-center">           
             <div class="text-center d-inline-flex">
-                <!-- left arrow : -->
                 {% if page > 1 %} <a href="index.php?action=blog&amp;page={{ page-1 }}"> {% else  %} {% endif  %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                         <g>
@@ -63,10 +59,8 @@
                     </svg>
                     {% if page > 1 %} </a> {% else  %} {% endif  %}
 
-                <!-- Display number of pages --> 
                 <div class="page-number mx-3 mt-2 mt-lg-1">{{ page }} / {{ pages }}</div>
 
-                <!-- right arrow : -->
                 {% if page < pages %} <a href="index.php?action=blog&amp;page={{ page+1 }}"> {% else  %} {% endif  %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                         <g>
