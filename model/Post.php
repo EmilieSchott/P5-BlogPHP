@@ -1,18 +1,13 @@
 <?php 
 
-// Define namespace of this class :
 namespace EmilieSchott\BlogPHP\Model;
 
-// Import Emilie Schott other class needed into the global namespace :
 use EmilieSchott\BlogPHP\Model\Hydrate;
 
-// Load other class needed:
 require_once __DIR__ . '/Hydrate.php';
 
-// Define this class :
 class Post extends Hydrate {
 
-    // Constants : 
     private $id;
     private $usersId;
     private $title;
@@ -22,45 +17,48 @@ class Post extends Hydrate {
     private $updatedAt;
     private $author;
     private $picture;
+    private $pictureDescription;
 
-    // Getters :
-    public function id() {
+    public function getId(): int {
         return $this->id;   
     }
 
-    public function usersId() {
+    public function getUsersId(): int {
         return $this->usersId;   
     }
 
-    public function title() {
+    public function getTitle(): string {
         return $this->title;   
     }
 
-    public function standFirst() {
+    public function getStandFirst(): string {
         return $this->standFirst;   
     }
 
-    public function content() {
+    public function getContent(): string {
         return $this->content;   
     }
 
-    public function createdAt() {
+    public function getCreatedAt(): string {
         return $this->createdAt;  
     }
 
-    public function updatedAt() {
+    public function getUpdatedAt(): string {
         return $this->updatedAt;   
     }
 
-    public function author() {
+    public function getAuthor(): string {
         return $this->author;   
     }
     
-    public function picture() {
+    public function getPicture(): string {
         return $this->picture;   
     }
 
-    // Setters :
+    public function getPictureDescription(): string {
+        return $this->pictureDescription;   
+    }
+
     public function setId(int $id) {
         if ($id > 0) {
             $this->id = $id;
@@ -74,7 +72,7 @@ class Post extends Hydrate {
     }
 
     public function setTitle(string $title) {  
-            $this->title = $title;
+        $this->title = $title;
     }
 
     public function setStandFirst(string $standFirst) {   
@@ -82,21 +80,19 @@ class Post extends Hydrate {
     }
 
     public function setContent(string $content) {
-            $this->content = $content;
+        $this->content = $content;
     }
 
-    // faut utiliser une classe standard PHP appelé DATETIME
-    public function setCreatedAt($createdAt) {
-        if (\preg_match("#^[0-3][0-9]-[0-1][0-9]-20[0-9][0-9]$#",$createdAt)) {
-            $this->createdAt = $createdAt;
-        }   
+    public function setCreatedAt(string $createdAt) {
+        $createdAt = new \DateTime($createdAt);        
+        $createdAt = $createdAt->format('d-m-Y');
+        $this->createdAt = $createdAt;
     }
 
-    // faut utiliser une classe standard PHP appelé DATETIME
-    public function setUpdatedAt($updatedAt) {
-        if (\preg_match("#^[0-3][0-9]-[0-1][0-9]-20[0-9][0-9] à [0-2][0-9]h[0-5][0-9]$#",$updatedAt)) {
-            $this->updatedAt = $updatedAt;
-        }   
+    public function setUpdatedAt(string $updatedAt) {
+        $updatedAt = new \DateTime($updatedAt);        
+        $updatedAt = $updatedAt->format('d-m-Y \à H\hi');
+        $this->updatedAt = $updatedAt;
     }
 
     public function setAuthor(string $author) {
@@ -107,4 +103,7 @@ class Post extends Hydrate {
         $this->picture = $picture;
     }
 
+    public function setPictureDescription(string $pictureDescription) {
+        $this->pictureDescription = $pictureDescription;
+    }
 }
