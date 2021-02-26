@@ -1,64 +1,53 @@
 <?php
+use EmilieSchott\BlogPHP\Model\PostManager;
+use EmilieSchott\BlogPHP\Controller\PublicController;
 
-// twig and PHPmailer composer:
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/controller/PublicController.php';
+require_once __DIR__ . '/model/PostManager.php';
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/view');
 $twig = new \Twig\Environment($loader, [
-    'cache' => false // __DIR__ . '/tmp',
+    'cache' => false // "False" to replace by " __DIR__ . '/tmp' " to enable cache.
 ]);
+$publicController=new PublicController();
+$postManager = new PostManager();
 
-//controller :
-require __DIR__ . '/controller/controller.php';
-
-//Routing
 if (isset($_GET['action'])) {
     $action = htmlspecialchars($_GET['action']);
-    switch ($_GET['action']) {
+    switch ($action) { 
         case 'homePage':
-            homePage($twig, $action);
+            $publicController->homePage($twig, $action);
             break;
 
         case 'contactMe':
-            contactMe();
+            $publicController->contactMe();
             break;
 
         case 'blog':
+            $postsPages = $publicController->getPosts($postManager);
+            $posts = $postsPages['datasPages'];
+            $pagesNbr = $postsPages['pagesNbr'];
 
-            // NOUVELLE VERSION
-            $postsPager=postsPager(); 
-            $posts = $postsPager['posts'];
-            $p_pages_nbr = $postsPager['p_pages_nbr'];
-
-            if (isset($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $p_pages_nbr) {
-                $page=(int) htmlspecialchars($_GET['page']); // htmlspecialchars nécessaire vu toutes les précautions du if ? Pense pas...
+            if (isset($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $pagesNbr) {
+                $page=(int) $_GET['page']; 
             }
             else {
                 $page=1;
                 header('Location: index.php?action=blog&page=1');
             }
 
- /*         //Why is_int() doesn't work ?   
-            if (isset($_GET['page']) && is_int($_GET['page'])===true && $_GET['page'] > 0 && $_GET['page'] <= $p_pages_nbr) {
-                $page=htmlspecialchars($_GET['page']); 
-                echo var_dump(__FILE__.' '. __LINE__);
-            }   
-            else {
-                $page=1;
-                echo var_dump(__FILE__.' '. __LINE__);
-            }*/
-
-            blog($twig, $page, $p_pages_nbr, $posts, $action);
+            $publicController->blog($postManager, $twig, $page, $pagesNbr, $posts, $action);
             break;
 
         default:
-            homepage($twig, $action);
+        $publicController->homePage($twig, $action);
     }
 }
 
 else {
     $action = 'homePage';
-    homePage($twig, $action);
+    $publicController->homePage($twig, $action);
 }
 
 
