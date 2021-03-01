@@ -4,8 +4,6 @@ namespace EmilieSchott\BlogPHP\Model;
 
 use EmilieSchott\BlogPHP\Model\Hydrate;
 
-require_once __DIR__ . '/Hydrate.php';
-
 class Post extends Hydrate {
 
     private $id;

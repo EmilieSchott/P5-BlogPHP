@@ -5,9 +5,6 @@ namespace EmilieSchott\BlogPHP\Model;
 use EmilieSchott\BlogPHP\Model\Manager; 
 use EmilieSchott\BlogPHP\Model\Post;
 
-require_once __DIR__ . '/Manager.php';
-require_once __DIR__ . '/Post.php';
-
 class PostManager extends Manager {
 
     public function getList(): array {
