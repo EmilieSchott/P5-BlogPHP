@@ -25,9 +25,9 @@ abstract class Manager {
     }
 
     public function displayPage(array $datasPages, int $page): array {
-    $offset=$page-1;
-    $datasPage=array_slice($datasPages, $offset, 1);
-    $datasPage=$datasPage[0];
-    return $datasPage;
+        $offset=$page-1;
+        $datasPage=array_slice($datasPages, $offset, 1);
+        $datasPage=$datasPage[0];
+        return $datasPage;
     }
 }
