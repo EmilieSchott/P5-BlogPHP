@@ -2,12 +2,13 @@
 
 namespace EmilieSchott\BlogPHP\Model;
 
+use EmilieSchott\BlogPHP\Model\PDOFactory;
+
 abstract class Manager {
     protected $db;
     
     public function __construct() {
-        $db=new \PDO('mysql:host=localhost;dbname=p5_blog_php;port=3308;charset=utf8', 'root', '');
-        $this->db=$db;
+        $this->db=PDOFactory::getDbConnection();
     }
 
     public function paginator(array $datas, int $itemsPerPage): array {
