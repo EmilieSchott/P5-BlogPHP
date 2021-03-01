@@ -29,8 +29,6 @@ class PublicController {
         $email_address = htmlspecialchars($_POST['email']);
         $message = htmlspecialchars($_POST['message']);
 
-        date_default_timezone_set('Etc/UTC');
-
         $mail = new PHPMailer();
         $mail->isSMTP();
         $mail->SMTPDebug = SMTP::DEBUG_OFF;

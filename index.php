@@ -11,6 +11,8 @@ $twig = new \Twig\Environment($loader, [
 $publicController=new PublicController();
 $postManager = new PostManager();
 
+date_default_timezone_set('Etc/UTC');
+
 if (isset($_GET['action'])) {
     $action = htmlspecialchars($_GET['action']);
     switch ($action) { 
