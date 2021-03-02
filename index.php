@@ -1,34 +1,53 @@
 <?php
+use EmilieSchott\BlogPHP\Model\PostManager;
+use EmilieSchott\BlogPHP\Controller\PublicController;
 
-// twig and PHPmailer composer:
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/view');
 $twig = new \Twig\Environment($loader, [
-    'cache' => false // __DIR__ . '/tmp',
+    'cache' => false // "False" to replace by " __DIR__ . '/tmp' " to enable cache.
 ]);
+$publicController=new PublicController();
+$postManager = new PostManager();
 
-//controller :
-require('controller/controller.php');
+date_default_timezone_set('Etc/UTC');
 
-//Routing
 if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
+    $action = htmlspecialchars($_GET['action']);
+    switch ($action) { 
         case 'homePage':
-            homePage($twig);
+            $publicController->homePage($twig, $action);
             break;
 
         case 'contactMe':
-            contactMe();
+            $publicController->contactMe();
+            break;
+
+        case 'blog':
+            $postsPages = $publicController->getPosts($postManager);
+            $posts = $postsPages['datasPages'];
+            $pagesNbr = $postsPages['pagesNbr'];
+
+            if (isset($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $pagesNbr) {
+                $page=(int) $_GET['page']; 
+            }
+            else {
+                $page=1;
+                header('Location: index.php?action=blog&page=1');
+            }
+
+            $publicController->blog($postManager, $twig, $page, $pagesNbr, $posts, $action);
             break;
 
         default:
-            homepage($twig);
+        $publicController->homePage($twig, $action);
     }
 }
 
 else {
-    homePage($twig);
+    $action = 'homePage';
+    $publicController->homePage($twig, $action);
 }
 
 
