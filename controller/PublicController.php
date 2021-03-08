@@ -68,19 +68,16 @@ class PublicController {
         } else {
             echo 'Message sent!';
         }
-
         header('Location: index.php');
     }
 
     public function getPosts(object $postManager): array {
         $posts = $postManager->getList();
-        $postsPages = $postManager->paginator($posts, 3); 
-
-        return $postsPages;
+        return $posts;
     }
 
     public function blog(object $postManager, object $twig, int $page, int $pagesNbr, array $posts, string $action) {  
-        $posts = $postManager->displayPage($posts, $page); 
+        $posts = $postManager->accessPage($posts, $page); 
         echo $twig->render('blogView.html.twig', [
             'posts' => $posts, 
             'page' => $page, 

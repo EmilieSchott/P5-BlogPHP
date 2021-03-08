@@ -87,7 +87,7 @@ class Post extends Hydrate {
         $this->createdAt = $createdAt;
     }
 
-    public function setUpdatedAt(string $updatedAt) {
+    public function setUpdatedAt(?string $updatedAt) {
         $updatedAt = new \DateTime($updatedAt);        
         $updatedAt = $updatedAt->format('d-m-Y \à H\hi');
         $this->updatedAt = $updatedAt;
