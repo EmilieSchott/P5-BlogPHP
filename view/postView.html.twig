@@ -1,0 +1,120 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} {{ post.title }} {% endblock %}
+{% block description %} {{ post.standFirst }} {% endblock %}
+{% block image %} src="public/theme/img/{{ post.picture }}" alt="{{ post.pictureDescription }}" {% endblock %}
+{% block type %} article {% endblock %}
+{% block url %} <!-- TO  DO : Modify URL --> https://www.example.com/index.php?action=post&amp;id={{ post.id }}  {% endblock %}
+{% block author %} {{ post.author }} {% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+       
+    <section class="page-section post-item">
+        <div class="container">
+            <img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/theme/img/{{ post.picture }}" alt="{{ post.pictureDescription }}">
+                <div class="post-item-content">
+                    <div class="row">
+                        <div class="bg-faded col-10 col-lg-7 col-xl-8 mx-auto p-3 offset-1 offset-lg-0 p-md-4 p-xl-4 pb-4 pb-lg-4 rounded ">
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">Publié le {{ post.createdAt }}</span>
+                                <span class="section-heading-lower">{{ post.title }}</span>
+                                <p>Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
+                            </h2>
+                            <p> <strong>{{ post.standFirst }}</strong></p>
+                            <p class="mb-0">{{ post.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    
+    <section class="page-section comments clearfix">
+        <div class="container">
+            <div class="comment-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
+                {% if entry is not empty and entry == 1 %} 
+                    <div class="comment-message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Merci !</span>
+                            <span class="section-heading-lower">Votre commentaire a bien été enregistré.</span>
+                            <p>
+                                Il sera publié une fois validé par un administrateur.
+                            </p>
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}#commentForm">En poster un autre ? </a>
+                    </div> 
+                {% elseif entry is not empty and entry == 0 %} 
+                    <div class="comment-message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Un problème est survenu :</span>
+                            <span class="section-heading-lower"> Votre commentaire n'a pas pu être enregistré.</span>
+                            <p>
+                                Nous sommes désolés de cet incident.
+                            </p>
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}#commentForm">Réessayer ? </a>
+                    </div> 
+                {% else %}
+                    <h2 class="section-heading mb-4 ">
+                        <span class="section-heading-upper">Laisser un</span>
+                        <span class="section-heading-lower">commentaire</span>
+                        <p>
+                            Il sera soumis à validation avant publication.
+                        </p>
+                    </h2>
+                    <form name="sentComment" id="commentForm" action="index.php?action=addComment" method="post" novalidate>
+                        <div class="row">
+                            <div class="form-group col-xl-12 mx-auto col-xs-12 floating-label-form-group controls">
+                                <label>Nom</label>
+                                <input type="text" class="form-control" placeholder="Nom" name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="form-group col-12 mx-auto floating-label-form-group controls">
+                                <label>Message</label>
+                                <textarea rows="5" class="form-control" placeholder="Commentaire" name="content" id="comment" required data-validation-required-message="Tapez un commentaire, s'il vous plait."></textarea>
+                                <p class="help-block text-danger"></p>
+                                <input type="hidden" name="postId" value="{{ post.id }}"/>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3">Envoyer</button>
+                        </div>            
+                    </form>
+                {% endif %}
+            </div>
+            {% for comment in comments %}
+            <div class="my-4 {% if loop.index is odd %} {% else %}d-flex justify-content-end {% endif %}">
+                <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                    <h2 class="section-heading">
+                        <span class="section-heading-upper">Le {{ comment.createdAt }}</span>
+                        <span class="section-heading-lower">{{ comment.author }}</span>
+                    </h2>
+                    <p class="mb-3">
+                        {{ comment.content }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
