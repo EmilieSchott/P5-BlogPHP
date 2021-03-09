@@ -85,4 +85,49 @@ class PublicController {
             'action' => $action
         ]);
     }
+ 
+    public function post(object $postManager, object $commentManager, object $twig, array $datas) {
+        if ($datas['id']>0) {
+            $post = $postManager->getPost($datas['id']);
+            $datas['post'] = $post[0];
+            if (is_null($datas['post'])) {
+                header('Location: index.php?action=blog&page=1');
+            }
+
+            $comments = $commentManager->getComments($datas['id']);
+            if (!is_null($comments['pagesNbr'])) {
+                $datas['pagesNbr'] = $comments['pagesNbr'];
+                if (!array_key_exists('page', $datas) || $datas['page']<=0 || $datas['page']>$datas['pagesNbr']) {
+                    $datas['page']=1;
+                }
+                $datas['comments'] = $commentManager->accessPage($comments['datasPages'], $datas['page']);
+            } else {
+                if (array_key_exists('page', $datas)) {
+                    unset($datas['page']);
+                }
+            }
+            
+            if (array_key_exists('entry', $datas) && ($datas['entry']<0 || $datas['entry']>1)) {
+                unset($datas['entry']);
+            }
+
+            echo $twig->render('postView.html.twig', $datas);
+        } else {
+            header('Location: index.php?action=blog&page=1');
+        }
+    }   
+
+    public function addComment(object $commentManager): void {
+        $comment = [
+            'author' => $_POST['author'],
+            'content' => $_POST['content'],
+            'postId' => $_POST['postId']
+        ];
+        $entry=$commentManager->addComment($comment);
+        if ($entry === false) {
+            header('Location: index.php?action=post&id='.$comment['postId'].'&entry=0&#addComment');
+        } else {
+            header('Location: index.php?action=post&id='.$comment['postId'].'&entry=1&#addComment');
+        }
+    }
 }

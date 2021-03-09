@@ -20,16 +20,23 @@ class PostManager extends Manager {
         return $postsPages;
     }
 
-    public function accessPage(array $posts, int $page): array {
-        $posts = $this->paginator->displayPage($posts, $page); 
-        return $posts;
+    public function accessPage(array $postsPages, int $page): array {
+        $postsPage = $this->paginator->displayPage($postsPages, $page); 
+        return $postsPage;
     }
 
-    public function getPost(int $id): object {
+    public function getPost(int $id): array {
+        $post=[];
         $q = $this->db->prepare('SELECT * FROM posts WHERE id = ?');
         $q->execute([$id]);
-        $post = $q->fetch();
-        $post = new Post($post); 
+        $r = $q->fetch();
+
+        if ($r == true) {
+            $post[] = new Post($r);
+        } else {
+            $post[] = null;
+        }
+
         return $post;
     }
 
