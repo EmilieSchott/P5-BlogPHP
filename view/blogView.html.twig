@@ -20,7 +20,7 @@
 
 {% block content %}
     {% for post in posts %}
-        <section class="page-section">
+        <section class="page-section" id="{{ post.id }}">
             <div class="container">
                 <div class="post-item">
                     <div class="post-item-title d-flex col-10 col-lg-auto p-0 mx-auto {% if loop.index is odd %} ml-sm-3 mr-lg-auto {% else %} justify-content-sm-end mr-sm-3 ml-sm-auto {% endif %}">
@@ -36,7 +36,7 @@
                         <div class="bg-faded col-10 col-lg-12 offset-1 offset-sm-0 p-3 p-md-4 p-xl-5 pb-4 pb-lg-5 rounded ">
                             <p class="mb-0">{{ post.standFirst }}</p> 
                             <div class="blog-button d-flex "> 
-                                <a class="btn btn-primary btn-xl mx-auto mr-lg-0" href="index.php?action=post&amp;id={{ post.id }}">Lire la suite...</a>
+                                <a class="btn btn-primary btn-xl mx-auto mr-lg-0" href="index.php?action=post&amp;id={{ post.id }}&amp;blogPage={{ page }}">Lire la suite...</a>
                             </div>
                         </div>
                     </div>

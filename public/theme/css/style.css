@@ -592,7 +592,7 @@ g:active .intern {
     position: relative;
     z-index: 0;
     margin-top: -2rem;
-    margin-bottom : 0rem;
+    margin-bottom : 4rem;
 }
 
 .blog-button {
@@ -616,7 +616,7 @@ g:active .intern {
 
     .post-item .post-item-description {
         max-width: 63vw; 
-        margin-bottom : 110px;
+        margin-bottom : 0rem;
     }
 
     .blog-button {
@@ -672,6 +672,24 @@ g:active .intern {
 .comment-message {
     margin-top: 77px;
     margin-bottom: 77px;
+}
+
+.post-button {
+    width: 100%;
+    position: absolute;
+    bottom: -1.5rem; 
+}
+
+@media (min-width: 767px) { 
+    .post-button {
+        right: 16px;
+    }
+}
+
+@media (min-width: 992px) {
+    .post-button {
+        bottom: -2rem; 
+    }
 }
 
 @media (min-width: 767px) {
