@@ -3,14 +3,15 @@
 namespace EmilieSchott\BlogPHP\Model;
 
 use EmilieSchott\BlogPHP\Paginator\Paginator;
-use EmilieSchott\BlogPHP\Model\PDOFactory;
 
-abstract class Manager extends Paginator {
+abstract class Manager
+{
     protected $db;
     protected $paginator;
     
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = PDOFactory::getDbConnection();
-        $this->paginator = new Paginator(); 
+        $this->paginator = new Paginator();
     }
 }

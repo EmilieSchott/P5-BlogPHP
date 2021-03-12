@@ -60,7 +60,7 @@
                         </h2>
                     </div>
                     <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}#addComment">En poster un autre ? </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">En poster un autre ? </a>
                     </div> 
                 {% elseif entry is not empty and entry == 0 %} 
                     <div class="comment-message" >
@@ -73,7 +73,7 @@
                         </h2>
                     </div>
                     <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}#addComment">Réessayer ? </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">Réessayer ? </a>
                     </div> 
                 {% else %}
                     <h2 class="section-heading mb-4 ">
@@ -83,11 +83,11 @@
                             Il sera soumis à validation avant publication.
                         </p>
                     </h2>
-                    <form name="sentComment" id="commentForm" action="index.php?action=addComment" method="post" novalidate>
+                    <form name="sentComment" id="commentForm" action="index.php?action=addComment" method="post">
                         <div class="row">
                             <div class="form-group col-xl-12 mx-auto col-xs-12 floating-label-form-group controls">
                                 <label>Nom</label>
-                                <input type="text" class="form-control" placeholder="Nom" name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait.">
+                                <input type="text" class="form-control" placeholder="Nom" name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
