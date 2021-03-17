@@ -107,7 +107,7 @@ class PublicController
 
             echo $twig->render('postView.html.twig', $datas);
         } else {
-            header('Location: index.php?action=blog&page=1');
+            throw new \Exception('L\'identifiant du billet indiqué n\'est pas valide.');
         }
     }
 
@@ -116,13 +116,24 @@ class PublicController
         $post = $postManager->getPost($datas['id']);
         $datas['post'] = $post[0];
         if (is_null($datas['post'])) {
-            header('Location: index.php?action=blog&page=1');
+            throw new \Exception('Le billet demandé n\'a pas pu être récupéré.');
+        }
+        
+        try {
+            $comments = $commentManager->getComments($datas['id']);
+        } catch (\Exception $e) {
+            $datas['commentsException'] = 'Le(s) commentaire(s) n\'a/ont pas pu être récupéré(s)';
         }
 
-        $comments = $commentManager->getComments($datas['id']);
         if (!is_null($comments['pagesNbr'])) {
             $datas['pagesNbr'] = $comments['pagesNbr'];
-            if (!array_key_exists('page', $datas) || $datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+
+            try {
+                if (!array_key_exists('page', $datas) || $datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                    throw new \Exception('La page de commentaires indiquée n\'existe pas.');
+                }
+            } catch (\Exception $e) {
+                $datas['invalidCommentsPage'] = $e->getMessage();
                 $datas['page'] = 1;
             }
             $datas['comments'] = $commentManager->accessPage($comments['datasPages'], $datas['page']);
@@ -133,16 +144,17 @@ class PublicController
 
     public function addComment(CommentManager $commentManager): void
     {
-        $comment = [
+        $datas = [
             'author' => $_POST['author'],
             'content' => $_POST['content'],
             'postId' => $_POST['postId']
         ];
-        $entry = $commentManager->addComment($comment);
-        if ($entry === false) {
-            header('Location: index.php?action=post&id=' . $comment['postId'] . '&entry=0&#addComment');
-        } else {
-            header('Location: index.php?action=post&id=' . $comment['postId'] . '&entry=1&#addComment');
+
+        try {
+            $commentManager->addComment($datas);
+        } catch (\PDOException $PDO) {
+            header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
         }
+        header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=1&#addComment');
     }
 }

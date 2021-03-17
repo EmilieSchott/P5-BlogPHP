@@ -2,6 +2,8 @@
 
 namespace EmilieSchott\BlogPHP\Model;
 
+use Exception;
+
 class Comment extends Hydrate
 {
     private $id;
@@ -43,24 +45,22 @@ class Comment extends Hydrate
     
     public function setId(int $id)
     {
-        $secure = htmlspecialchars($id);
-        if ($secure > 0) {
-            $this->id = $secure;
-        }
+        $this->id = $id;
     }
 
     public function setPostId(int $postId)
     {
-        $secure = htmlspecialchars($postId);
-        if ($secure > 0) {
-            $this->postId = $secure;
-        }
+        $this->postId = $postId;
     }
 
     public function setAuthor(string $author)
     {
-        $secure = htmlspecialchars($author);
-        $this->author = $secure;
+        if (\strlen($author) <= 45) {
+            $secure = htmlspecialchars($author);
+            $this->author = $secure;
+        } else {
+            throw new Exception('Le nom de l\'auteur doit faire moins de 45 caractères.');
+        }
     }
 
     public function setContent(string $content)
@@ -78,7 +78,6 @@ class Comment extends Hydrate
 
     public function setValidated(bool $validated)
     {
-        $secure = htmlspecialchars($validated);
-        $this->validated = $secure;
+        $this->validated = $validated;
     }
 }

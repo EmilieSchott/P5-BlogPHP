@@ -67,9 +67,7 @@ class Post extends Hydrate
 
     public function setId(int $id)
     {
-        if ($id > 0) {
-            $this->id = $id;
-        }
+        $this->id = $id;
     }
 
     public function setUsersId(int $usersId)

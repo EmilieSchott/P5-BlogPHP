@@ -27,14 +27,20 @@ class CommentManager extends Manager
         return $commentsPage;
     }
 
-    public function addComment(array $comment): void
+    public function addComment(array $datas): void
     {
+        try {
+            $comment = new Comment($datas);
+        } catch (\Exception $e) {
+            $_SESSION['commentException'] = $e->getMessage();
+            header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
+        }
+
         $q=$this->db->prepare('INSERT INTO comments (posts_id, author, content) VALUES (:postId, :author, :content)');
-        $q->execute([
-            'postId' => $comment['postId'],
-            'author' => $comment['author'],
-            'content' => $comment['content']
-        ]);
+        $q->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
+        $q->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
+        $q->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
+        $q->execute();
     }
 
     //Delete a comment

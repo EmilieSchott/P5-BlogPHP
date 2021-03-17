@@ -66,9 +66,9 @@
                     <div class="comment-message" >
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-upper">Un problème est survenu :</span>
-                            <span class="section-heading-lower"> Votre commentaire n'a pas pu être enregistré.</span>
+                            <span class="section-heading-lower"> Votre commentaire n'a pas pu être enregistré. </span>
                             <p>
-                                Nous sommes désolés de cet incident.
+                                {% if commentException is empty %} Nous sommes désolés de cet incident. {% else %} {{ commentException }} {% endif %} 
                             </p>
                         </h2>
                     </div>
@@ -106,7 +106,20 @@
                 {% endif %}
             </div>
 
-            {% if page is not empty %}
+            {% if page is not empty or commentsException is not empty %}
+                {% if invalidCommentsPage is not empty %}
+                    <div class="my-4 d-flex justify-content-center">
+                        <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                            <h2 class="section-heading">
+                                <span class="section-heading-upper text-center" >Un problème est survenu :</span>
+                                <span class="section-heading-lower text-center"> {{ invalidCommentsPage }} </span>
+                                <p class="text-center">
+                                    Vous avez été redirigé.
+                                </p>
+                            </h2>
+                        </div>
+                    </div>
+                {% endif %}
                 <div id="commentsPage">
                     {% for comment in comments %}
                         <div class="my-4 {% if loop.index is odd %} {% else %}d-flex justify-content-end {% endif %}">
@@ -119,6 +132,19 @@
                             </div>
                         </div>
                     {% endfor %}
+                    {% if commentsException is not empty %}
+                        <div class="my-4 d-flex justify-content-center">
+                            <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                                <h2 class="section-heading">
+                                    <span class="section-heading-upper text-center" >Un problème est survenu :</span>
+                                    <span class="section-heading-lower text-center"> {{ commentsException }} </span>
+                                    <p class="text-center">
+                                         Nous sommes désolés de cet incident.
+                                    </p>
+                                </h2>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="container text-center pt-4 pt-lg-5">           
