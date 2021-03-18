@@ -32,12 +32,7 @@ class PostManager extends Manager
         $q = $this->db->prepare('SELECT * FROM posts WHERE id = ?');
         $q->execute([$id]);
         $r = $q->fetch();
-
-        if (!empty($r)) {
-            $post[] = new Post($r);
-        } else {
-            $post[] = null;
-        }
+        $post[] = new Post($r);
 
         return $post;
     }
