@@ -72,52 +72,64 @@ class Post extends Hydrate
 
     public function setUsersId(int $usersId)
     {
-        if ($usersId > 0) {
-            $this->usersId = $usersId;
-        }
+        $this->usersId = $usersId;
     }
 
     public function setTitle(string $title)
     {
-        $this->title = $title;
+        if (\strlen($title) <= 150) {
+            $this->title = \nl2br(htmlspecialchars($title));
+        } else {
+            throw new \Exception("Le titre doit faire moins de 150 caractères.");
+        }
     }
 
     public function setStandFirst(string $standFirst)
     {
-        $this->standFirst = $standFirst;
+        $this->standFirst = \nl2br(htmlspecialchars($standFirst));
     }
 
     public function setContent(string $content)
     {
-        $this->content = $content;
+        $this->content = \nl2br(htmlspecialchars($content));
     }
 
     public function setCreatedAt(string $createdAt)
     {
-        $createdAt = new \DateTime($createdAt);
-        $createdAt = $createdAt->format('d-m-Y');
-        $this->createdAt = $createdAt;
+        $createdAtDateTime = new \DateTime($createdAt);
+        $this->createdAt = $createdAtDateTime->format('d-m-Y');
     }
 
     public function setUpdatedAt(?string $updatedAt)
     {
-        $updatedAt = new \DateTime($updatedAt);
-        $updatedAt = $updatedAt->format('d-m-Y \à H\hi');
-        $this->updatedAt = $updatedAt;
+        $updatedAtDateTime = new \DateTime($updatedAt);
+        $this->updatedAt = $updatedAtDateTime->format('d-m-Y \à H\hi');
     }
 
     public function setAuthor(string $author)
     {
-        $this->author = $author;
+        if (\strlen($author) <= 45) {
+            $this->author = htmlspecialchars($author);
+        } else {
+            throw new \Exception("Le nom de l'auteur doit faire moins de 45 caractères.");
+        }
     }
     
     public function setPicture(string $picture)
     {
-        $this->picture = $picture;
+        if (\strlen($picture) <= 150) {
+            $this->picture = htmlspecialchars($picture);
+        } else {
+            throw new \Exception("Le nom de l'image doit faire moins de 150 caractères.");
+        }
     }
 
     public function setPictureDescription(string $pictureDescription)
     {
-        $this->pictureDescription = $pictureDescription;
+        if (\strlen($pictureDescription) <= 250) {
+            $this->pictureDescription = htmlspecialchars($pictureDescription);
+        } else {
+            throw new \Exception("La description de l'image doit faire moins de 250 caractères.");
+        }
     }
 }

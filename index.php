@@ -22,10 +22,10 @@ date_default_timezone_set('Etc/UTC');
 
 try {
     if (isset($_GET['action'])) {
-        $action = htmlspecialchars($_GET['action']);
-        switch ($action) {
+        $datas['action'] = htmlspecialchars($_GET['action']);
+        switch ($datas['action']) {
             case 'homePage':
-                $publicController->homePage($twig, $action);
+                $publicController->homePage($twig, $datas['action']);
 
                 break;
             case 'contactMe':
@@ -33,18 +33,12 @@ try {
 
                 break;
             case 'blog':
-                $postsPages = $publicController->getPosts($postManager);
-                $posts = $postsPages['datasPages'];
-                $pagesNbr = $postsPages['pagesNbr'];
-
-                if (isset($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $pagesNbr) {
-                    $page=(int) $_GET['page'];
-                } else {
-                    $page = 1;
-                    header('Location: index.php?action=blog&page=1');
+                $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                if (isset($_SESSION['blogException'])) {
+                    $datas['blogException'] = $_SESSION['blogException'];
+                    unset($_SESSION['blogException']);
                 }
-
-                $publicController->blog($postManager, $twig, $page, $pagesNbr, $posts, $action);
+                $publicController->blog($postManager, $twig, $datas);
 
                 break;
             case 'post':

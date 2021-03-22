@@ -14,6 +14,11 @@ class PostManager extends Manager
         while ($datas = $q->fetch(\PDO::FETCH_ASSOC)) {
             $posts[] = new Post($datas);
         }
+
+        if ($posts === null) {
+            throw new \Exception("Aucun billet n'a pu être récupéré.");
+        }
+
         $postsPages = $this->paginator->paginator($posts, 3);
         
         return $postsPages;
