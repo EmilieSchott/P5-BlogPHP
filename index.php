@@ -65,7 +65,6 @@ try {
                 } catch (\Exception $blogException) {
                     $_SESSION['blogException'] = $blogException;
                     header('Location: index.php?action=blog&page=1');
-                    // TO DO : display exception message on blog page and unset $_SESSION.
                 }
 
                 break;
