@@ -19,31 +19,30 @@
 {% endblock %}
 
 {% block content %}
-       
     <section class="page-section post-item">
         <div class="container">
             <img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/theme/img/{{ post.picture }}" alt="{{ post.pictureDescription }}">
-                <div class="post-item-content">
-                    <div class="row">
-                        <div class="bg-faded col-10 col-lg-7 col-xl-8 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 pb-4 pb-lg-5 rounded">
-                            <h2 class="section-heading mb-4">
-                                <span class="section-heading-upper">Publié le {{ post.createdAt }}</span>
-                                <span class="section-heading-lower">{{ post.title }}</span>
-                                <p>Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
-                            </h2>
-                            <p> <strong>{{ post.standFirst }}</strong></p>
-                            <p class="mb-0">{{ post.content }}</p>
-                            <div class="row post-button">
-                                <a 
-                                    class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" 
-                                    href="index.php?action=blog&amp;{% if blogPage is not empty %}page={{ blogPage }}#{{ post.id }}{% else %}{% endif %}">
-                                    Lire un autre post ? 
-                                </a>
-                            </div> 
-                        </div>
+            <div class="post-item-content">
+                <div class="row">
+                    <div class="bg-faded col-10 col-lg-7 col-xl-8 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 pb-4 pb-lg-5 rounded">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Publié le {{ post.createdAt }}</span>
+                            <span class="section-heading-lower">{{ post.title | raw }}</span>
+                            <p>Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
+                        </h2>
+                        <p> <strong>{{ post.standFirst | raw }}</strong></p>
+                        <p class="mb-0">{{ post.content | raw }}</p>
+                        <div class="row post-button">
+                            <a 
+                                class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" 
+                                href="index.php?action=blog&amp;{% if blogPage is not empty %}page={{ blogPage }}#{{ post.id }}{% else %}{% endif %}">
+                                Lire un autre post ? 
+                            </a>
+                        </div> 
                     </div>
                 </div>
             </div>
+        </div>
     </section>
     
     <section class="page-section comments clearfix">

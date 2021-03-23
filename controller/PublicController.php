@@ -78,22 +78,28 @@ class PublicController
         header('Location: index.php');
     }
 
-    public function getPosts(PostManager $postManager): array
+    public function blog(PostManager $postManager, Environment $twig, array $datas)
     {
-        $posts = $postManager->getList();
+        try {
+            $postsPages = $postManager->getList();
+        } catch (\Exception $e) {
+            $datas['blogException'] = $e->getMessage();
+        }
+        $datas['posts'] = $postsPages['datasPages'];
+        $datas['pagesNbr'] = $postsPages['pagesNbr'];
 
-        return $posts;
-    }
+        try {
+            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                $datas['page'] = 1;
 
-    public function blog(PostManager $postManager, Environment $twig, int $page, int $pagesNbr, array $posts, string $action)
-    {
-        $posts = $postManager->accessPage($posts, $page);
-        echo $twig->render('blogView.html.twig', [
-            'posts' => $posts,
-            'page' => $page,
-            'pages' => $pagesNbr,
-            'action' => $action
-        ]);
+                throw new \Exception("La page indiquée n'existe pas.");
+            }
+        } catch (\Exception $e) {
+            $datas['blogException'] = $e->getMessage();
+        }
+
+        $datas['posts'] = $postManager->accessPage($datas['posts'], $datas['page']);
+        echo $twig->render('blogView.html.twig', $datas);
     }
  
     public function post(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
