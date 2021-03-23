@@ -45,11 +45,9 @@ try {
                 try {
                     if (isset($_GET['id'])) {
                         $datas['id'] = (int) $_GET['id'];
+                        $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                         if (isset($_GET['blogPage'])) {
                             $datas['blogPage'] = (int) $_GET['blogPage'];
-                        }
-                        if (isset($_GET['page'])) {
-                            $datas['page'] = (int) $_GET['page'];
                         }
                         if (isset($_GET['entry'])) {
                             $datas['entry'] = (int) $_GET['entry'];
