@@ -438,13 +438,13 @@ p {
 }
 
 
-.contact .submit-button {   
+.contact .submit-button, .contact .retry-button {   
     width:50%;
     margin: auto;
 }
 
 @media (min-width: 768px) {
-    .contact .submit-button {   
+    .contact .submit-button, .contact .retry-button {   
         width:28%;
         margin-bottom: 1rem;
         margin-left: 0px;
@@ -455,7 +455,7 @@ p {
 }
 
 @media (min-width:1200px) {
-    .contact .submit-button {
+    .contact .submit-button, .contact .retry-button {
         width:25%;
         margin-top: 1rem;
         margin-bottom: 1rem;

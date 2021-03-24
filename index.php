@@ -25,12 +25,29 @@ try {
         $datas['action'] = htmlspecialchars($_GET['action']);
         switch ($datas['action']) {
             case 'homePage':
-                $publicController->homePage($twig, $datas['action']);
+                if (isset($_SESSION['homePageException'])) {
+                    $datas['homePageException'] = $_SESSION['homePageException'];
+                    unset($_SESSION['homePageException']);
+                }
+                if (isset($_SESSION['contactFormMessage'])) {
+                    $datas['contactFormMessage'] = $_SESSION['contactFormMessage'];
+                    unset($_SESSION['contactFormMessage']);
+                }
+                if (isset($_GET['send'])) {
+                    $datas['send'] = (int) $_GET['send'];
+                }
+                $publicController->homePage($twig, $datas);
 
                 break;
             case 'contactMe':
-                $publicController->contactMe();
-
+                try {
+                    $publicController->contactMe();
+                    header('Location: index.php?action=homePage&send=1#contact-tool');
+                } catch (\Exception $e) {
+                    $_SESSION['contactFormMessage'] = $e->getMessage();
+                    header('Location: index.php?action=homePage&send=0#contact-tool');
+                }
+                
                 break;
             case 'blog':
                 $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -71,15 +88,14 @@ try {
 
                 break;
             default:
-                throw new Exception('l\'action indiquée n\'est pas valide.');
+                throw new Exception("L'action indiquée n'est pas valide.");
 
                 break;
         }
     } else {
-        throw new Exception('aucune action n\'a été indiquée.');
+        throw new \Exception("Aucune action n'a été indiquée.");
     }
 } catch (\Exception $e) {
-    $_SESSION['homePageException'] = $e;
+    $_SESSION['homePageException'] = $e->getMessage();
     header('Location: index.php?action=homePage');
-    // TO DO : display exception message on homepage and unset $_SESSION.
 }
