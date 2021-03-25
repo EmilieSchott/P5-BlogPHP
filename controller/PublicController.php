@@ -113,7 +113,7 @@ class PublicController
 
             echo $twig->render('postView.html.twig', $datas);
         } else {
-            throw new \Exception('L\'identifiant du billet indiqué n\'est pas valide.');
+            throw new \Exception("L'identifiant du billet indiqué n'est pas valide.");
         }
     }
 
@@ -122,21 +122,21 @@ class PublicController
         $post = $postManager->getPost($datas['id']);
         $datas['post'] = $post[0];
         if (is_null($datas['post'])) {
-            throw new \Exception('Le billet demandé n\'a pas pu être récupéré.');
+            throw new \Exception("Le billet demandé n'a pas pu être récupéré.");
         }
         
         try {
             $comments = $commentManager->getComments($datas['id']);
         } catch (\Exception $e) {
-            $datas['commentsException'] = 'Le(s) commentaire(s) n\'a/ont pas pu être récupéré(s)';
+            $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
         }
 
         if (!is_null($comments['pagesNbr'])) {
             $datas['pagesNbr'] = $comments['pagesNbr'];
 
             try {
-                if (!array_key_exists('page', $datas) || $datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
-                    throw new \Exception('La page de commentaires indiquée n\'existe pas.');
+                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                    throw new \Exception("La page de commentaires indiquée n'existe pas.");
                 }
             } catch (\Exception $e) {
                 $datas['invalidCommentsPage'] = $e->getMessage();
