@@ -2,6 +2,7 @@
 
 session_start();
 
+use EmilieSchott\BlogPHP\Controller\PrivateController;
 use EmilieSchott\BlogPHP\Controller\PublicController;
 use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
@@ -15,6 +16,7 @@ $twig = new Environment($loader, [
     'cache' => false // "False" to replace by " __DIR__ . '/tmp' " to enable cache.
 ]);
 $publicController = new PublicController();
+$privateController = new PrivateController();
 $postManager = new PostManager();
 $commentManager = new CommentManager();
 
@@ -85,6 +87,10 @@ try {
                 break;
             case 'addComment':
                 $publicController->addComment($commentManager);
+
+                break;
+            case 'connexion':
+                $privateController->connexionPage($twig, $datas);
 
                 break;
             default:

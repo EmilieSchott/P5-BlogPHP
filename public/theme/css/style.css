@@ -33,6 +33,15 @@ p {
     }
 }
 
+a {
+    color:#7b858e;
+}
+
+a:hover, .current {
+    color: #006699;
+    text-decoration: none;
+}
+
 .text-faded {
     color: rgba(255, 255, 255, 0.3);
 }
@@ -323,6 +332,14 @@ p {
     position: relative;
 }
 
+.backAccess {
+    padding-top: 5rem;
+    padding-bottom:3rem;
+    background-color: rgba(0, 102, 153, 0.85);
+    margin-top: 5rem;
+    position: relative;
+}
+
 .comments {
     padding-top: 2.5rem;
     padding-bottom:2.5rem;
@@ -330,7 +347,7 @@ p {
     position: relative;
 }
 
-.contact .contact-inner {
+.contact .contact-inner, .backAccess .backAccess-inner {
     position: relative;
     margin: 0.5rem;
     margin-bottom: 53px;
@@ -343,7 +360,7 @@ p {
     background-color: rgba(255, 255, 255, 0.85);
 }
 
-.contact .contact-inner:before, .comments .comment-inner:before {
+.contact .contact-inner:before, .comments .comment-inner:before, .backAccess .backAccess-inner:before {
     border-radius: 0.5rem;
     content: '';
     position: absolute;
@@ -356,7 +373,7 @@ p {
 }
 
 @media (min-width: 768px) {   
-    .contact .contact-inner {
+    .contact .contact-inner, .backAccess .backAccess-inner {
         margin-bottom: 30px;
     }
 }
@@ -367,13 +384,13 @@ p {
         padding-bottom:4rem;
     }
 
-    .contact .contact-inner {
+    .contact .contact-inner, .backAccess .backAccess-inner {
         margin-bottom: 0px;
     }
 }
 
 @media (min-width:1200px) {
-    .contact {
+    .contact, .backAccess {
         padding-bottom: 3rem;
     }
 
@@ -382,7 +399,7 @@ p {
         padding-bottom:5rem;
     }
     
-    .contact .contact-inner {
+    .contact .contact-inner, .backAccess .backAccess-inner {
         padding: 3rem;
         margin-bottom: -40px;
     }
@@ -712,6 +729,58 @@ g:active .intern {
         margin-bottom: 118px;
     }
 }
+
+/* Connexion / Inscription Page */
+
+.makeChoice .item {
+    margin-top: -25px;
+    margin-bottom: -15px;
+}
+
+.makeChoice div {
+    font-family: Raleway;
+    font-size: 50px;
+    font-weight: 100;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.current {
+    color: #000;
+    pointer-events:none;
+    text-decoration: none;
+}
+
+@media (min-width: 740px) {
+    .makeChoice {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .makeChoice div {
+        font-size: 80px;
+        position: relative;
+        bottom:0.3rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .makeChoice {
+        margin:-45px
+    }
+
+    .makeChoice .item {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    .makeChoice div {
+        font-size: 150px;
+        bottom: 0.9rem;
+    }
+}
+
 
 /* Footer */
 
