@@ -360,7 +360,9 @@ a:hover, .current {
     background-color: rgba(255, 255, 255, 0.85);
 }
 
-.contact .contact-inner:before, .comments .comment-inner:before, .backAccess .backAccess-inner:before {
+.contact .contact-inner:before, 
+.comments .comment-inner:before, 
+.backAccess .backAccess-inner:before {
     border-radius: 0.5rem;
     content: '';
     position: absolute;

@@ -6,6 +6,7 @@ use EmilieSchott\BlogPHP\Controller\PrivateController;
 use EmilieSchott\BlogPHP\Controller\PublicController;
 use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
+use EmilieSchott\BlogPHP\Model\UserManager;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -19,6 +20,7 @@ $publicController = new PublicController();
 $privateController = new PrivateController();
 $postManager = new PostManager();
 $commentManager = new CommentManager();
+$userManager = new UserManager();
 
 date_default_timezone_set('Etc/UTC');
 
@@ -90,7 +92,28 @@ try {
 
                 break;
             case 'connexion':
+                if (isset($_SESSION['connexionException'])) {
+                    $datas['connexionException'] = $_SESSION['connexionException'];
+                    unset($_SESSION['connexionException']);
+                }
                 $privateController->connexionPage($twig, $datas);
+
+                break;
+            case 'getConnexion':
+                $privateController->getConnexion($userManager);
+
+                break;
+            case 'account':
+                try {
+                    if (isset($_SESSION['id'])) {
+                        $privateController->accountPage($twig);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
 
                 break;
             default:
