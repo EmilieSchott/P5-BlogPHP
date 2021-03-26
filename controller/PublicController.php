@@ -12,9 +12,12 @@ use Twig\Environment;
 
 class PublicController
 {
-    public function homePage(Environment $twig, string $action)
+    public function homePage(Environment $twig, array $datas)
     {
-        echo $twig->render('homeView.html.twig', ['action' => $action]);
+        if (array_key_exists('send', $datas) && ($datas['send'] < 0 || $datas['send'] > 1)) {
+            unset($datas['send']);
+        }
+        echo $twig->render('homeView.html.twig', $datas);
     }
     
     public function contactMe()
@@ -23,12 +26,13 @@ class PublicController
             empty($_POST['name']) ||
             empty($_POST['firstName']) ||
             empty($_POST['email']) ||
-            empty($_POST['message']) ||
-            !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)
+            empty($_POST['message'])
         ) {
-            echo "No arguments Provided!";
+            throw new \Exception("Un ou plusieurs champs n'ont pas été rempli(s).");
+        }
 
-            return false;
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new \Exception("L'adresse mail n'est pas valide.");
         }
             
         $name = htmlspecialchars($_POST['name']);
@@ -50,6 +54,15 @@ class PublicController
         $clientId = '';
         $clientSecret = '';
         $refreshToken = '';
+
+        if (
+            empty($email) ||
+            empty($clientId) ||
+            empty($clientSecret) ||
+            empty($refreshToken)
+        ) {
+            throw new \Exception("Le formulaire de contact n'a pas été paramétré correctement.");
+        }
 
         $provider = new Google([
             'clientId' => $clientId,

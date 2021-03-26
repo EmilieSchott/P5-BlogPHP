@@ -21,6 +21,25 @@
 {% endblock %}
 
 {% block content %}
+    {% if homePageException is not empty %}
+        <section class="page-section">
+            <div class="container">
+                <div class="post-item">
+                    <div class="bg-faded col-10 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 rounded">
+                        <h2 class="section-heading text-center">
+                            <span class="section-heading-upper">Un problème est survenu :</span>
+                            <span class="section-heading-lower"> {{ homePageException }}</span>
+                            <p class="text-center">
+                                Vous avez été redirigé.
+                            </p>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+
     <section class="page-section clearfix">
         <div class="container">
             <div class="intro">
@@ -38,7 +57,7 @@
                         C’est cette conviction qui m'a poussée à me spécialiser dans le développement web, et si vous aussi vous partagez cette vision, peut être serons-nous amenés à travailler ensemble, qui sait ?
                     </p>
                     <div class="intro-button">
-                        <a class="btn btn-primary btn-xl" href="#">Télécharger mon CV</a>
+                        <a class="btn btn-primary btn-xl" href="public/download/CV_Emilie_Schott.pdf">Télécharger mon CV</a>
                     </div>
                 </div>
             </div>
@@ -47,41 +66,69 @@
 
     <section class="page-section contact clearfix">
         <div class="container">
-            <div class="contact-tool">
+            <div class="contact-tool" id="contact-tool">
                 <div class="contact-inner text-center p-3 pb-5 p-md-4 p-lg-5 rounded">
-                    <h2 class="section-heading mb-4">
-                        <span class="section-heading-upper">Me</span>
-                        <span class="section-heading-lower">contacter</span>
-                    </h2>
-                    <form name="sentMessage" id="contactForm" action="index.php?action=contactMe" method="post" novalidate>
+                    {% if contactFormMessage is not empty and send == 0 %}                         
+                        <div class="comment-message" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">Un problème est survenu :</span>
+                                <span class="section-heading-lower"> {{ contactFormMessage }} </span>
+                                <p>
+                                    Nous sommes désolés de cet incident.
+                                </p>
+                            </h2>
+                        </div>
                         <div class="row">
-                            <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
-                                <div class="form-group floating-label-form-group controls">
-                                    <label>Nom</label>
-                                    <input type="text" class="form-control" placeholder="Nom" name="name" id="name" required="required" data-validation-required-message="Entrez votre nom, s'il vous plait.">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group floating-label-form-group controls">
-                                    <label>Prénom</label>
-                                    <input type="text" class="form-control" placeholder="Prénom" name="firstName" id="firstName" required data-validation-required-message="Entrez votre prénom, s'il vous plait.">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group floating-label-form-group controls">
-                                    <label>Addresse email </label>
-                                    <input type="email" class="form-control" placeholder="Addresse Email" name="email" id="email" required data-validation-required-message="Entrez votre email, s'il vous plait.">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
-                                <label>Message</label>
-                                <textarea rows="5" class="form-control" placeholder="Message" name="message" id="message" required data-validation-required-message="Tapez un message, s'il vous plait."></textarea>
-                                <p class="help-block text-danger"></p>
-                            </div>
-                        </div>    
+                            <a class="btn btn-primary btn-xl retry-button" href="index.php?action=homePage#contact-tool">Réessayer ? </a>
+                        </div> 
+                    {% elseif send == 1 %}                         
+                        <div class="comment-message" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">Merci !</span>
+                                <span class="section-heading-lower"> Votre message a bien été envoyé. </span>
+                                <p>
+                                    Nous vous répondrons dès que possible.
+                                </p>
+                            </h2>
+                        </div>
                         <div class="row">
-                            <button type="submit" class="btn btn-primary btn-xl submit-button">Envoyer</button>
-                        </div>            
-                    </form>
+                            <a class="btn btn-primary btn-xl retry-button" href="index.php?action=homePage#contact-tool">Réessayer ? </a>
+                        </div> 
+                    {% else %}
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Me</span>
+                            <span class="section-heading-lower">contacter</span>
+                        </h2>
+                        <form name="sentMessage" id="contactForm" action="index.php?action=contactMe" method="post">
+                            <div class="row">
+                                <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Nom</label>
+                                        <input type="text" class="form-control" placeholder="Nom" name="name" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Prénom</label>
+                                        <input type="text" class="form-control" placeholder="Prénom" name="firstName" id="firstName" required data-validation-required-message="Entrez votre prénom, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Addresse email </label>
+                                        <input type="email" class="form-control" placeholder="Addresse Email" name="email" id="email" required data-validation-required-message="Entrez votre email, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
+                                    <label>Message</label>
+                                    <textarea rows="5" class="form-control" placeholder="Message" name="message" id="message" required data-validation-required-message="Tapez un message, s'il vous plait."></textarea>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>    
+                            <div class="row">
+                                <button type="submit" class="btn btn-primary btn-xl submit-button">Envoyer</button>
+                            </div>            
+                        </form>
+                    {% endif %}
                 </div>
             
                 <div class="RS-border col-10 offset-1 col-md-6 offset-md-5 col-xl-6 offset-xl-4  rounded ">
