@@ -100,7 +100,7 @@ class User extends Hydrate
     public function setPassword(string $password)
     {
         if (\strlen($password) <= 255) {
-            $this->password = \password_hash($password, PASSWORD_DEFAULT);
+            $this->password = $password;
         } else {
             throw new \Exception("Le mot de passe doit faire moins de 255 caractères.");
         }

@@ -44,4 +44,29 @@ class PrivateController
     {
         echo $twig->render('accountView.html.twig');
     }
+
+    public function inscriptionPage(Environment $twig, array $datas): void
+    {
+        echo $twig->render('inscriptionView.html.twig', $datas);
+    }
+
+    public function getInscription(UserManager $userManager)
+    {
+        $datas = [
+            'role' => 'Reader',
+            'pseudo' => $_POST['pseudo'],
+            'name' => $_POST['name'],
+            'firstName' => $_POST['firstName'],
+            'email' => $_POST['email'],
+            'password' => \password_hash($_POST['password'], PASSWORD_DEFAULT)
+        ];
+
+        try {
+            $userManager->addUser($datas);
+        } catch (\Exception $e) {
+            $_SESSION['inscriptionException'] = $e->getMessage();
+            header('Location: index.php?action=inscription&success=0#exceptionMessage');
+        }
+        header('Location: index.php?action=inscription&success=1#exceptionMessage');
+    }
 }
