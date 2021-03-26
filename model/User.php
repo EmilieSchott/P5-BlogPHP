@@ -52,7 +52,7 @@ class User extends Hydrate
         $this->id = $id;
     }
 
-    public function setRole(int $role)
+    public function setRole(string $role)
     {
         $this->role = $role;
     }
@@ -99,10 +99,10 @@ class User extends Hydrate
 
     public function setPassword(string $password)
     {
-        if (\strlen($password) <= 45) {
-            $this->password = \password_hash($password);
+        if (\strlen($password) <= 255) {
+            $this->password = \password_hash($password, PASSWORD_DEFAULT);
         } else {
-            throw new \Exception("Le mot de passe doit faire moins de 45 caractères.");
+            throw new \Exception("Le mot de passe doit faire moins de 255 caractères.");
         }
     }
 }
