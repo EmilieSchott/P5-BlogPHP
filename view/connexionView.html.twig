@@ -1,0 +1,76 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} Connexion {% endblock %}
+{% block description %} Page permettant de s'identifier sur le blog Web-Link {% endblock %}
+{% block image %} <img src="public/theme/Web-Link.jpg" alt="Web-Link, le blog d'une développeuse - Image par geralt de pixabay"/>  {% endblock %}
+{% block type %} website {% endblock %}
+{% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <section class="page-section backAccess clearfix">
+        <div class="container">
+            <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
+                <div class="makeChoice" id="makeChoice">
+                    <a class="item current" href="index.php?action=connexion#makeChoice">
+                        <h2 class="section-heading ">
+                            <span class="section-heading-upper">Se</span>
+                            <span class="section-heading-lower">connecter</span>
+                        </h2>
+                    </a>
+                    <div class="item"> / </div>
+                    <a class="item" href="index.php?action=inscription#makeChoice">
+                        <h2 class="section-heading">
+                            <span class="section-heading-upper">S'</span>
+                            <span class="section-heading-lower">inscrire</span>
+                        </h2>
+                    </a>
+                </div>
+                <form name="connexionForm" id="connexionForm" action="index.php?action=getConnexion" method="post">
+                    <div class="row">
+                        <div class="form-group col-10 col-lg-7 col-xl-6 mx-auto floating-label-form-group controls">
+                            <label>Email</label>
+                            <input type="text" class="form-control" placeholder="Email" name="email" id="email" required="required" data-validation-required-message="Entrez votre email, s'il vous plait.">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-10 col-lg-7 col-xl-6 mx-auto floating-label-form-group controls">
+                            <label>Mot de Passe</label>
+                            <input type="text" class="form-control" placeholder="Mot de Passe" name="password" id="password" required="required" data-validation-required-message="Entrez votre mot de passe, s'il vous plait.">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>    
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3">Se connecter</button>
+                    </div>            
+                </form>
+            </div>
+            {% if connexionException is not empty %}
+                <div class="my-4 d-flex justify-content-center">
+                    <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
+                        <h2 class="section-heading">
+                            <span class="section-heading-upper text-center" >Attention !</span>
+                            <span class="section-heading-lower text-center"> {{ connexionException }} </span>
+                        </h2>
+                    </div>
+                </div>
+            {% endif %} 
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
