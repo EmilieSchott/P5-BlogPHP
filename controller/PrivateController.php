@@ -67,6 +67,6 @@ class PrivateController
             $_SESSION['inscriptionException'] = $e->getMessage();
             header('Location: index.php?action=inscription&success=0#exceptionMessage');
         }
-        header('Location: index.php?action=inscription&success=1#exceptionMessage');
+        header('Location: index.php?action=inscription&success=1');
     }
 }
