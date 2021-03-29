@@ -116,6 +116,21 @@ try {
                 }
 
                 break;
+            case 'inscription':
+                if (isset($_SESSION['inscriptionException'])) {
+                    $datas['inscriptionException'] = $_SESSION['inscriptionException'];
+                    unset($_SESSION['inscriptionException']);
+                }
+                if (isset($_GET['success'])) {
+                    $datas['success'] = (int) $_GET['success'];
+                }
+                $privateController->inscriptionPage($twig, $datas);
+
+                break;
+            case 'getInscription':
+                $privateController->getInscription($userManager);
+
+                break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
