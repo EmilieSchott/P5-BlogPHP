@@ -4,12 +4,12 @@ namespace EmilieSchott\BlogPHP\Model;
 
 class UserManager extends Manager
 {
-    public function getUser(string $email): object
+    public function getUser(string $pseudo): object
     {
-        $query = $this->db->prepare('SELECT * FROM users WHERE email = ?');
-        $query->execute([$email]);
+        $query = $this->db->prepare('SELECT * FROM users WHERE pseudo = ?');
+        $query->execute([$pseudo]);
 
-        return $user = new User($query->fetch());
+        return new User($query->fetch());
     }
 
     public function addUser(array $datas): void

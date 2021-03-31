@@ -15,12 +15,12 @@ class PrivateController
     public function getConnexion(UserManager $userManager)
     {
         $attempt = [
-            'email' => $_POST['email'],
+            'pseudo' => $_POST['pseudo'],
             'password' => $_POST['password']
         ];
 
         try {
-            $user = $userManager->getUser($attempt['email']);
+            $user = $userManager->getUser($attempt['pseudo']);
 
             if (!empty($user) && \password_verify($attempt['password'], $user->getPassword())) {
                 $_SESSION['id'] = $user->getId();
