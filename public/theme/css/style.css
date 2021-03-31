@@ -419,7 +419,6 @@ a:hover, .current {
     color: #18BC9C;
 }
 
-
 .contact .submit-button, .contact .retry-button {   
     width:50%;
     margin: auto;
@@ -751,18 +750,36 @@ g:active .intern {
 .back {
     position: relative;
 }
-*/
+
+.back-nav a:active {
+    color: #7b858e;
+}*/
+
 .back-nav {
-    position: fixed;
-    top: 485px;
-    z-index:2;
     background-color: rgba(0, 102, 153, 0.75);
     font-family: 'Raleway';
+    margin-top: 40px;
 
+}
+
+@media (min-width: 992px) {
+    .back-nav {
+        position: fixed;
+        top: 350px;
+        z-index:2;
+        margin-top: 0px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .back-nav {
+        top: 485px;
+    }
 }
 
 .list {
     font-size: 0.9rem;
+    padding: 0px;
 }
 
 .list .list-item {
@@ -772,40 +789,28 @@ g:active .intern {
     font-style: italic;
 }
 
-/*
-.back-nav a:active {
-    color: #7b858e;
-}*/
-@keyframes descent {
-    from {
-        transform: translateY(0%);
-    }
-    to {
-        transform: translateY(150%);
-    }
-}
-.button-list-container {
-    overflow: hidden;
-}
-
 .list-button {
     margin-bottom:-5px;
 }
 
-.list-button:active {
-    animation: descent 1000ms;
+.back-content {
+    padding:20px;
 }
-
-.list-button:not(active) {
-    animation: descent 1000ms paused;
-    
-}
-
 
 @media (min-width: 992px) {
-    .intro .intro-img, .back .back-content {
+    .intro .intro-img {
         width: 50%;
         float: right;
+        
+    }
+
+    .back-content {
+        padding:20px;
+        padding-left: 40px;
+    }
+
+    .list {
+        font-size: 1.1rem;
     }
 
     .list-button {
@@ -826,24 +831,14 @@ g:active .intern {
         bottom: -1rem; 
     }*/
 
-    .list {
-        font-size: 1.1rem;
-    }
+
 }
 
 @media (min-width: 1200px) {
     .back-nav {
         padding:40px;
-    }
-/*
-    .back-nav a {
-        font-size: 1.3rem;
-    }
-
-    .back-nav a:active, .back-nav a:hover {
-        color: #7b858e;
-    }
-*/
+    }    
+    
     .back-content {
         padding:40px;
         padding-left: 80px;
@@ -858,7 +853,59 @@ g:active .intern {
         margin-left: 5rem;
         bottom: -2rem;
     }
+    
+/*
+    .back-nav a {
+        font-size: 1.3rem;
+    }
+
+    .back-nav a:active, .back-nav a:hover {
+        color: #7b858e;
+    }
+*/
+
 }
+
+.list-floating-label-form-group {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.list-floating-label-form-group input
+{
+    z-index: 1;
+    position: relative;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: none;
+    font-family: 'Lora';
+    font-size: 18px;
+    background: none;
+    box-shadow: none !important;
+    resize: none;
+}
+
+@media (min-width: 992px) {
+    .list-floating-label-form-group input {
+    font-size: 20px;
+    }
+}
+
+.list-floating-label-form-group label {
+    display: block;
+    z-index: 0;
+    position: relative;
+    top: 2em;
+    margin: 0;
+    font-size: 0.85em;
+    line-height: 0.5em;
+    opacity: 0;
+    -webkit-transition: top 0.3s ease,opacity 0.3s ease;
+    -moz-transition: top 0.3s ease,opacity 0.3s ease;
+    -ms-transition: top 0.3s ease,opacity 0.3s ease;
+    transition: top 0.3s ease,opacity 0.3s ease;
+}
+
 
 /* Footer */
 

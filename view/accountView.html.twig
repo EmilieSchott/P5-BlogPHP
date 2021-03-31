@@ -20,13 +20,13 @@
 
 {% block content %}
     <section class="page-section">
-        <div class="container col-8 offset-3">
-            <div class="back-content offset-1 bg-faded rounded ">
+        <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
+            <div class="back-content offset-lg-1 bg-faded rounded ">
                 <h2 class="section-heading mb-4">
                     <span class="section-heading-upper">Mon compte</span>
                     <span class="section-heading-lower">Mes informations</span>
                 </h2>
-                <ul class="list mb-5 text-left mx-auto">
+                <ul class="list text-left mx-auto">
                     <li class="list-item d-flex">
                         Rôle
                         <span class="ml-auto"> {{ user.role }} </span>
@@ -45,15 +45,13 @@
                     </li>
                     <li class="list-item d-flex">
                         Email
-                        <span class="ml-auto"> {{ user.email }} </span>
+                        <span class="ml-auto"> {{ user.email }}</span>
                     </li>
-                    <li class="list-item d-flex button-list-container">
-                        Mot de passe
-                        <span class=" ml-auto">
-                            <div class="btn btn-primary list-button" >Modifier</div>     
-                        </span>
-                    </li>
-                  </ul>
+                    <div class="d-flex justify-content-center justify-content-lg-end">
+                        <a class="btn btn-primary list-button mt-3" href="index.php?action=modifyMyDatas" >Modifier mes informations</a> 
+                    </div>
+                </ul>
+                
             </div>
         </div>
     </section>

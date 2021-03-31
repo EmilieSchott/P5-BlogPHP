@@ -83,6 +83,11 @@ try {
                             $datas['commentException'] = $_SESSION['commentException'];
                             unset($_SESSION['commentException']);
                         }
+                        if (isset($_SESSION['pseudo'])) {
+                            $datas['user'] = [
+                                'pseudo' => $_SESSION['pseudo']
+                            ];
+                        }
                         $publicController->post($postManager, $commentManager, $twig, $datas);
                     } else {
                         throw new Exception('aucun identifiant de billet n\'a été indiqué.');
@@ -137,13 +142,21 @@ try {
                 $privateController->getInscription($userManager);
 
                 break;
+            case 'disconnect':
+                $privateController->disconnect();
+
+                break;
+            case 'modifyMyDatas':
+                $privateController->modifyMyDatas();
+
+                break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
                 break;
         }
     } else {
-        throw new \Exception("Aucune action n'a été indiquée.");
+        header('Location: index.php?action=homePage');
     }
 } catch (\Exception $e) {
     $_SESSION['homePageException'] = $e->getMessage();

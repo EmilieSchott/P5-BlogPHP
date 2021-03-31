@@ -85,4 +85,10 @@ class PrivateController
             header('Location: index.php?action=inscription&success=0#exceptionMessage');
         }
     }
+
+    public function disconnect()
+    {
+        \session_destroy();
+        header('Location: index.php?action=homePage');
+    }
 }
