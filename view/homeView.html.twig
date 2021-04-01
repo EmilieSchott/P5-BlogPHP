@@ -27,8 +27,8 @@
                 <div class="post-item">
                     <div class="bg-faded col-10 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 rounded">
                         <h2 class="section-heading text-center">
-                            <span class="section-heading-upper">Un problème est survenu :</span>
-                            <span class="section-heading-lower"> {{ homePageException }}</span>
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> {{ homePageException }}</span>
                             <p class="text-center">
                                 Vous avez été redirigé.
                             </p>
@@ -46,8 +46,8 @@
                 <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="public/theme/img/portrait ES.jpg" alt="Portrait d'Emilie Schott"/>
                 <div class="intro-text col-11 text-center bg-faded mx-auto left-md-0 p-3 p-md-4 p-lg-5 rounded">
                     <h2 class="section-heading mb-4">
-                        <span class="section-heading-upper">Développeuse de solutions</span>
-                        <span class="section-heading-lower">Emilie Schott</span>
+                        <span class="section-heading-around">Développeuse de solutions</span>
+                        <span class="section-heading-main">Emilie Schott</span>
                     </h2>
                     <p class="mb-3">Accessible par tous, tout le temps et avec facilité, le web est créateur de lien entre les gens tout autour du monde. 
                         <br><br>
@@ -69,10 +69,10 @@
             <div class="contact-tool" id="contact-tool">
                 <div class="contact-inner text-center p-3 pb-5 p-md-4 p-lg-5 rounded">
                     {% if contactFormMessage is not empty and send == 0 %}                         
-                        <div class="comment-message" >
+                        <div class="message" >
                             <h2 class="section-heading mb-4">
-                                <span class="section-heading-upper">Un problème est survenu :</span>
-                                <span class="section-heading-lower"> {{ contactFormMessage }} </span>
+                                <span class="section-heading-around">Un problème est survenu :</span>
+                                <span class="section-heading-main"> {{ contactFormMessage }} </span>
                                 <p>
                                     Nous sommes désolés de cet incident.
                                 </p>
@@ -82,10 +82,10 @@
                             <a class="btn btn-primary btn-xl retry-button" href="index.php?action=homePage#contact-tool">Réessayer ? </a>
                         </div> 
                     {% elseif send == 1 %}                         
-                        <div class="comment-message" >
+                        <div class="message" >
                             <h2 class="section-heading mb-4">
-                                <span class="section-heading-upper">Merci !</span>
-                                <span class="section-heading-lower"> Votre message a bien été envoyé. </span>
+                                <span class="section-heading-around">Merci !</span>
+                                <span class="section-heading-main"> Votre message a bien été envoyé. </span>
                                 <p>
                                     Nous vous répondrons dès que possible.
                                 </p>
@@ -96,8 +96,8 @@
                         </div> 
                     {% else %}
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Me</span>
-                            <span class="section-heading-lower">contacter</span>
+                            <span class="section-heading-around">Me</span>
+                            <span class="section-heading-main">contacter</span>
                         </h2>
                         <form name="sentMessage" id="contactForm" action="index.php?action=contactMe" method="post">
                             <div class="row">
@@ -134,8 +134,8 @@
                 <div class="RS-border col-10 offset-1 col-md-6 offset-md-5 col-xl-6 offset-xl-4  rounded ">
                     <div class="contact-RS text-center p-3  rounded">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Me suivre sur les</span>
-                            <span class="section-heading-lower">réseaux sociaux</span>
+                            <span class="section-heading-around">Me suivre sur les</span>
+                            <span class="section-heading-main">réseaux sociaux</span>
                         </h2>
 
                         <a href="https://github.com/EmilieSchott/">

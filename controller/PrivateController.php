@@ -2,8 +2,10 @@
 
 namespace EmilieSchott\BlogPHP\Controller;
 
-use EmilieSchott\BlogPHP\Model\User;
+use EmilieSchott\BlogPHP\Model\CommentManager;
+use EmilieSchott\BlogPHP\Model\PostManager;
 use EmilieSchott\BlogPHP\Model\UserManager;
+use EmilieSchott\BlogPHP\Model\User;
 use Twig\Environment;
 
 class PrivateController
@@ -48,7 +50,7 @@ class PrivateController
     public function accountPage(Environment $twig, UserManager $userManager, array $datas): void
     {
         $datas['office'] = 'back';
-        $datas['user'] = $userManager->getUser($_SESSION['email']);
+        $datas['user'] = $userManager->getUser($_SESSION['pseudo']);
         echo $twig->render('accountView.html.twig', $datas);
     }
 
@@ -90,5 +92,97 @@ class PrivateController
     {
         \session_destroy();
         header('Location: index.php?action=homePage');
+    }
+    
+    public function modifyMyDatas(UserManager $userManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        $datas['user'] = $userManager->getUser($_SESSION['pseudo']);
+        if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+            unset($datas['success']);
+        }
+
+        echo $twig->render('datasModificationView.html.twig', $datas);
+    }
+
+    public function modifyUser(UserManager $userManager, Environment $twig)
+    {
+        try {
+            $datas['office'] = 'back';
+            $user = $userManager->getUser($_SESSION['pseudo']);
+
+            if ($_POST['formName'] === 'modifyEmail') {
+                if (isset($_POST['email'])) {
+                    $modification = [
+                        'email' => $_POST['email']
+                        ];
+                } else {
+                    throw new \Exception("Le champ n'est pas rempli.");
+                }
+            }
+
+            if ($_POST['formName'] === 'modifyPassword') {
+                if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
+                    if (\password_verify($_POST['password0'], $user->getPassword())) {
+                        if ($_POST['password1'] === $_POST['password2']) {
+                            $modification = [
+                                'password' => \password_hash($_POST['password1'], PASSWORD_DEFAULT)
+                            ];
+                        } else {
+                            throw new \Exception("Les nouveaux mots de passe ne sont pas identiques.");
+                        }
+                    } else {
+                        throw new \Exception("L'ancien mot de passe n'est pas correct.");
+                    }
+                } else {
+                    throw new \Exception("Les champs ne sont pas remplis.");
+                }
+            }
+
+            $datas['user'] = $userManager->modifyUser($user, $modification);
+            header('Location: index.php?action=modifyMyDatas&success=1#message');
+        } catch (\Exception $e) {
+            $_SESSION['modificationException'] = $e->getMessage();
+            header('Location: index.php?action=modifyMyDatas&success=0#message');
+        }
+    }
+
+    public function myComments(CommentManager $commentManager, PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            $commentsPages = $commentManager->getUserCommments($_SESSION['pseudo']);
+        } catch (\Exception $e) {
+            $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
+        }
+
+        if (!is_null($commentsPages['pagesNbr'])) {
+            $datas['pagesNbr'] = $commentsPages['pagesNbr'];
+
+            try {
+                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                    throw new \Exception("La page de commentaires indiquée n'existe pas.");
+                }
+            } catch (\Exception $e) {
+                $datas['invalidCommentsPage'] = $e->getMessage();
+                $datas['page'] = 1;
+            }
+
+            $commentsPage = $commentManager->accessPage($commentsPages['datasPages'], $datas['page']);
+        } elseif (array_key_exists('page', $datas)) {
+            unset($datas['page']);
+        }
+
+        foreach ($commentsPage as $comment) {
+            $post = $postManager->getPost($comment->getPostId());
+            $postTitle = $post->getTitle();
+            $datas['comments'][] = [
+                'datas' => $comment,
+                'postTitle' => $postTitle
+            ];
+        }
+
+        echo $twig->render('myCommentsView.html.twig', $datas);
     }
 }

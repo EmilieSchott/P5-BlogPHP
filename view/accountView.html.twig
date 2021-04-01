@@ -23,35 +23,34 @@
         <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
             <div class="back-content offset-lg-1 bg-faded rounded ">
                 <h2 class="section-heading mb-4">
-                    <span class="section-heading-upper">Mon compte</span>
-                    <span class="section-heading-lower">Mes informations</span>
+                    <span class="section-heading-around">Mon compte</span>
+                    <span class="section-heading-main">Mes informations</span>
                 </h2>
                 <ul class="list text-left mx-auto">
                     <li class="list-item d-flex">
-                        Rôle
+                        Rôle :
                         <span class="ml-auto"> {{ user.role }} </span>
                     </li>
                     <li class="list-item d-flex">
-                        Pseudo
+                        Pseudo :
                         <span class="ml-auto"> {{ user.pseudo }} </span>
                     </li>
                     <li class="list-item d-flex">
-                        Nom
+                        Nom :
                         <span class="ml-auto"> {{ user.name }} </span>
                     </li>
                     <li class="list-item d-flex">
-                        Prénom
+                        Prénom :
                         <span class="ml-auto"> {{ user.firstName }} </span>
                     </li>
                     <li class="list-item d-flex">
-                        Email
+                        Email :
                         <span class="ml-auto"> {{ user.email }}</span>
                     </li>
                     <div class="d-flex justify-content-center justify-content-lg-end">
                         <a class="btn btn-primary list-button mt-3" href="index.php?action=modifyMyDatas" >Modifier mes informations</a> 
                     </div>
                 </ul>
-                
             </div>
         </div>
     </section>

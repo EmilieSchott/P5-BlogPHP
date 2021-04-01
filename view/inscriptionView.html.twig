@@ -23,10 +23,10 @@
         <div class="container">
             <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
                 {% if success is not empty and success == 1 %} 
-                    <div class="comment-message" id="commentForm">
+                    <div class="message" id="commentForm">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Merci !</span>
-                            <span class="section-heading-lower">Votre inscription a bien été enregistrée.</span>
+                            <span class="section-heading-around">Merci !</span>
+                            <span class="section-heading-main">Votre inscription a bien été enregistrée.</span>
                             <p>
                                 Connectez-vous pour accéder à votre compte.
                             </p>
@@ -36,10 +36,10 @@
                         <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=connexion#makeChoice">Se connecter ? </a>
                     </div> 
                 {% elseif success is not empty and success == 0 %} 
-                    <div class="comment-message" >
+                    <div class="message" >
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Un problème est survenu :</span>
-                            <span class="section-heading-lower"> {% if inscriptionException is not empty %} {{ inscriptionException }} {% else %} Votre inscription n'a pas pu être enregistrée. {% endif %} </span>
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> {% if inscriptionException is not empty %} {{ inscriptionException }} {% else %} Votre inscription n'a pas pu être enregistrée. {% endif %} </span>
                             <p>
                                 {% if inscriptionException is not empty %}  Votre inscription n'a pas pu être enregistrée. {% else %}  Nous sommes désolés de cet incident. {% endif %} 
                             </p>
@@ -52,15 +52,15 @@
                     <div class="makeChoice" id="makeChoice">
                         <a class="item" href="index.php?action=connexion#makeChoice">
                             <h2 class="section-heading ">
-                                <span class="section-heading-upper">Se</span>
-                                <span class="section-heading-lower">connecter</span>
+                                <span class="section-heading-around">Se</span>
+                                <span class="section-heading-main">connecter</span>
                             </h2>
                         </a>
                         <div class="item"> / </div>
                         <a class="item current" href="index.php?action=inscription#makeChoice">
                             <h2 class="section-heading">
-                                <span class="section-heading-upper">S'</span>
-                                <span class="section-heading-lower">inscrire</span>
+                                <span class="section-heading-around">S'</span>
+                                <span class="section-heading-main">inscrire</span>
                             </h2>
                         </a>
                     </div>
@@ -110,8 +110,8 @@
             <div class="my-4 d-flex justify-content-center">
                 <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
                     <h2 class="section-heading">
-                        <span class="section-heading-upper text-center" >Attention !</span>
-                        <span class="section-heading-lower text-center"> {{ inscriptionException }} </span>
+                        <span class="section-heading-around text-center" >Attention !</span>
+                        <span class="section-heading-main text-center"> {{ inscriptionException }} </span>
                     </h2>
                 </div>
             </div>

@@ -24,9 +24,10 @@ $userManager = new UserManager();
 
 date_default_timezone_set('Etc/UTC');
 
-if (isset($_SESSION['role'])) {
+if (isset($_SESSION['role'], $_SESSION['pseudo'])) {
     $datas['user'] = [
-        'role' => $_SESSION['role']
+        'role' => $_SESSION['role'],
+        'pseudo' => $_SESSION['pseudo']
     ];
 }
 
@@ -76,17 +77,12 @@ try {
                         if (isset($_GET['blogPage'])) {
                             $datas['blogPage'] = (int) $_GET['blogPage'];
                         }
-                        if (isset($_GET['entry'])) {
-                            $datas['entry'] = (int) $_GET['entry'];
+                        if (isset($_GET['success'])) {
+                            $datas['success'] = (int) $_GET['success'];
                         }
                         if (isset($_SESSION['commentException'])) {
                             $datas['commentException'] = $_SESSION['commentException'];
                             unset($_SESSION['commentException']);
-                        }
-                        if (isset($_SESSION['pseudo'])) {
-                            $datas['user'] = [
-                                'pseudo' => $_SESSION['pseudo']
-                            ];
                         }
                         $publicController->post($postManager, $commentManager, $twig, $datas);
                     } else {
@@ -116,7 +112,7 @@ try {
                 break;
             case 'account':
                 try {
-                    if (isset($_SESSION['email'])) {
+                    if (isset($_SESSION['pseudo'])) {
                         $privateController->accountPage($twig, $userManager, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
@@ -143,11 +139,67 @@ try {
 
                 break;
             case 'disconnect':
-                $privateController->disconnect();
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $privateController->disconnect();
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
 
                 break;
             case 'modifyMyDatas':
-                $privateController->modifyMyDatas();
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        if (isset($_SESSION['modificationException'])) {
+                            $datas['modificationException'] = $_SESSION['modificationException'];
+                            unset($_SESSION['modificationException']);
+                        }
+                        if (isset($_GET['success'])) {
+                            $datas['success'] = (int) $_GET['success'];
+                        }
+                        $privateController->modifyMyDatas($userManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'modifyUser':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $privateController->modifyUser($userManager, $twig);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'myComments':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                        if (isset($_SESSION['commentException'])) {
+                            $datas['commentException'] = $_SESSION['commentException'];
+                            unset($_SESSION['commentException']);
+                        }
+                        $privateController->myComments($commentManager, $postManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
 
                 break;
             default:

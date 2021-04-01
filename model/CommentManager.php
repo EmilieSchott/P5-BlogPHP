@@ -7,12 +7,12 @@ class CommentManager extends Manager
     public function getComments(int $id): array
     {
         $comments = [];
-        $q=$this->db->prepare(
-            'SELECT id, posts_id, author, content, createdAt, validated 
-            FROM comments WHERE posts_id=? AND validated=1 ORDER BY id'
+        $query=$this->db->prepare(
+            'SELECT id, postId, author, content, createdAt, status 
+            FROM comments WHERE postId=? AND status = "Validé" ORDER BY id'
         );
-        $q->execute([$id]);
-        while ($datas=$q->fetch()) {
+        $query->execute([$id]);
+        while ($datas=$query->fetch()) {
             $comments[] = new Comment($datas);
         }
         $commentsPages = $this->paginator->paginator($comments, 5);
@@ -36,11 +36,28 @@ class CommentManager extends Manager
             header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
         }
 
-        $q=$this->db->prepare('INSERT INTO comments (posts_id, author, content) VALUES (:postId, :author, :content)');
-        $q->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
-        $q->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
-        $q->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
-        $q->execute();
+        $query=$this->db->prepare('INSERT INTO comments (postId, author, content) VALUES (:postId, :author, :content)');
+        $query->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
+        $query->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
+        $query->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
+        $query->execute();
+    }
+
+    public function getUserCommments(string $pseudo): array
+    {
+        $comments = [];
+        $query=$this->db->prepare(
+            'SELECT id, postId, author, content, createdAt, status
+            FROM comments WHERE author=? ORDER BY id DESC'
+        );
+        $query->execute([$pseudo]);
+        while ($datas=$query->fetch()) {
+            $comments[] = new Comment($datas);
+        }
+
+        $commentsPages = $this->paginator->paginator($comments, 5);
+
+        return $commentsPages;
     }
 
     //Delete a comment

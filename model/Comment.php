@@ -11,7 +11,7 @@ class Comment extends Hydrate
     private $author;
     private $content;
     private $createdAt;
-    private $validated;
+    private $status;
 
     public function getId(): int
     {
@@ -38,9 +38,9 @@ class Comment extends Hydrate
         return $this->createdAt;
     }
 
-    public function getValidated(): bool
+    public function getstatus(): string
     {
-        return $this->validated;
+        return $this->status;
     }
     
     public function setId(int $id)
@@ -76,8 +76,8 @@ class Comment extends Hydrate
         $this->createdAt = $createdAt;
     }
 
-    public function setValidated(bool $validated)
+    public function setstatus(string $status)
     {
-        $this->validated = $validated;
+        $this->status = $status;
     }
 }
