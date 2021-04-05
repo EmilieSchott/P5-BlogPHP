@@ -20,6 +20,10 @@ class PrivateController
         ];
 
         try {
+            if (filter_var($attempt['pseudo'], FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception("Vous avez entré un email. C'est votre pseudo qui est demandé.");
+            }
+            
             $user = $userManager->getUser($attempt['pseudo']);
 
             if (!empty($user) && \password_verify($attempt['password'], $user->getPassword())) {
@@ -32,7 +36,7 @@ class PrivateController
 
                 header('Location: index.php?action=account');
             } else {
-                throw new \Exception("L'email ou le mot de passe est invalide.");
+                throw new \Exception("Le pseudo ou le mot de passe est invalide.");
             }
         } catch (\Exception $e) {
             $_SESSION['connexionException'] = $e->getMessage();
