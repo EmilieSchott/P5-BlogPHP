@@ -70,11 +70,16 @@ class PrivateController
         ];
 
         try {
-            $userManager->addUser($datas);
+            $unavailablePseudo = $userManager->getUser($datas['pseudo']);
+            if ($unavailablePseudo === 'false') {
+                $userManager->addUser($datas);
+                header('Location: index.php?action=inscription&success=1');
+            } else {
+                throw new \Exception("Ce pseudo est déjà pris, choisissez-en un autre.");
+            }
         } catch (\Exception $e) {
             $_SESSION['inscriptionException'] = $e->getMessage();
             header('Location: index.php?action=inscription&success=0#exceptionMessage');
         }
-        header('Location: index.php?action=inscription&success=1');
     }
 }
