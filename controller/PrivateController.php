@@ -51,6 +51,10 @@ class PrivateController
 
     public function inscriptionPage(Environment $twig, array $datas): void
     {
+        if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+            unset($datas['success']);
+        }
+
         echo $twig->render('inscriptionView.html.twig', $datas);
     }
 
