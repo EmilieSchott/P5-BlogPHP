@@ -9,13 +9,11 @@ class UserManager extends Manager
         $query = $this->db->prepare('SELECT * FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
 
-        if (is_bool($query->fetch())) {
+        if (false === ($data = $query->fetch())) {
             throw new \Exception("Ce pseudo n'existe pas.");
-        } else {
-            var_dump("test");
-
-            return new User($query->fetch());
         }
+        
+        return new User($data);
     }
 
     public function addUser(array $datas): void
