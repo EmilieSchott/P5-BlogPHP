@@ -4,16 +4,14 @@ namespace EmilieSchott\BlogPHP\Model;
 
 class UserManager extends Manager
 {
-    public function getUser(string $pseudo): object
+    public function getUser(string $pseudo)
     {
         $query = $this->db->prepare('SELECT * FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
 
-        if (false === ($data = $query->fetch())) {
-            throw new \Exception("Ce pseudo n'existe pas.");
-        }
-        
-        return new User($data);
+        $datas = $query->fetch();
+
+        return !empty($datas) ? new User($datas) : false;
     }
 
     public function addUser(array $datas): void
