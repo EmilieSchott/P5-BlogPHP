@@ -2,6 +2,7 @@
 
 namespace EmilieSchott\BlogPHP\Controller;
 
+use EmilieSchott\BlogPHP\Model\User;
 use EmilieSchott\BlogPHP\Model\UserManager;
 use Twig\Environment;
 
@@ -26,7 +27,7 @@ class PrivateController
             
             $user = $userManager->getUser($attempt['pseudo']);
 
-            if (!empty($user) && \password_verify($attempt['password'], $user->getPassword())) {
+            if ($user instanceof User && \password_verify($attempt['password'], $user->getPassword())) {
                 $_SESSION['id'] = $user->getId();
                 $_SESSION['role'] = $user->getRole();
                 $_SESSION['pseudo'] = $user->getPseudo();
@@ -51,6 +52,10 @@ class PrivateController
 
     public function inscriptionPage(Environment $twig, array $datas): void
     {
+        if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+            unset($datas['success']);
+        }
+
         echo $twig->render('inscriptionView.html.twig', $datas);
     }
 
@@ -66,11 +71,16 @@ class PrivateController
         ];
 
         try {
-            $userManager->addUser($datas);
+            $verifyPseudo = $userManager->getUser($datas['pseudo']);
+            if ($verifyPseudo instanceof User) {
+                throw new \Exception("Ce pseudo est déjà pris, choisissez-en un autre.");
+            } else {
+                $userManager->addUser($datas);
+                header('Location: index.php?action=inscription&success=1');
+            }
         } catch (\Exception $e) {
             $_SESSION['inscriptionException'] = $e->getMessage();
             header('Location: index.php?action=inscription&success=0#exceptionMessage');
         }
-        header('Location: index.php?action=inscription&success=1');
     }
 }
