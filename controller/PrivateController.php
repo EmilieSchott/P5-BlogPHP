@@ -45,9 +45,11 @@ class PrivateController
         }
     }
 
-    public function accountPage(Environment $twig): void
+    public function accountPage(Environment $twig, UserManager $userManager, array $datas): void
     {
-        echo $twig->render('accountView.html.twig');
+        $datas['office'] = 'back';
+        $datas['user'] = $userManager->getUser($_SESSION['email']);
+        echo $twig->render('accountView.html.twig', $datas);
     }
 
     public function inscriptionPage(Environment $twig, array $datas): void

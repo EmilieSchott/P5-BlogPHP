@@ -19,9 +19,9 @@
 {% endblock %}
 
 {% block content %}
-    <section class="page-section backAccess clearfix">
+    <section class="page-section back-access clearfix">
         <div class="container">
-            <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
+            <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
                 {% if success is not empty and success == 1 %} 
                     <div class="comment-message" id="commentForm">
                         <h2 class="section-heading mb-4">
@@ -108,7 +108,7 @@
             </div>
             {% if success is empty and inscriptionException is not empty %}
             <div class="my-4 d-flex justify-content-center">
-                <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
+                <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
                     <h2 class="section-heading">
                         <span class="section-heading-upper text-center" >Attention !</span>
                         <span class="section-heading-lower text-center"> {{ inscriptionException }} </span>

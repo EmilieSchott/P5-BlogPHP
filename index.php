@@ -24,6 +24,12 @@ $userManager = new UserManager();
 
 date_default_timezone_set('Etc/UTC');
 
+if (isset($_SESSION['role'])) {
+    $datas['user'] = [
+        'role' => $_SESSION['role']
+    ];
+}
+
 try {
     if (isset($_GET['action'])) {
         $datas['action'] = htmlspecialchars($_GET['action']);
@@ -105,8 +111,8 @@ try {
                 break;
             case 'account':
                 try {
-                    if (isset($_SESSION['id'])) {
-                        $privateController->accountPage($twig);
+                    if (isset($_SESSION['email'])) {
+                        $privateController->accountPage($twig, $userManager, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }

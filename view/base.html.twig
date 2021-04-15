@@ -50,14 +50,17 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav mx-auto">
-                                <li class="nav-item px-lg-4 {% if action == 'homePage' %} active {% else %} {% endif %} ">
-                                    <a class="nav-link text-uppercase text-expanded" href="index.php?action=homePage">A propos...
-                                        <span class="sr-only">(current)</span>
-                                    </a>
+                                <li class="nav-item px-lg-4">
+                                    <a  {% if action == 'homePage' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=homePage">A propos...</a>
                                 </li>
-                                <li class="nav-item px-lg-4  {% if action == 'blog' %} active {% else %} {% endif %}">
-                                    <a class="nav-link text-uppercase text-expanded" href="index.php?action=blog&amp;page=1">Blog</a>
+                                <li class="nav-item px-lg-4">
+                                    <a {% if action == 'blog' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blog&amp;page=1">Blog</a>
                                 </li>
+                                {% if user.role == ('Admin' or 'Lecteur') %}
+                                <li class="nav-item px-lg-4">
+                                    <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mon compte</a>
+                                </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -66,6 +69,29 @@
         </header>
 
         <div id="content">
+            {% if office == 'back' %}
+                <nav class="back-nav col-3 offset-1 rounded">
+                    <ul class="navbar-nav mx-auto ">
+                        <li  class="nav-item px-lg-4" >
+                            <a {% if action == 'account' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mes Informations</a>
+                        </li>
+                        <li  class="nav-item px-lg-4"  >
+                            <a {% if action == 'myComments' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=myComments">Mes commentaires</a>
+                        </li>
+                        {% if user.role == 'Admin' %}
+                        <li class="nav-item px-lg-4" >
+                            <a {% if action == 'managePosts' %} class="nav-link text-uppercase  active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=managePosts">Gérer les billets</a>
+                        </li>
+                        <li  class="nav-item px-lg-4">
+                            <a {% if action == 'manageComments' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageComments">Gérer les commentaires</a>
+                        </li>
+                        <li class="nav-item px-lg-4">
+                            <a {% if action == 'manageUsers' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageUsers">Gérer les utilisateurs</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
             {{ block('content') }}
         </div>
 
