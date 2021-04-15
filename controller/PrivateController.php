@@ -4,8 +4,8 @@ namespace EmilieSchott\BlogPHP\Controller;
 
 use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
-use EmilieSchott\BlogPHP\Model\UserManager;
 use EmilieSchott\BlogPHP\Model\User;
+use EmilieSchott\BlogPHP\Model\UserManager;
 use Twig\Environment;
 
 class PrivateController
@@ -30,12 +30,8 @@ class PrivateController
             $user = $userManager->getUser($attempt['pseudo']);
 
             if ($user instanceof User && \password_verify($attempt['password'], $user->getPassword())) {
-                $_SESSION['id'] = $user->getId();
                 $_SESSION['role'] = $user->getRole();
                 $_SESSION['pseudo'] = $user->getPseudo();
-                $_SESSION['name'] = $user->getName();
-                $_SESSION['firstName'] = $user->getFirstName();
-                $_SESSION['email'] = $user->getEmail();
 
                 header('Location: index.php?action=account');
             } else {

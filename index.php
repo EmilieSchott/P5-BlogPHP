@@ -99,6 +99,9 @@ try {
 
                 break;
             case 'connexion':
+                if (isset($_SESSION['pseudo'])) {
+                    header('Location: index.php?action=account');
+                }
                 if (isset($_SESSION['connexionException'])) {
                     $datas['connexionException'] = $_SESSION['connexionException'];
                     unset($_SESSION['connexionException']);
@@ -124,6 +127,9 @@ try {
 
                 break;
             case 'inscription':
+                if (isset($_SESSION['pseudo'])) {
+                    header('Location: index.php?action=account');
+                }
                 if (isset($_SESSION['inscriptionException'])) {
                     $datas['inscriptionException'] = $_SESSION['inscriptionException'];
                     unset($_SESSION['inscriptionException']);
