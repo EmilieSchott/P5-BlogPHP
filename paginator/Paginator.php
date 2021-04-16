@@ -2,7 +2,7 @@
 
 namespace EmilieSchott\BlogPHP\Paginator;
 
-class Paginator
+trait Paginator
 {
     public function paginator(array $datas, int $itemsPerPage): array
     {
@@ -24,6 +24,7 @@ class Paginator
         $offset = $page - 1;
         $datasPage = array_slice($datasPages, $offset, 1);
         $datasPage = $datasPage[0];
+
         return $datasPage;
     }
 }

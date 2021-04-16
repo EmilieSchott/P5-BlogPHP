@@ -4,6 +4,7 @@ namespace EmilieSchott\BlogPHP\Controller;
 
 use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
+use EmilieSchott\BlogPHP\Paginator\Paginator;
 use League\OAuth2\Client\Provider\Google;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -12,6 +13,8 @@ use Twig\Environment;
 
 class PublicController
 {
+    use Paginator;
+
     public function homePage(Environment $twig, array $datas)
     {
         if (array_key_exists('send', $datas) && ($datas['send'] < 0 || $datas['send'] > 1)) {
@@ -94,10 +97,11 @@ class PublicController
     public function blog(PostManager $postManager, Environment $twig, array $datas)
     {
         try {
-            $postsPages = $postManager->getList();
+            $posts = $postManager->getList();
         } catch (\Exception $e) {
             $datas['blogException'] = $e->getMessage();
         }
+        $postsPages = $this->paginator($posts, 3);
         $datas['posts'] = $postsPages['datasPages'];
         $datas['pagesNbr'] = $postsPages['pagesNbr'];
 
@@ -111,7 +115,7 @@ class PublicController
             $datas['blogException'] = $e->getMessage();
         }
 
-        $datas['posts'] = $postManager->accessPage($datas['posts'], $datas['page']);
+        $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
         echo $twig->render('blogView.html.twig', $datas);
     }
  
@@ -144,8 +148,9 @@ class PublicController
             $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
         }
 
-        if (!is_null($comments['pagesNbr'])) {
-            $datas['pagesNbr'] = $comments['pagesNbr'];
+        $commentsPages = $this->paginator($comments, 5);
+        if (!is_null($commentsPages['pagesNbr'])) {
+            $datas['pagesNbr'] = $commentsPages['pagesNbr'];
 
             try {
                 if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
@@ -155,7 +160,7 @@ class PublicController
                 $datas['invalidCommentsPage'] = $e->getMessage();
                 $datas['page'] = 1;
             }
-            $datas['comments'] = $commentManager->accessPage($comments['datasPages'], $datas['page']);
+            $datas['comments'] = $this->displayPage($commentsPages['datasPages'], $datas['page']);
         } elseif (array_key_exists('page', $datas)) {
             unset($datas['page']);
         }

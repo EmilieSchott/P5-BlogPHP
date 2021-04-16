@@ -6,10 +6,13 @@ use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
 use EmilieSchott\BlogPHP\Model\User;
 use EmilieSchott\BlogPHP\Model\UserManager;
+use EmilieSchott\BlogPHP\Paginator\Paginator;
 use Twig\Environment;
 
 class PrivateController
 {
+    use Paginator;
+
     public function connexionPage(Environment $twig, array $datas): void
     {
         echo $twig->render('connexionView.html.twig', $datas);
@@ -148,11 +151,12 @@ class PrivateController
         $datas['office'] = 'back';
         
         try {
-            $commentsPages = $commentManager->getUserCommments($_SESSION['pseudo']);
+            $comments = $commentManager->getUserCommments($_SESSION['pseudo']);
         } catch (\Exception $e) {
             $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
         }
 
+        $commentsPages = $this->paginator($comments, 5);
         if (!is_null($commentsPages['pagesNbr'])) {
             $datas['pagesNbr'] = $commentsPages['pagesNbr'];
 
@@ -165,7 +169,7 @@ class PrivateController
                 $datas['page'] = 1;
             }
 
-            $commentsPage = $commentManager->accessPage($commentsPages['datasPages'], $datas['page']);
+            $commentsPage = $this->displayPage($commentsPages['datasPages'], $datas['page']);
         } elseif (array_key_exists('page', $datas)) {
             unset($datas['page']);
         }
