@@ -185,4 +185,31 @@ class PrivateController
 
         echo $twig->render('myCommentsView.html.twig', $datas);
     }
+
+    public function managePosts(PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            $posts = $postManager->getList();
+        } catch (\Exception $e) {
+            $datas['postException'] ="Le(s) post(s) n'a/ont pas pu être récupéré(s)";
+        }
+        $postsPages = $this->paginator($posts, 5);
+        $datas['posts'] = $postsPages['datasPages'];
+        $datas['pagesNbr'] = $postsPages['pagesNbr'];
+
+        try {
+            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                $datas['page'] = 1;
+
+                throw new \Exception("La page indiquée n'existe pas.");
+            }
+        } catch (\Exception $e) {
+            $datas['invalidPostPage'] = $e->getMessage();
+        }
+
+        $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
+        echo $twig->render('adminManagePostsView.html.twig', $datas);
+    }
 }

@@ -153,7 +153,7 @@ a:hover, .current {
     color: #7b858e;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
     .navbar-nav .nav-item .nav-link {
         font-size: 1.3rem;
     }
@@ -275,11 +275,26 @@ a:hover, .current {
 .btn-primary {
     background-color: #7b858e;
     border-color: #7b858e;
+    color: white;
 }
 
+.btn-red {
+    background-color: #7b858e;
+    border-color: #7b858e;
+    color: #7a1212;
+}
+
+.btn-red:hover, .btn-red:focus, .btn-red:active {
+    background-color: #7a1212;
+    border-color: #7a1212;
+    color: white;
+}
+
+,
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background-color: #006699;
     border-color: #006699;
+    color: white;
 }
 
 .font-weight-light {
@@ -838,6 +853,14 @@ g:active .intern {
     flex-wrap: wrap;
 }
 
+.list-button {
+    text-transform: uppercase;
+    font-weight: 200;
+    font-family: "Raleway";
+    font-style: normal;
+    font-size: 15px;
+}
+
 @media (max-width: 992px) {
     .input-group * {
         width:100%
@@ -845,6 +868,12 @@ g:active .intern {
 
     .list-button {
         margin-top: -10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .list-button {
+        font-size: 20px;
     }
 }
 
