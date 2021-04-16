@@ -208,6 +208,19 @@ try {
                 }
 
                 break;
+            case 'managePosts':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                    if (isset($_SESSION['postException'])) {
+                        $datas['postException'] = $_SESSION['postException'];
+                        unset($_SESSION['postException']);
+                    }
+                    $privateController->managePosts($postManager, $twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                }
+
+                break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
