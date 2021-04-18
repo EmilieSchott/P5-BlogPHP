@@ -30,7 +30,7 @@
                         </h2>
                     </div>
                     <div class="col-12 col-xl-4 mb-5 mb-xl-0 mt-2">
-                        <a class="btn btn-primary btn-xl list-button" href="index.php?action=createPostPage" >Ajouter un billet</a> 
+                        <a class="btn btn-primary btn-xl list-button" href="index.php?action=postFormPage" >Ajouter un billet</a> 
                     </div>
                 </div> 
                 {% if page is not empty or postException is not empty %}
@@ -62,7 +62,7 @@
                                         <a class="btn btn-red list-button" href="index.php?action=deletePostPage&amp;post={{ post.id }}" >Supprimer le billet</a> 
                                     </div>
                                     <div class="col-6 text-right">
-                                        <a class="btn btn-primary list-button" href="index.php?action=modifyPostPage&amp;post={{ post.id }}" >Modifier le billet</a> 
+                                        <a class="btn btn-primary list-button" href="index.php?action=postFormPage&amp;post={{ post.id }}" >Modifier le billet</a> 
                                     </div>
                                 </div> 
                             </li>
@@ -74,6 +74,18 @@
                                 <h3 class="section-heading">
                                     <span class="section-heading-around text-center" >Un problème est survenu :</span>
                                     <span class="section-heading-main text-center"> {{ postException }} </span>
+                                    <p class="text-center">
+                                        Nous sommes désolés de cet incident.
+                                    </p>
+                                </h3>
+                            </div>
+                        </div>
+                    {% elseif exceptionMessage is not empty %}
+                        <div class="my-4 d-flex justify-content-center">
+                            <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                                <h3 class="section-heading">
+                                    <span class="section-heading-around text-center" > Un problème est survenu :</span>
+                                    <span class="section-heading-main text-center">{% if exceptionMessage == 'PDOException' %} Impossible de récupérer le billet demandé. {% else %} {{ exceptionMessage }} {% endif %}</span>
                                     <p class="text-center">
                                         Nous sommes désolés de cet incident.
                                     </p>

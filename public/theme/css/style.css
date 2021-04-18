@@ -365,6 +365,20 @@ a:hover, .current {
     z-index: -1;
 }
 
+
+.admin-field:before{
+    border-radius: 0.5rem;
+    content: '';
+    position: absolute;
+    top: -0.2rem;
+    bottom: -0.2rem;
+    left: -0.2rem;
+    right: -0.2rem;
+    border: 0.25rem solid rgba(255, 255, 255, 0.85);
+    z-index: -1;
+}
+
+
 @media (min-width: 768px) {   
     .contact .contact-inner, .back-access .back-access-inner {
         margin-bottom: 30px;
@@ -382,6 +396,16 @@ a:hover, .current {
     }
 }
 
+
+@media (max-width:1199px) {
+    .admin-field {
+        padding: 5px;
+        margin: 5px;
+        padding-top: 10px;
+        margin-top: 1rem;
+    }
+}
+
 @media (min-width:1200px) {
     .contact, .back-access {
         padding-bottom: 3rem;
@@ -396,12 +420,19 @@ a:hover, .current {
         padding: 3rem;
         margin-bottom: -40px;
     }
+
+    .admin-field {
+        padding-top: 0.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 }
 
 .floating-label-form-group {
     position: relative;
     margin-bottom: 0;
 }
+
 
 .floating-label-form-group input,
 .floating-label-form-group textarea {
@@ -418,6 +449,7 @@ a:hover, .current {
 }
 
 @media (min-width: 992px) {
+
     .floating-label-form-group input,
     .floating-label-form-group textarea {
     font-size: 20px;
@@ -443,9 +475,66 @@ a:hover, .current {
     top: 0;
     opacity: 1;
 }
+
 .floating-label-form-group-with-focus label {
     color: #18BC9C;
 }
+
+.visible-label-form-group {
+    margin-bottom: 0;
+}
+
+.visible-label-form-group input,
+.visible-label-form-group textarea {
+    z-index: 1;
+    position: relative;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: none;
+    font-family: 'Lora';
+    font-size: 18px;
+    background: none;
+    box-shadow: none !important;
+    resize: none;
+}
+
+.visible-label-form-group label {
+    margin: 0;
+    font-size: 18px;
+    font-family: 'Lora';
+    padding-left: 5px;
+    color: #7b858e;
+}
+
+@media (min-width: 992px) {
+    .visible-label-form-group label,
+    .visible-label-form-group input,
+    .visible-label-form-group textarea {
+    font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .contact .submit-button, .contact .retry-button {   
     width:50%;
