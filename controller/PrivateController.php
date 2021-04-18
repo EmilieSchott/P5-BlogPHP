@@ -254,4 +254,10 @@ class PrivateController
             echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
         }
     }
+
+    public function createPostPage(Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        echo $twig->render('adminPostView.html.twig', $datas);
+    }
 }

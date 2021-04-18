@@ -239,6 +239,14 @@ try {
                     }
     
                     break;
+            case 'createPostPage':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $privateController->createPostPage($twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                }
+
+                break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
