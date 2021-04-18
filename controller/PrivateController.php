@@ -3,6 +3,7 @@
 namespace EmilieSchott\BlogPHP\Controller;
 
 use EmilieSchott\BlogPHP\Model\CommentManager;
+use EmilieSchott\BlogPHP\Model\Post;
 use EmilieSchott\BlogPHP\Model\PostManager;
 use EmilieSchott\BlogPHP\Model\User;
 use EmilieSchott\BlogPHP\Model\UserManager;
@@ -211,5 +212,46 @@ class PrivateController
 
         $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
         echo $twig->render('adminManagePostsView.html.twig', $datas);
+    }
+
+    public function deletePostPage($postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            if (!empty($datas['id'])) {
+                var_dump($datas['id']);
+                $datas['post'] = $postManager->getPost($datas['id']);
+                if ($datas['post'] instanceof Post) {
+                    echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+                } else {
+                    throw new \Exception("Le post n'a pas pu être récupéré");
+                }
+            } else {
+                throw new \Exception("Aucun post valide n'a été spécifié.");
+            }
+        } catch (\Exception $e) {
+            $datas['postException']=$e->getMessage();
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        }
+    }
+
+    public function deletePost(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+    
+        try {
+            if (!empty($datas['id'])) {
+                $postManager->deletePost($datas['postId']);
+                $commentManager->deletePostComments($datas['postId']);
+                $datas['deleteSuccess']=1;
+                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("Aucun post n'a été spécifié.");
+            }
+        } catch (\Exception $e) {
+            $datas['postException']=$e->getMessage();
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        }
     }
 }

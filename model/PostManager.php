@@ -34,9 +34,13 @@ class PostManager extends Manager
         return new Post($data);
     }
 
+    public function deletePost(int $id): void
+    {
+        $query = $this->db->prepare('DELETE * FROM posts WHERE id = ?');
+        $query->execute([$id]);
+    }
+    
     // Add a post
 
     //Modify a post
-
-    //Delete a post
 }
