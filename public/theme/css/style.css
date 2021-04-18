@@ -272,6 +272,8 @@ a:hover, .current {
     box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
 }
    
+.btn-hard-red:hover, .btn-hard-red:focus, .btn-hard-red:active,
+.btn-hard-primary:hover, .btn-hard-primary:focus, .btn-hard-primary:active,
 .btn-primary {
     background-color: #7b858e;
     border-color: #7b858e;
@@ -284,13 +286,19 @@ a:hover, .current {
     color: #7a1212;
 }
 
+.btn-hard-red {
+    background-color: #7a1212;
+    border-color: #7a1212;
+    color: white;
+}
+
 .btn-red:hover, .btn-red:focus, .btn-red:active {
     background-color: #7a1212;
     border-color: #7a1212;
     color: white;
 }
 
-,
+.btn-hard-primary,
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background-color: #006699;
     border-color: #006699;

@@ -23,7 +23,7 @@
         <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
             <div class="back-content offset-lg-1 bg-faded rounded" id="list">
                 {% if success is not empty and success == 1 %} 
-                    <div class="message text-center" id="message">
+                    <div class=" text-center mt-5 mb-2" id="message">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">La modification a bien été enregistrée.</span>
@@ -32,11 +32,11 @@
                             </p>
                         </h2>
                     </div>
-                    <div class="row">
+                    <div class="row mb-5">
                         <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=modifyMyDatas#list">Modifier autre chose ? </a>
                     </div> 
                 {% elseif success is not empty and success == 0 %} 
-                    <div class="message text-center" id="message">
+                    <div class=" text-center mt-5 mb-2" id="message">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main"> {% if modificationException is empty %} La modification n'a pas pu être enregistrée. {% else %} {{ modificationException }} {% endif %} </span>

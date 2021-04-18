@@ -4,7 +4,7 @@
     <link href="public/theme/css/style.css" rel="stylesheet">
 {% endblock %}
 {% block title %} Gérer les billets {% endblock %}
-{% block description %} Panneau d'administration permettant la création, suppression ou modification des billets. {% endblock %}
+{% block description %} Panneau d'administration permettant d'accéder à la création, suppression ou modification des billets. {% endblock %}
 {% block image %} <img src="public/theme/Web-Link.jpg" alt="Web-Link, le blog d'une développeuse - Image par geralt de pixabay"/> {% endblock %}
 {% block type %} website {% endblock %}
 {% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
@@ -30,7 +30,7 @@
                         </h2>
                     </div>
                     <div class="col-12 col-xl-4 mb-5 mb-xl-0 mt-2">
-                        <a class="btn btn-primary btn-xl list-button" href="index.php?action=addPostPage" >Ajouter un billet</a> 
+                        <a class="btn btn-primary btn-xl list-button" href="index.php?action=createPostPage" >Ajouter un billet</a> 
                     </div>
                 </div> 
                 {% if page is not empty or postException is not empty %}
@@ -55,7 +55,7 @@
                                         <span class="section-heading-main"> {{ post.title }}</span> 
                                         <span class="section-heading-around">Posté le {{ post.createdAt }} </span>
                                     </h4>
-                                    <p> "{{ post.standfirst }}" </p>
+                                    <p> {{ post.standfirst }} </p>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
