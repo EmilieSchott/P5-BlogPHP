@@ -74,7 +74,7 @@
                             <div class="col-12 pl-0 mb-0 admin-field">
                                 <div class="form-group col-12 mx-auto visible-label-form-group controls ">
                                     <label >Image :{% if post is not empty %} {{ post.picture }} {% else %}{% endif %}</label>
-                                    {% if post is not empty %}<img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/theme/img/{{ post.picture }}" alt="{{ post.pictureDescription }}"> {% else %}{% endif %}
+                                    {% if post is not empty %}<img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/upload/img/post/{{ post.picture }}" alt="{{ post.pictureDescription }}"> {% else %}{% endif %}
                                     {% if post is not empty %}<input type="hidden" class="form-control" value="{{ post.picture }}" name="oldPicture" id="picture"> {% else %}{% endif %} 
                                     {% if post is not empty %} <br><label>Si vous souhaitez remplacez l'image :</label> {% else %}{% endif %}
                                     <input type="file" class="form-control" placeholder="Téléversez une image" name="newPicture" id="picture" {% if post is not empty %} {% else %} required data-validation-required-message="Téléverser une image, s'il vous plait."{% endif %} > 

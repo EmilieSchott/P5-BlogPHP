@@ -292,7 +292,7 @@ class PrivateController
             if (isset($_FILE['picture'])) {
                 $datas['picture'] = $this->validateImageFile();
                 if (isset($_POST['picture'])) {
-                    \unlink(__DIR__ . '/../public/upload/img/' . $_POST['picture']);
+                    \unlink('public/upload/img/post/' . $_POST['picture']);
                 }
             } else {
                 $datas['picture'] = $_POST['picture'];
@@ -316,7 +316,7 @@ class PrivateController
                 $dataFile = \pathinfo($_FILES['newPicture']['name']);
                 $fileExtension = $dataFile['extension'];
                 if (in_array($authorizedExtensions, $fileExtension, true)) {
-                    \move_upload_file($_FILES['newPicture']['tmp_name'], __DIR__ . '/../public/upload/img/' . $_FILES['newPicture']['tmp_name']);
+                    \move_upload_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['tmp_name']);
 
                     return $_FILES['newPicture']['tmp_name'];
                 } else {
