@@ -255,9 +255,78 @@ class PrivateController
         }
     }
 
-    public function createPostPage(Environment $twig, array $datas)
+    public function postFormPage(PostManager $postManager, Environment $twig, array $datas)
     {
-        $datas['office'] = 'back';
-        echo $twig->render('adminPostView.html.twig', $datas);
+        try {
+            $datas['office'] = 'back';
+            $datas['post'] = !empty($datas['postId']) ? $postManager->getPost($datas['postId']) : null;
+
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
+            }
+
+            echo $twig->render('adminPostFormView.html.twig', $datas);
+        } catch (\PDOException $PDO) {
+            $datas['exceptionMessage'] = 'PDOException';
+            echo $twig->render('adminManagePostsView.html.twig', $datas);
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $twig->render('adminManagePostsView.html.twig', $datas);
+        }
+    }
+
+    public function sendPostForm(UserManager $userManager, PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas = [
+            'title' => $_POST['title'],
+            'author' => $_POST['author'],
+            'pictureDescription' => $_POST['pictureDescription'],
+            'standfirst' => $_POST['standfirst'],
+            'content' => $_POST['content']
+        ];
+        
+        try {
+            $user = $userManager->getUser($_SESSION['pseudo']);
+            $datas['userId'] = $user->getId();
+
+            if (isset($_FILE['picture'])) {
+                $datas['picture'] = $this->validateImageFile();
+                if (isset($_POST['picture'])) {
+                    \unlink(__DIR__ . '/../public/upload/img/' . $_POST['picture']);
+                }
+            } else {
+                $datas['picture'] = $_POST['picture'];
+            }
+
+            isset($_POST['postId']) ? $postManager->modifyPost($datas) : $postManager->addPost($datas);
+            header('Location: index.php?action=postFormPage&success=1#form');
+        } catch (\PDOException $PDO) {
+            header('Location: index.php?action=postFormPage&success=0#form');
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            header('Location: index.php?action=postFormPage&success=0#form');
+        }
+    }
+
+    public function validateImageFile() : string
+    {
+        if ($_FILES['newPicture']['error'] === 0) {
+            if ($_FILES['newPicture']['size'] <= 2000000) {
+                $authorizedExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
+                $dataFile = \pathinfo($_FILES['newPicture']['name']);
+                $fileExtension = $dataFile['extension'];
+                if (in_array($authorizedExtensions, $fileExtension, true)) {
+                    \move_upload_file($_FILES['newPicture']['tmp_name'], __DIR__ . '/../public/upload/img/' . $_FILES['newPicture']['tmp_name']);
+
+                    return $_FILES['newPicture']['tmp_name'];
+                } else {
+                    throw new \Exception("Le fichier image doit être au format .jpg, .png, ou .gif.");
+                }
+            } else {
+                throw new \Exception("Le fichier image doit faire au maximum 2Mo.");
+            }
+        } else {
+            throw new \Exception("Le fichier image n'a pas pu être uploadé.");
+        }
     }
 }
