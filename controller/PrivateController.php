@@ -289,9 +289,9 @@ class PrivateController
         try {
             $user = $userManager->getUser($_SESSION['pseudo']);
             $datas['userId'] = $user->getId();
-            if (isset($_FILES['newPicture'])) {
+            if (!empty($_FILES['newPicture']['name'])) {
                 $datas['picture'] = $this->validateImageFile();
-                if (isset($_POST['oldPicture'])) {
+                if (!empty($_POST['oldPicture'])) {
                     \unlink('public/upload/img/post/' . $_POST['oldPicture']);
                 }
             } else {
@@ -309,7 +309,7 @@ class PrivateController
         } catch (\PDOException $PDO) {
             header('Location: index.php?action=postFormPage&success=0#form');
         } catch (\Exception $e) {
-            $datas['exceptionMessage'] = $e->getMessage();
+            $_SESSION['exceptionMessage'] = $e->getMessage();
             header('Location: index.php?action=postFormPage&success=0#form');
         }
     }

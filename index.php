@@ -235,6 +235,10 @@ try {
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     $datas['postId'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
                     $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
+                    if (isset($_SESSION['exceptionMessage'])) {
+                        $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                        unset($_SESSION['exceptionMessage']);
+                    }
                     $privateController->postFormPage($postManager, $twig, $datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
