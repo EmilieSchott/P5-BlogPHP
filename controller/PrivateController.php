@@ -220,7 +220,6 @@ class PrivateController
         
         try {
             if (!empty($datas['id'])) {
-                var_dump($datas['id']);
                 $datas['post'] = $postManager->getPost($datas['id']);
                 if ($datas['post'] instanceof Post) {
                     echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
@@ -242,6 +241,8 @@ class PrivateController
     
         try {
             if (!empty($datas['postId'])) {
+                $post = $postManager->getPost($datas['postId']);
+                \unlink('public/upload/img/post/' . $post->getPicture());
                 $postManager->deletePost($datas['postId']);
                 $commentManager->deletePostComments($datas['postId']);
                 $datas['deleteSuccess']=1;
@@ -288,7 +289,6 @@ class PrivateController
         try {
             $user = $userManager->getUser($_SESSION['pseudo']);
             $datas['userId'] = $user->getId();
-            var_dump($datas['userId']);
             if (isset($_FILES['newPicture'])) {
                 $datas['picture'] = $this->validateImageFile();
                 if (isset($_POST['oldPicture'])) {
