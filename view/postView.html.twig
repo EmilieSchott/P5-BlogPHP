@@ -5,7 +5,7 @@
 {% endblock %}
 {% block title %} {{ post.title }} {% endblock %}
 {% block description %} {{ post.standFirst }} {% endblock %}
-{% block image %} src="public/upload/img/post/{{ post.picture }}" alt="{{ post.pictureDescription }}" {% endblock %}
+{% block image %}public/upload/img/post/{{ post.picture }}{% endblock %}
 {% block type %} article {% endblock %}
 {% block url %} <!-- TO  DO : Modify URL --> https://www.example.com/index.php?action=post&amp;id={{ post.id }}  {% endblock %}
 {% block author %} {{ post.author }} {% endblock %}
