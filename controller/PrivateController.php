@@ -241,7 +241,7 @@ class PrivateController
         $datas['office'] = 'back';
     
         try {
-            if (!empty($datas['id'])) {
+            if (!empty($datas['postId'])) {
                 $postManager->deletePost($datas['postId']);
                 $commentManager->deletePostComments($datas['postId']);
                 $datas['deleteSuccess']=1;
@@ -288,17 +288,23 @@ class PrivateController
         try {
             $user = $userManager->getUser($_SESSION['pseudo']);
             $datas['userId'] = $user->getId();
-
-            if (isset($_FILE['picture'])) {
+            var_dump($datas['userId']);
+            if (isset($_FILES['newPicture'])) {
                 $datas['picture'] = $this->validateImageFile();
-                if (isset($_POST['picture'])) {
-                    \unlink('public/upload/img/post/' . $_POST['picture']);
+                if (isset($_POST['oldPicture'])) {
+                    \unlink('public/upload/img/post/' . $_POST['oldPicture']);
                 }
             } else {
-                $datas['picture'] = $_POST['picture'];
+                $datas['picture'] = $_POST['oldPicture'];
             }
 
-            isset($_POST['postId']) ? $postManager->modifyPost($datas) : $postManager->addPost($datas);
+            if (isset($_POST['postId'])) {
+                $datas['id'] = $_POST['postId'];
+                $postManager->modifyPost($datas);
+            } else {
+                $postManager->addPost($datas);
+            }
+        
             header('Location: index.php?action=postFormPage&success=1#form');
         } catch (\PDOException $PDO) {
             header('Location: index.php?action=postFormPage&success=0#form');
@@ -315,12 +321,12 @@ class PrivateController
                 $authorizedExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
                 $dataFile = \pathinfo($_FILES['newPicture']['name']);
                 $fileExtension = $dataFile['extension'];
-                if (in_array($authorizedExtensions, $fileExtension, true)) {
-                    \move_upload_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['tmp_name']);
+                if (in_array($fileExtension, $authorizedExtensions, true)) {
+                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['name']);
 
-                    return $_FILES['newPicture']['tmp_name'];
+                    return $_FILES['newPicture']['name'];
                 } else {
-                    throw new \Exception("Le fichier image doit être au format .jpg, .png, ou .gif.");
+                    throw new \Exception("Le fichier image doit être au format .jpg, .png ou .gif.");
                 }
             } else {
                 throw new \Exception("Le fichier image doit faire au maximum 2Mo.");

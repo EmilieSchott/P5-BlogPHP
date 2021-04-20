@@ -224,7 +224,7 @@ try {
                 break;
             case 'deletePost':
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
-                        $datas['postId'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
+                        $datas['postId'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
                         $privateController->deletePost($postManager, $commentManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");

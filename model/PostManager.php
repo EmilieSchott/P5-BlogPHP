@@ -40,7 +40,40 @@ class PostManager extends Manager
         $query->execute([$id]);
     }
     
-    // Add a post
+    public function addPost(array $datas): void
+    {
+        $post = new Post($datas);
+        $query=$this->db->prepare(
+            'INSERT INTO posts (userId, title, standfirst, content, author, picture, pictureDescription) 
+            VALUES (:userId, :title, :standfirst, :content, :author, :picture, :pictureDescription)'
+        );
+        $query->bindValue(':userId', $post->getUserId(), \PDO::PARAM_INT);
+        $query->bindValue(':title', $post->getTitle(), \PDO::PARAM_STR);
+        $query->bindValue(':standfirst', $post->getStandfirst(), \PDO::PARAM_STR);
+        $query->bindValue(':content', $post->getContent(), \PDO::PARAM_STR);
+        $query->bindValue(':author', $post->getAuthor(), \PDO::PARAM_STR);
+        $query->bindValue(':picture', $post->getPicture(), \PDO::PARAM_STR);
+        $query->bindValue(':pictureDescription', $post->getPictureDescription(), \PDO::PARAM_STR);
+        $query->execute();
+    }
 
-    //Modify a post
+    public function modifyPost(array $datas): void
+    {
+        $post = new Post($datas);
+
+        $query=$this->db->prepare(
+            'UPDATE posts 
+            SET userId = :userId, title = :title, standfirst = :standfirst, content = :content, author = :author, picture = :picture, pictureDescription = :pictureDescription
+            WHERE id = :id'
+        );
+        $query->bindValue(':id', $post->getId(), \PDO::PARAM_INT);
+        $query->bindValue(':userId', $post->getUserId(), \PDO::PARAM_INT);
+        $query->bindValue(':title', $post->getTitle(), \PDO::PARAM_STR);
+        $query->bindValue(':standfirst', $post->getStandfirst(), \PDO::PARAM_STR);
+        $query->bindValue(':content', $post->getContent(), \PDO::PARAM_STR);
+        $query->bindValue(':author', $post->getAuthor(), \PDO::PARAM_STR);
+        $query->bindValue(':picture', $post->getPicture(), \PDO::PARAM_STR);
+        $query->bindValue(':pictureDescription', $post->getPictureDescription(), \PDO::PARAM_STR);
+        $query->execute();
+    }
 }

@@ -5,7 +5,7 @@ namespace EmilieSchott\BlogPHP\Model;
 class Post extends Hydrate
 {
     private $id;
-    private $usersId;
+    private $userId;
     private $title;
     private $standFirst;
     private $content;
@@ -20,9 +20,9 @@ class Post extends Hydrate
         return $this->id;
     }
 
-    public function getUsersId(): int
+    public function getUserId(): int
     {
-        return $this->usersId;
+        return $this->userId;
     }
 
     public function getTitle(): string
@@ -70,9 +70,9 @@ class Post extends Hydrate
         $this->id = $id;
     }
 
-    public function setUsersId(int $usersId)
+    public function setUserId(int $userId)
     {
-        $this->usersId = $usersId;
+        $this->userId = $userId;
     }
 
     public function setTitle(string $title)
