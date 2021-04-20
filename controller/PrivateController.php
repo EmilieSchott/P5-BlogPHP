@@ -322,6 +322,10 @@ class PrivateController
                 $dataFile = \pathinfo($_FILES['newPicture']['name']);
                 $fileExtension = $dataFile['extension'];
                 if (in_array($fileExtension, $authorizedExtensions, true)) {
+                    $fileName = $dataFile['filename'];
+                    for ($i=1 ; file_exists('public/upload/img/post/' . $_FILES['newPicture']['name']) ; $i++) {
+                        $_FILES['newPicture']['name'] = $fileName . "--" . $i . "." . $fileExtension;
+                    }
                     \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['name']);
 
                     return $_FILES['newPicture']['name'];
