@@ -9,11 +9,11 @@ trait Paginator
         $datasPages = \array_chunk($datas, $itemsPerPage);
         \array_unshift($datasPages, '');
         unset($datasPages[0]);
-        $pagesNbr = \array_key_last($datasPages);
+        $pagesNumber = \array_key_last($datasPages);
 
         $paginator = [
         'datasPages' => $datasPages,
-        'pagesNbr' => $pagesNbr
+        'pagesNumber' => $pagesNumber
         ];
 
         return $paginator;

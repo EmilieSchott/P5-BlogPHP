@@ -158,11 +158,11 @@ class PrivateController
         }
 
         $commentsPages = $this->paginator($comments, 5);
-        if (!is_null($commentsPages['pagesNbr'])) {
-            $datas['pagesNbr'] = $commentsPages['pagesNbr'];
+        if (!is_null($commentsPages['pagesNumber'])) {
+            $datas['pagesNumber'] = $commentsPages['pagesNumber'];
 
             try {
-                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNumber']) {
                     throw new \Exception("La page de commentaires indiquée n'existe pas.");
                 }
             } catch (\Exception $e) {
@@ -198,10 +198,10 @@ class PrivateController
         }
         $postsPages = $this->paginator($posts, 5);
         $datas['posts'] = $postsPages['datasPages'];
-        $datas['pagesNbr'] = $postsPages['pagesNbr'];
+        $datas['pagesNumber'] = $postsPages['pagesNumber'];
 
         try {
-            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNumber']) {
                 $datas['page'] = 1;
 
                 throw new \Exception("La page indiquée n'existe pas.");
