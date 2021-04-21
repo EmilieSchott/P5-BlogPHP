@@ -3,6 +3,9 @@
 
     <head>
         {% block head %}
+
+            {% block script %}{% endblock %}
+
             <meta charset="utf-8">
 
             <title>Blog Web-Link - {{ block('title') }}</title>
@@ -31,42 +34,42 @@
 
             <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
             <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">  
-            
-        {% endblock %}
+
+            {% endblock %}
     </head>
 
     <body>
         <header>
-            {% block header %}
-                <h1 class="site-heading text-center text-white">
-                    <span class="site-heading-upper mb-3">Le blog d'une développeuse</span>
-                    <span class="site-heading-lower">Web-Link</span>
-                </h1>
+{% block header %}  
+            <h1 class="site-heading text-center text-white">
+                <span class="site-heading-upper mb-3">Le blog d'une développeuse</span>
+                <span class="site-heading-lower">Web-Link</span>
+            </h1>
 
-                <nav class="navbar navbar-expand-lg navbar-dark py-lg-3" id="mainNav">
-                    <div class="container">
-                        <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarResponsive">
-                            <ul class="navbar-nav mx-auto">
-                                <li class="nav-item px-lg-4">
-                                    <a  {% if action == 'homePage' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=homePage">A propos...</a>
-                                </li>
-                                <li class="nav-item px-lg-4">
-                                    <a {% if action == 'blog' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blog&amp;page=1">Blog</a>
-                                </li>
-                                {% if user.role == ('Admin' or 'Lecteur') %}
-                                <li class="nav-item px-lg-4">
-                                    <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mon compte</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-dark py-lg-3" id="mainNav">
+                <div class="container">
+                    <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item px-lg-4">
+                                <a  {% if action == 'homePage' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=homePage">A propos...</a>
+                            </li>
+                            <li class="nav-item px-lg-4">
+                                <a {% if action == 'blog' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blog&amp;page=1">Blog</a>
+                            </li>
+                            {% if user.role == ('Admin' or 'Lecteur') %}
+                            <li class="nav-item px-lg-4">
+                                <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mon compte</a>
+                            </li>
+                            {% endif %}
+                        </ul>
                     </div>
-                </nav>
-            {% endblock %}
+                </div>
+            </nav>
+{% endblock %}
         </header>
 
         <div id="content">

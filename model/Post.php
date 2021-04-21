@@ -2,7 +2,7 @@
 
 namespace EmilieSchott\BlogPHP\Model;
 
-class Post extends Hydrate
+class Post extends Hydrator
 {
     private $id;
     private $userId;
@@ -78,7 +78,7 @@ class Post extends Hydrate
     public function setTitle(string $title)
     {
         if (\strlen($title) <= 150) {
-            $this->title = \nl2br(htmlspecialchars($title));
+            $this->title = \nl2br(strip_tags($title));
         } else {
             throw new \Exception("Le titre doit faire moins de 150 caractères.");
         }
@@ -86,12 +86,14 @@ class Post extends Hydrate
 
     public function setStandFirst(string $standFirst)
     {
-        $this->standFirst = \nl2br(htmlspecialchars($standFirst));
+        $this->standFirst = \nl2br(strip_tags($standFirst));
     }
 
     public function setContent(string $content)
     {
-        $this->content = \nl2br(htmlspecialchars($content));
+        $authorizedTags = '<strong><em><h1><h2><h3><h4><h5><h6><p><div><span><sup><sub>
+        <blockquote><code><pre><section><article><aside><figure><a><img><iframe><ul><li><ol>';
+        $this->content = \strip_tags($content, $authorizedTags);
     }
 
     public function setCreatedAt(string $createdAt)
@@ -109,7 +111,7 @@ class Post extends Hydrate
     public function setAuthor(string $author)
     {
         if (\strlen($author) <= 45) {
-            $this->author = htmlspecialchars($author);
+            $this->author = strip_tags($author);
         } else {
             throw new \Exception("Le nom de l'auteur doit faire moins de 45 caractères.");
         }
@@ -118,7 +120,7 @@ class Post extends Hydrate
     public function setPicture(string $picture)
     {
         if (\strlen($picture) <= 150) {
-            $this->picture = htmlspecialchars($picture);
+            $this->picture = strip_tags($picture);
         } else {
             throw new \Exception("Le nom de l'image doit faire moins de 150 caractères.");
         }
@@ -127,7 +129,7 @@ class Post extends Hydrate
     public function setPictureDescription(string $pictureDescription)
     {
         if (\strlen($pictureDescription) <= 250) {
-            $this->pictureDescription = htmlspecialchars($pictureDescription);
+            $this->pictureDescription = strip_tags($pictureDescription);
         } else {
             throw new \Exception("La description de l'image doit faire moins de 250 caractères.");
         }

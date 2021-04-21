@@ -55,7 +55,7 @@
                                         <span class="section-heading-main"> {{ post.title }}</span> 
                                         <span class="section-heading-around">Posté le {{ post.createdAt }} </span>
                                     </h4>
-                                    <p> {{ post.standfirst }} </p>
+                                    <p> {{ post.standfirst | raw }} </p>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">

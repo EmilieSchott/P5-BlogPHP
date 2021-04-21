@@ -4,7 +4,7 @@ namespace EmilieSchott\BlogPHP\Model;
 
 use Exception;
 
-class Comment extends Hydrate
+class Comment extends Hydrator
 {
     private $id;
     private $postId;

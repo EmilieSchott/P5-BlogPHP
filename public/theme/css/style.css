@@ -19,6 +19,8 @@ h4,
 h5,
 h6 {
     font-family: 'Raleway';
+    font-weight:100;
+    text-transform:uppercase;
 }
 
 p {
@@ -26,10 +28,14 @@ p {
     font-size: 0.9rem;
 }
 
+.subtitle {
+    font-weight:700;
+}
+
 @media (min-width: 1200px) {
     p {
         line-height: 1.75;
-        font-size: 16px;;
+        font-size: 16px;
     }
 }
 

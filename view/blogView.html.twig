@@ -51,7 +51,7 @@
             <div
                 class="post-item-description d-flex  {% if loop.index is odd %} justify-content-sm-end mr-sm-3 ml-sm-auto {% else %} ml-sm-3 mr-lg-auto {% endif %}">
                 <div class="bg-faded col-10 col-lg-12 offset-1 offset-sm-0 p-3 p-md-4 p-xl-5 pb-4 pb-lg-5 rounded ">
-                    <p class="mb-0">{{ post.standFirst }}</p>
+                    <p class="mb-0 ">{{ post.standFirst| raw}}</p>
                     <div class="blog-button d-flex ">
                         <a class="btn btn-primary btn-xl mx-auto mr-lg-0"
                             href="index.php?action=post&amp;id={{ post.id }}&amp;blogPage={{ page }}">Lire la

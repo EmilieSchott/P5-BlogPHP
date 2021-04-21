@@ -9,6 +9,141 @@
 {% block type %} website {% endblock %}
 {% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
 {% block author %}Emilie Schott{% endblock %}
+{% block script %}
+<script src="vendor/tinymce/tinymce/tinymce.min.js"></script>
+<script type="text/javascript"> tinymce.init({
+    selector: '.editor',
+    setup: function (editor) {
+        editor.on('change', function () {
+            editor.save();
+        });
+    },
+    menubar : false,
+    toolbar_mode: 'wrap',
+    plugins: ['lists preview code media codesample emoticons link table quickbars searchreplace wordcount'],
+    toolbar: [
+        {
+        name: 'history', items: [ 'undo', 'redo' ]
+        },
+        {
+        name: 'styles', items: [ 'styleselect' ]
+        },
+        {
+        name: 'select', items: [ 'fontselect', 'fontsizeselect', 'lineheight', 'removeformat']
+        },
+        {
+        name: 'formatting', items: [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'codeformat' ]
+        },
+        {
+        name: 'alignment', items: [ 'alignleft', 'aligncenter', 'alignright', 'alignjustify']
+        },
+        {
+        name: 'list', items: [ 'bullist', 'numlist']
+        },
+        {
+        name: 'decorations', items: [ 'forecolor', 'backcolor', 'emoticons']
+        },
+        {
+        name: 'code', items: [ 'codesample', 'outdent', 'indent', 'code' ]
+        },
+        {
+        name: 'insert', items: [ 'quickimage','media', 'table' ]
+        },
+        {
+        name: 'link', items: [ 'link', 'openlink', 'unlink' ]
+        },
+        {
+        name: 'tools', items: [ 'searchreplace','wordcount','preview' ]
+        }
+    ],
+    spellchecker_language: 'fr_FR',
+    spellchecker_languages: 'Français=fr_FR,Anglais=en',
+    font_formats: 'Lora=Lora;Raleway=Raleway',
+    fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 40pt 44pt 48pt',
+    preview_styles: 'font-size font-weight color background-color border border-radius outline text-shadow',
+    content_style:  'p {line-height: 1.75; font-size: 16px; font-family: "Lora";}' +
+                    'h1 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h2 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h3 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h4 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h5 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h6 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'a {color:#7b858e;}' +
+                    'a:hover, .current {color: #006699; text-decoration: none;}' +
+                    '.section-heading-main {font-size: 1.8rem; font-weight: 100; text-transform: uppercase;}' +
+                    '.section-heading-around {display: block; font-size: 16px; font-weight: 700;}',
+    color_map: [
+        '#BFEDD2', 'Light Green',
+        '#FBEEB8', 'Light Yellow',
+        '#F8CAC6', 'Light Red',
+        '#ECCAFA', 'Light Purple',
+        '#C2E0F4', 'Light Blue',
+    
+        '#2DC26B', 'Green',
+        '#F1C40F', 'Yellow',
+        '#E03E2D', 'Red',
+        '#B96AD9', 'Purple',
+        '#3598DB', 'Blue',
+    
+        '#169179', 'Dark Turquoise',
+        '#E67E23', 'Orange',
+        '#BA372A', 'Dark Red',
+        '#843FA1', 'Dark Purple',
+        '#236FA1', 'Dark Blue',
+    
+        '#ECF0F1', 'Light Gray',
+        '#CED4D9', 'Medium Gray',
+        '#95A5A6', 'Gray',
+        '#7E8C8D', 'Dark Gray',
+        '#34495E', 'Navy Blue',
+
+        '#7b858e', 'Website Gray',
+        '#d9e6ed', 'Website Grayish White',
+        '#006699', 'Website Blue',
+        
+        '#000000', 'Black',
+        '#ffffff', 'White'
+    ],
+    codesample_languages: [
+    {text: 'HTML/XML', value: 'markup'},
+    {text: 'JavaScript', value: 'javascript'},
+    {text: 'CSS', value: 'css'},
+    {text: 'PHP', value: 'php'},
+    {text: 'Ruby', value: 'ruby'},
+    {text: 'Python', value: 'python'},
+    {text: 'Java', value: 'java'},
+    {text: 'Twig', value: 'twig'},
+    {text: 'C', value: 'c'},
+    {text: 'C#', value: 'csharp'},
+    {text: 'C++', value: 'cpp'}
+],
+    style_formats: [
+    { title: 'Headings', items: [
+        { title: 'Heading 1', format: 'h1' },
+        { title: 'Heading 2', format: 'h2' },
+        { title: 'Heading 3', format: 'h3' },
+        { title: 'Heading 4', format: 'h4' },
+        { title: 'Heading 5', format: 'h5' },
+        { title: 'Heading 6', format: 'h6' }
+    ]},
+    { title: 'Blocks', items: [
+        { title: 'Paragraph', format: 'p' },
+        { title: 'Blockquote', format: 'blockquote' },
+        { title: 'Div', format: 'div' },
+        { title: 'Pre', format: 'pre' }
+    ]},
+    { title: 'Containers', items: [
+      { title: 'section', block: 'section', wrapper: true, merge_siblings: false },
+      { title: 'article', block: 'article', wrapper: true, merge_siblings: false },
+      { title: 'blockquote', block: 'blockquote', wrapper: true },
+      { title: 'hgroup', block: 'hgroup', wrapper: true },
+      { title: 'aside', block: 'aside', wrapper: true },
+      { title: 'figure', block: 'figure', wrapper: true }
+    ] }
+    ]
+    
+}); </script>
+{% endblock %}
 
 {% block head %}
     {{ parent() }}
@@ -70,7 +205,7 @@
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
-                        <div class="row">
+                        <div class="row ">
                             <div class="col-12 pl-0 mb-0 admin-field">
                                 <div class="form-group col-12 mx-auto visible-label-form-group controls ">
                                     <label >Image :{% if post is not empty %} {{ post.picture }} {% else %}{% endif %}</label>
@@ -94,7 +229,7 @@
                                 <textarea rows="5"  class="form-control"  
                                 placeholder="Ecrivez un chapô (texte de présentation) à votre billet. Il sera affiché en gras au dessus de celui-ci et sera visible sur la page d'index du blog." 
                                 name="standfirst" id="standfirst" 
-                                required data-validation-required-message="Entrez un chapô s'il vous plait.">{% if post is not empty %} {{ post.standfirst }} {% else %}{% endif %}</textarea>
+                                required data-validation-required-message="Entrez un chapô s'il vous plait.">{% if post is not empty %}{{ post.standfirst }}{% else %}{% endif %}</textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>   
@@ -102,8 +237,8 @@
                             <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
                                 <label>Contenu :</label>
                                 <textarea 
-                                    rows="30" class="form-control" placeholder="Ecrivez le contenu de votre billet." name="content" id="content" 
-                                    required data-validation-required-message="Tapez un contenu, s'il vous plait.">{% if post is not empty %} {{ post.content }} {% else %}{% endif %}</textarea>
+                                    rows="30" class="form-control editor" placeholder="Ecrivez le contenu de votre billet." name="content" id="content" 
+                                    required data-validation-required-message="Tapez un contenu, s'il vous plait.">{% if post is not empty %}{{ post.content }}{% else %}{% endif %}</textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    

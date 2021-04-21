@@ -306,8 +306,6 @@ class PrivateController
             }
         
             header('Location: index.php?action=postFormPage&success=1#form');
-        } catch (\PDOException $PDO) {
-            header('Location: index.php?action=postFormPage&success=0#form');
         } catch (\Exception $e) {
             $_SESSION['exceptionMessage'] = $e->getMessage();
             header('Location: index.php?action=postFormPage&success=0#form');
