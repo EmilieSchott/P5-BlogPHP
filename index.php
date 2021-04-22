@@ -203,9 +203,9 @@ try {
             case 'managePosts':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-                    if (isset($_SESSION['postException'])) {
-                        $datas['postException'] = $_SESSION['postException'];
-                        unset($_SESSION['postException']);
+                    if (isset($_SESSION['exceptionMessage'])) {
+                        $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                        unset($_SESSION['exceptionMessage']);
                     }
                     $privateController->managePosts($postManager, $twig, $datas);
                 } else {
@@ -257,9 +257,9 @@ try {
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
-                    if (isset($_SESSION['commentException'])) {
-                        $datas['commentException'] = $_SESSION['commentException'];
-                        unset($_SESSION['commentException']);
+                    if (isset($_SESSION['exceptionMessage'])) {
+                        $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                        unset($_SESSION['exceptionMessage']);
                     }
                     $privateController->manageComments($commentManager, $postManager, $twig, $datas);
                 } else {
@@ -272,6 +272,20 @@ try {
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['status'] = isset($_GET['status']) ? (string) $_GET['status'] : null;
                         $privateController->modifyCommentStatus($commentManager, $datas);
+                    } else {
+                        throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                    }
+    
+                    break;
+                case 'manageUsers':
+                    if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                        $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                        $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
+                        if (isset($_SESSION['exceptionMessage'])) {
+                            $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                            unset($_SESSION['exceptionMessage']);
+                        }
+                        $privateController->manageUsers($userManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }
