@@ -148,6 +148,7 @@ class PublicController
             'content' => $_POST['content'],
             'postId' => $_POST['postId']
         ];
+        $datas['status'] = $_SESSION['role'] === 'Admin'  ? 'Validé' : 'En attente';
 
         try {
             $commentManager->addComment($datas);

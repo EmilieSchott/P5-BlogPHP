@@ -88,7 +88,7 @@
                         <div class="row">
                             <div class="form-group col-xl-12 mx-auto col-xs-12 floating-label-form-group controls">
                                 <label >Pseudo</label>
-                                <input  class="form-control" {% if user.pseudo is not empty %} type="hidden" value="{{ user.pseudo }}" {% else %} type="hidden" placeholder="Pseudo" {% endif %} name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
+                                <input  class="form-control" {% if user.pseudo is not empty %} type="hidden" value="{{ user.pseudo }}" {% else %} type="text" placeholder="Pseudo" {% endif %} name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
@@ -101,7 +101,7 @@
                             </div>
                         </div>    
                         <div class="row">
-                            <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3">Envoyer</button>
+                            <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3"> Envoyer</button>
                         </div>            
                     </form>
                 {% endif %}

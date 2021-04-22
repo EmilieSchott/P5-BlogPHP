@@ -46,10 +46,11 @@ class CommentManager extends Manager
             header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
         }
 
-        $query=$this->db->prepare('INSERT INTO comments (postId, author, content) VALUES (:postId, :author, :content)');
+        $query=$this->db->prepare('INSERT INTO comments (postId, author, content, status) VALUES (:postId, :author, :content, :status)');
         $query->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
         $query->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
         $query->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
+        $query->bindValue(':status', $comment->getStatus(), \PDO::PARAM_STR);
         $query->execute();
     }
 
