@@ -49,10 +49,4 @@ class CommentManager extends Manager
 
         return $comments;
     }
-
-    public function deletePostComments(int $postId): void
-    {
-        $query = $this->db->prepare('DELETE FROM comments WHERE postId = ?');
-        $query->execute([$postId]);
-    }
 }

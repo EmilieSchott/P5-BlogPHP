@@ -235,7 +235,7 @@ class PrivateController
         }
     }
 
-    public function deletePost(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
+    public function deletePost(PostManager $postManager, Environment $twig, array $datas)
     {
         $datas['office'] = 'back';
     
@@ -244,7 +244,6 @@ class PrivateController
                 $post = $postManager->getPost($datas['postId']);
                 \unlink('public/upload/img/post/' . $post->getPicture());
                 $postManager->deletePost($datas['postId']);
-                $commentManager->deletePostComments($datas['postId']);
                 $datas['deleteSuccess']=1;
                 echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
             } else {
