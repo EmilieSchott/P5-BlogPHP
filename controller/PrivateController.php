@@ -66,7 +66,7 @@ class PrivateController
     public function getInscription(UserManager $userManager)
     {
         $datas = [
-            'role' => 'Reader',
+            'role' => 'Lecteur',
             'pseudo' => $_POST['pseudo'],
             'name' => $_POST['name'],
             'firstName' => $_POST['firstName'],
@@ -94,14 +94,12 @@ class PrivateController
         header('Location: index.php?action=homePage');
     }
     
-    public function modifyMyDatas(UserManager $userManager, Environment $twig, array $datas)
+    public function modifyDatas(UserManager $userManager, Environment $twig, array $datas)
     {
         $datas['office'] = 'back';
-        $datas['user'] = $userManager->getUser($_SESSION['pseudo']);
         if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
             unset($datas['success']);
         }
-
         echo $twig->render('datasModificationView.html.twig', $datas);
     }
 
@@ -109,41 +107,61 @@ class PrivateController
     {
         try {
             $datas['office'] = 'back';
-            $user = $userManager->getUser($_SESSION['pseudo']);
+            $user = $userManager->getUser($_POST['pseudo']);
 
+            /*
             if ($_POST['formName'] === 'modifyEmail') {
-                if (isset($_POST['email'])) {
-                    $modification = [
-                        'email' => $_POST['email']
-                        ];
-                } else {
-                    throw new \Exception("Le champ n'est pas rempli.");
-                }
+                $modification = $this->modifyEmail();
             }
 
             if ($_POST['formName'] === 'modifyPassword') {
-                if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
-                    if (\password_verify($_POST['password0'], $user->getPassword())) {
-                        if ($_POST['password1'] === $_POST['password2']) {
-                            $modification = [
-                                'password' => \password_hash($_POST['password1'], PASSWORD_DEFAULT)
-                            ];
-                        } else {
-                            throw new \Exception("Les nouveaux mots de passe ne sont pas identiques.");
-                        }
-                    } else {
-                        throw new \Exception("L'ancien mot de passe n'est pas correct.");
-                    }
-                } else {
-                    throw new \Exception("Les champs ne sont pas remplis.");
-                }
+                $modification = $this->modifyPassword();
+            }*/
+
+            if (method_exists($this, $_POST['formName'])) {
+                $method = $_POST['formName'];
+                $modification = $this->{$method}();
             }
 
             $datas['user'] = $userManager->modifyUser($user, $modification);
-            header('Location: index.php?action=modifyMyDatas&success=1#message');
+            header('Location: index.php?action=modifyDatas&success=1#message');
         } catch (\Exception $e) {
             $_SESSION['modificationException'] = $e->getMessage();
-            header('Location: index.php?action=modifyMyDatas&success=0#message');
+            header('Location: index.php?action=modifyDatas&success=0#message');
+        }
+    }
+
+    public function modifyEmail()
+    {
+        if (isset($_POST['email'])) {
+            $modification = [
+                'email' => $_POST['email']
+                ];
+
+            return $modification;
+        } else {
+            throw new \Exception("Le champ n'est pas rempli.");
+        }
+    }
+
+    public function modifyPassword()
+    {
+        if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
+            if (\password_verify($_POST['password0'], $user->getPassword())) {
+                if ($_POST['password1'] === $_POST['password2']) {
+                    $modification = [
+                        'password' => \password_hash($_POST['password1'], PASSWORD_DEFAULT)
+                    ];
+
+                    return $modification;
+                } else {
+                    throw new \Exception("Les nouveaux mots de passe ne sont pas identiques.");
+                }
+            } else {
+                throw new \Exception("L'ancien mot de passe n'est pas correct.");
+            }
+        } else {
+            throw new \Exception("Les champs ne sont pas remplis.");
         }
     }
 

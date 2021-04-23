@@ -151,15 +151,16 @@ try {
                 }
 
                 break;
-            case 'modifyMyDatas':
+            case 'modifyDatas':
                 try {
                     if (isset($_SESSION['pseudo'])) {
+                        $datas['pseudo'] = ($_SESSION['role'] === 'Admin' && isset($_GET['pseudo'])) ?  (string) $_GET['pseudo'] : $_SESSION['pseudo'];
                         if (isset($_SESSION['modificationException'])) {
                             $datas['modificationException'] = $_SESSION['modificationException'];
                             unset($_SESSION['modificationException']);
                         }
                         $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
-                        $privateController->modifyMyDatas($userManager, $twig, $datas);
+                        $privateController->modifyDatas($userManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
