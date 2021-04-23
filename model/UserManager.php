@@ -77,7 +77,7 @@ class UserManager extends Manager
         }
     }
 
-    public function deleteUser(int $pseudo): void
+    public function deleteUser(string $pseudo): void
     {
         $query = $this->db->prepare('DELETE FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
