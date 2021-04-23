@@ -163,9 +163,9 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">Le billet a bien été enregistrée.</span>
-                            <p>
+                            <span class="section-heading-around text-center" >
                                 Vous pouvez reprendre une activité normale.
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row mb-5">
@@ -176,9 +176,9 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main">{% if exceptionMessage is empty %} Le billet n'a pas pu être enregistrée. {% else %} {{ exceptionMessage }} {% endif %}.</span>
-                            <p>
+                            <span class="section-heading-around">
                                 {% if exceptionMessage is empty %} Nous sommes désolés de cet incident. {% else %} Le billet n'a pas pu être enregistrée.{% endif %} 
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
