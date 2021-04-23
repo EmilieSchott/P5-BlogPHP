@@ -4,6 +4,23 @@ namespace EmilieSchott\BlogPHP\Model;
 
 class UserManager extends Manager
 {
+    public function getList()
+    {
+        $users = [];
+        $query=$this->db->query(
+            'SELECT * FROM users WHERE role = "Lecteur"'
+        );
+        while ($datas = $query->fetch(\PDO::FETCH_ASSOC)) {
+            $users[] = new User($datas);
+        }
+
+        if ($users === null) {
+            throw new \Exception("Aucun utilisateur n'a pu être récupéré.");
+        }
+        
+        return $users;
+    }
+    
     public function getUser(string $pseudo)
     {
         $query = $this->db->prepare('SELECT * FROM users WHERE pseudo = ?');
