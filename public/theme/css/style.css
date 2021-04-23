@@ -372,7 +372,7 @@ a:hover, .current {
 }
 
 
-.admin-field:before{
+.admin-group:before{
     border-radius: 0.5rem;
     content: '';
     position: absolute;
@@ -404,7 +404,7 @@ a:hover, .current {
 
 
 @media (max-width:1199px) {
-    .admin-field {
+    .admin-group {
         padding: 5px;
         margin: 5px;
         padding-top: 10px;
@@ -427,7 +427,7 @@ a:hover, .current {
         margin-bottom: -40px;
     }
 
-    .admin-field {
+    .admin-group {
         padding-top: 0.5rem;
         margin-top: 1rem;
         margin-bottom: 1rem;

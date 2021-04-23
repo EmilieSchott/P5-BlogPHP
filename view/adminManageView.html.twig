@@ -80,42 +80,83 @@
                             {% if posts is not empty %}
                                 {% for post in posts %}
                                     <li class="list-item d-flex flex-column">
-                                        <div>
-                                            <h4 class="section-heading">
-                                                <span class="section-heading-main"> {{ post.title }}</span> 
-                                                <span class="section-heading-around">Posté le {{ post.createdAt }} </span>
-                                            </h4>
-                                            <p> {{ post.standfirst | raw }} </p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <a class="btn btn-red list-button" href="index.php?action=deletePostPage&amp;post={{ post.id }}" >Supprimer le billet</a> 
+
+                                            <div>
+                                                <h4 class="section-heading">
+                                                    <span class="section-heading-main"> {{ post.title }}</span> 
+                                                    <span class="section-heading-around">Posté le {{ post.createdAt }} </span>
+                                                </h4>
+                                                <p> {{ post.standfirst | raw }} </p>
                                             </div>
-                                            <div class="col-6 text-right">
-                                                <a class="btn btn-primary list-button" href="index.php?action=postFormPage&amp;post={{ post.id }}" >Modifier le billet</a> 
-                                            </div>
-                                        </div> 
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-red list-button" href="index.php?action=deletePostPage&amp;post={{ post.id }}" >Supprimer le billet</a> 
+                                                </div>
+                                                <div class="col-6 text-right">
+                                                    <a class="btn btn-primary list-button" href="index.php?action=postFormPage&amp;post={{ post.id }}" >Modifier le billet</a> 
+                                                </div>
+                                            </div> 
+
                                     </li>
                                 {% endfor %}
                             {% elseif comments is not empty %}
                                 {% for comment in comments %}
                                     <li class="list-item d-flex flex-column">
-                                        <div>
-                                            <h4 class="section-heading">
-                                                <span class="section-heading-around">En réponse au billet :  </span>
-                                                <span class="section-heading-main"> "{{ comment.postTitle }}"</span> 
-                                                <span class="section-heading-around">{{ comment.datas.author }} a écrit, le {{ comment.datas.createdAt }}" :  </span>
-                                            </h4>
-                                            <p> "{{ comment.datas.content }}" </p>
+
+                                            <div>
+                                                <h4 class="section-heading">
+                                                    <span class="section-heading-around">En réponse au billet :  </span>
+                                                    <span class="section-heading-main"> "{{ comment.postTitle }}"</span> 
+                                                    <span class="section-heading-around">{{ comment.datas.author }} a écrit, le {{ comment.datas.createdAt }}" :  </span>
+                                                </h4>
+                                                <p> "{{ comment.datas.content }}" </p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6">
+                                                    <a class="btn btn-red list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}" >Rejeter le commentaire</a> 
+                                                </div>
+                                                <div class="col-12 col-sm-6 text-sm-right">
+                                                    <a class="btn btn-primary list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}" >Valider le commentaire</a> 
+                                                </div>
+                                            </div> 
+
+                                    </li>
+                                {% endfor %}
+                                {% elseif users is not empty %}
+                                {% for user in users %}
+                                    <li class="list-item d-flex flex-column">
+                                        <div class="col-12 admin-group text-center">
+                                            <ul class="pl-0 px-1">
+                                                <li class="list-item d-flex">
+                                                    Rôle :
+                                                    <span class="ml-auto"> {{ user.role }} </span>
+                                                </li>
+                                                <li class="list-item d-flex">
+                                                    Pseudo :
+                                                    <span class="ml-auto"> {{ user.pseudo }} </span>
+                                                </li>
+                                                <li class="list-item d-flex">
+                                                    Nom :
+                                                    <span class="ml-auto"> {{ user.name }} </span>
+                                                </li>
+                                                <li class="list-item d-flex">
+                                                    Prénom :
+                                                    <span class="ml-auto"> {{ user.firstName }} </span>
+                                                </li>
+                                                <li class="list-item d-flex">
+                                                    Email :
+                                                    <span class="ml-auto"> {{ user.email }}</span>
+                                                </li>
+                                                <div class="row pl-0">
+                                                    <div class="col-12 col-sm-6 text-left">
+                                                        <a class="btn btn-red list-button mb-1 mb-sm-2 mt-2 px-5 px-sm-2" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}" >Supprimer l'utilisateur</a> 
+                                                    </div>
+                                                    <div class="col-12 col-sm-6 text-right">
+                                                        <a class="btn btn-primary list-button mb-1 mb-sm-2 mt-2" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}" >Modifier les informations</a> 
+                                                    </div>
+                                                </div> 
+                                            </ul>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <a class="btn btn-red list-button" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}" >Rejeter le commentaire</a> 
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <a class="btn btn-primary list-button" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}" >Valider le commentaire</a> 
-                                            </div>
-                                        </div> 
                                     </li>
                                 {% endfor %}
                             {% endif %}

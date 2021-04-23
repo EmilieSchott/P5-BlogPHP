@@ -192,21 +192,21 @@
                     <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" class="px-2" enctype="multipart/form-data">
                         {% if post is not empty %}<input type="hidden" name="postId" value="{{ post.id }}"/>{% else %}{% endif %}
                         <div class="row">
-                            <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label>Titre :</label>
                                 <input type="text" class="form-control" {% if post is not empty %} value="{{ post.title }}" {% else %}  {% endif %} placeholder="Donnez un titre au billet" name="title" id="title" required data-validation-required-message="Entrez un titre, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>  
                         <div class="row">
-                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label >Auteur :</label>
                                 <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}  {% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
                         <div class="row ">
-                            <div class="col-12 pl-0 mb-0 admin-field">
+                            <div class="col-12 pl-0 mb-0 admin-group">
                                 <div class="form-group col-12 mx-auto visible-label-form-group controls ">
                                     <label >Image :{% if post is not empty %} {{ post.picture }} {% else %}{% endif %}</label>
                                     {% if post is not empty %}<img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/upload/img/post/{{ post.picture }}" alt="{{ post.pictureDescription }}"> {% else %}{% endif %}
@@ -224,7 +224,7 @@
                             </div>
                         </div>   
                         <div class="row">
-                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label >Chapô :</label>
                                 <textarea rows="5"  class="form-control"  
                                 placeholder="Ecrivez un chapô (texte de présentation) à votre billet. Il sera affiché en gras au dessus de celui-ci et sera visible sur la page d'index du blog." 
@@ -234,7 +234,7 @@
                             </div>
                         </div>   
                         <div class="row">
-                            <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label>Contenu :</label>
                                 <textarea 
                                     rows="30" class="form-control editor" placeholder="Ecrivez le contenu de votre billet." name="content" id="content" 
