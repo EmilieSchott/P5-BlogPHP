@@ -367,4 +367,23 @@ class PrivateController
             header('Location: index.php?action=manageComments&success=0#message');
         }
     }
+
+    public function manageUsers(UserManager $userManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+
+        try {
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
+            }
+            $users = $userManager->getList();
+            $usersPages = $this->paginator($users, 10);
+            $datas['pagesNumber'] = $usersPages['pagesNumber'];
+            $datas['users'] =  $this->displayPage($usersPages, $datas['page']);
+            echo $twig->render('adminManageView.html.twig', $datas);
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $twig->render('adminManageView.html.twig', $datas);
+        }
+    }
 }
