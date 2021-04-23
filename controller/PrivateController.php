@@ -212,20 +212,63 @@ class PrivateController
         }
     }
 
-    public function deletePostPage($postManager, Environment $twig, array $datas)
+    public function confirmDeletion(PostManager $postManager, UserManager $userManager, Environment $twig, array $datas)
     {
         $datas['office'] = 'back';
         
         try {
-            if (!empty($datas['id'])) {
-                $datas['post'] = $postManager->getPost($datas['id']);
-                if ($datas['post'] instanceof Post) {
-                    echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
-                } else {
-                    throw new \Exception("Le billet n'a pas pu être récupéré");
-                }
+            if ($datas['entity'] === 'post') {
+                $this->confirmPostSuppression($postManager, $twig, $datas);
+            } elseif ($datas['entity'] === 'user') {
+                $this->confirmUserSuppression($userManager, $twig, $datas);
             } else {
-                throw new \Exception("Aucun billet valide n'a été spécifié.");
+                throw new \Exception("L'action entreprise n'est pas valide.");
+            }
+        } catch (\Exception $e) {
+            $datas['postException']=$e->getMessage();
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        }
+    }
+
+    public function confirmPostSuppression(PostManager $postManager, Environment $twig, array $datas)
+    {
+        if (!empty($datas['id'])) {
+            $datas['post'] = $postManager->getPost($datas['id']);
+            if ($datas['post'] instanceof Post) {
+                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("Le billet n'a pas pu être récupéré");
+            }
+        } else {
+            throw new \Exception("Aucun billet valide n'a été spécifié.");
+        }
+    }
+
+    public function confirmUserSuppression(UserManager $userManager, Environment $twig, array $datas)
+    {
+        if (!empty($datas['pseudo'])) {
+            $datas['user'] = $userManager->getUser($datas['pseudo']);
+            if ($datas['user'] instanceof User) {
+                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("L'utilisateur n'a pas pu être récupéré");
+            }
+        } else {
+            throw new \Exception("Aucun utilisateur valide n'a été spécifié.");
+        }
+    }
+
+    public function deleteEntity(PostManager $postManager, UserManager $userManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            if ($datas['entity'] === 'post') {
+                $this->deletePost($postManager, $twig, $datas);
+            } elseif ($datas['entity'] === 'user') {
+                $this->deleteUser($userManager, $twig, $datas);
+            } else {
+                throw new \Exception("L'action entreprise n'est pas valide.");
             }
         } catch (\Exception $e) {
             $datas['postException']=$e->getMessage();
@@ -235,21 +278,25 @@ class PrivateController
 
     public function deletePost(PostManager $postManager, Environment $twig, array $datas)
     {
-        $datas['office'] = 'back';
-    
-        try {
-            if (!empty($datas['postId'])) {
-                $post = $postManager->getPost($datas['postId']);
-                \unlink('public/upload/img/post/' . $post->getPicture());
-                $postManager->deletePost($datas['postId']);
-                $datas['deleteSuccess']=1;
-                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
-            } else {
-                throw new \Exception("Aucun post n'a été spécifié.");
-            }
-        } catch (\Exception $e) {
-            $datas['postException']=$e->getMessage();
+        if (!empty($datas['postId'])) {
+            $post = $postManager->getPost($datas['postId']);
+            \unlink('public/upload/img/post/' . $post->getPicture());
+            $postManager->deletePost($datas['postId']);
+            $datas['deleteSuccess']=1;
             echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        } else {
+            throw new \Exception("Aucun post n'a été spécifié.");
+        }
+    }
+
+    public function deleteUser(UserManager $userManager, Environment $twig, array $datas)
+    {
+        if (!empty($datas['pseudo'])) {
+            $userManager->deleteUser($datas['pseudo']);
+            $datas['deleteSuccess']=1;
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        } else {
+            throw new \Exception("Aucun utilisateur n'a été spécifié.");
         }
     }
 

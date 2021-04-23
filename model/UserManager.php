@@ -76,4 +76,10 @@ class UserManager extends Manager
             header('Location: index.php?action=modifyMyDatas#message');
         }
     }
+
+    public function deleteUser(int $pseudo): void
+    {
+        $query = $this->db->prepare('DELETE FROM users WHERE pseudo = ?');
+        $query->execute([$pseudo]);
+    }
 }

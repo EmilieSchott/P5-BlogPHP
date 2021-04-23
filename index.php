@@ -25,7 +25,7 @@ $userManager = new UserManager();
 date_default_timezone_set('Etc/UTC');
 
 if (isset($_SESSION['role'], $_SESSION['pseudo'])) {
-    $datas['user'] = [
+    $datas['userSession'] = [
         'role' => $_SESSION['role'],
         'pseudo' => $_SESSION['pseudo']
     ];
@@ -214,19 +214,23 @@ try {
                 }
 
                 break;
-            case 'deletePostPage':
+            case 'confirmDeletion':
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
-                        $datas['id'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
-                        $privateController->deletePostPage($postManager, $twig, $datas);
+                        $datas['entity'] = isset($_GET['entity']) ? (string) $_GET['entity'] : null;
+                        $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
+                        $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
+                        $privateController->confirmDeletion($postManager, $userManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }
     
                 break;
-            case 'deletePost':
+            case 'deleteEntity':
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
-                        $datas['postId'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
-                        $privateController->deletePost($postManager, $twig, $datas);
+                        $datas['entity'] = isset($_GET['entity']) ? (string) $_GET['entity'] : null;
+                        $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
+                        $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
+                        $privateController->deleteEntity($postManager, $userManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }

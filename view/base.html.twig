@@ -60,7 +60,7 @@
                             <li class="nav-item px-lg-4">
                                 <a {% if action == 'blog' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blog&amp;page=1">Blog</a>
                             </li>
-                            {% if user.role == ('Admin' or 'Lecteur') %}
+                            {% if userSession.role == ('Admin' or 'Lecteur') %}
                             <li class="nav-item px-lg-4">
                                 <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mon compte</a>
                             </li>
@@ -82,7 +82,7 @@
                         <li  class="nav-item px-lg-4"  >
                             <a {% if action == 'myComments' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=myComments">Mes commentaires</a>
                         </li>
-                        {% if user.role == 'Admin' %}
+                        {% if userSession.role == 'Admin' %}
                         <li class="nav-item px-lg-4" >
                             <a {% if action == 'managePosts' %} class="nav-link text-uppercase  active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=managePosts">Gérer les billets</a>
                         </li>
