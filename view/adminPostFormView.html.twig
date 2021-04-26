@@ -189,7 +189,7 @@
                         <span class="section-heading-around">Panneau d'administration</span>
                         <span class="section-heading-main">{% if post is not empty %} Modifier {% else %} Créer {% endif %} un billet</span>
                     </h2>
-                    <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" class="px-2" enctype="multipart/form-data">
+                    <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" requireSSL="true" class="px-2" enctype="multipart/form-data">
                         {% if post is not empty %}<input type="hidden" name="postId" value="{{ post.id }}"/>{% else %}{% endif %}
                         <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
                         <div class="row">

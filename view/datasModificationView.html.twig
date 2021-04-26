@@ -51,7 +51,7 @@
                         <span class="section-heading-around">Mon compte</span>
                         <span class="section-heading-main">Modifier mes informations</span>
                     </h2>
-                    <form name="modifyEmail" id="modifyEmail" action="index.php?action=modifyUser" method="post">
+                    <form name="modifyEmail" id="modifyEmail" action="index.php?action=modifyUser" requireSSL="true" method="post">
                         <div class="form-group floating-label-form-group controls hidden">
                             <label>formName</label>
                             <input type="hidden" class="form-control" value="modifyEmail" name="formName" id="formName">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                     </form> 
-                    <form name="modifyPassword" id="modifyPassword" action="index.php?action=modifyUser" method="post">
+                    <form name="modifyPassword" id="modifyPassword" action="index.php?action=modifyUser" requireSSL="true" method="post">
                         <div class="form-group floating-label-form-group controls hidden">
                             <label>formName</label>
                             <input type="hidden" class="form-control" value="modifyPassword" name="formName" id="formName">
