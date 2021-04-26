@@ -278,10 +278,10 @@ class PrivateController
 
     public function deletePost(PostManager $postManager, Environment $twig, array $datas)
     {
-        if (!empty($datas['postId'])) {
-            $post = $postManager->getPost($datas['postId']);
+        if (!empty($datas['id'])) {
+            $post = $postManager->getPost($datas['id']);
             \unlink('public/upload/img/post/' . $post->getPicture());
-            $postManager->deletePost($datas['postId']);
+            $postManager->deletePost($datas['id']);
             $datas['deleteSuccess']=1;
             echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
         } else {
