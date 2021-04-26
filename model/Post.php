@@ -121,7 +121,7 @@ class Post extends Hydrator
     
     public function setPicture(string $picture)
     {
-        if (\strlen($picture) <= 150) {
+        if (\strlen($picture) <= 162) {
             $this->picture = strip_tags($picture);
         } else {
             throw new \Exception("Le nom de l'image doit faire moins de 150 caractères.");

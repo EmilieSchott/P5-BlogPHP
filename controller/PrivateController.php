@@ -313,7 +313,7 @@ class PrivateController
         }
     }
 
-    public function sendPostForm(UserManager $userManager, PostManager $postManager, array $datas)
+    public function sendPostForm(UserManager $userManager, PostManager $postManager, Environment $twig, array $datas)
     {
         $datas = [
             'title' => $_POST['title'],
@@ -328,6 +328,7 @@ class PrivateController
             $datas['userId'] = $user->getId();
             if (!empty($_FILES['newPicture']['name'])) {
                 $datas['picture'] = $this->validateImageFile();
+
                 if (!empty($_POST['oldPicture'])) {
                     \unlink('public/upload/img/post/' . $_POST['oldPicture']);
                 }
@@ -353,17 +354,24 @@ class PrivateController
     {
         if ($_FILES['newPicture']['error'] === 0) {
             if ($_FILES['newPicture']['size'] <= 2000000) {
-                $authorizedExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
+                $authorizedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                 $dataFile = \pathinfo($_FILES['newPicture']['name']);
-                $fileExtension = $dataFile['extension'];
-                if (in_array($fileExtension, $authorizedExtensions, true)) {
-                    $fileName = $dataFile['filename'];
-                    for ($i=1 ; file_exists('public/upload/img/post/' . $_FILES['newPicture']['name']) ; $i++) {
-                        $_FILES['newPicture']['name'] = $fileName . "--" . $i . "." . $fileExtension;
-                    }
-                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['name']);
+                $fileExtension = \strtolower($dataFile['extension']);
 
-                    return $_FILES['newPicture']['name'];
+                if (in_array($fileExtension, $authorizedExtensions, true)) {
+                    if (\strlen($_FILES['newPicture']['name']) >= 150) {
+                        $cutName = str_split($dataFile['filename'], 140);
+                        $fileName = $cutName[0];
+                    } else {
+                        $fileName = $dataFile['filename'];
+                    }
+
+                    $newFileName = bin2hex(\openssl_random_pseudo_bytes(6));
+                    $newFileName .= $fileName;
+                    $newFileName .= '.' . $fileExtension;
+                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $newFileName);
+
+                    return $newFileName;
                 } else {
                     throw new \Exception("Le fichier image doit être au format .jpg, .png ou .gif.");
                 }
@@ -374,7 +382,7 @@ class PrivateController
             throw new \Exception("Le fichier image n'a pas pu être uploadé.");
         }
     }
-
+    
     public function manageComments(CommentManager $commentManager, PostManager $postManager, Environment $twig, array $datas)
     {
         $datas['office'] = 'back';
