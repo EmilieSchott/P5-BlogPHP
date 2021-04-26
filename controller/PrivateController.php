@@ -36,6 +36,7 @@ class PrivateController
             if ($user instanceof User && \password_verify($attempt['password'], $user->getPassword())) {
                 $_SESSION['role'] = $user->getRole();
                 $_SESSION['pseudo'] = $user->getPseudo();
+                $_SESSION['token'] = md5(bin2hex(\openssl_random_pseudo_bytes(6)));
 
                 header('Location: index.php?action=account');
             } else {
@@ -109,18 +110,9 @@ class PrivateController
             $datas['office'] = 'back';
             $user = $userManager->getUser($_POST['pseudo']);
 
-            /*
-            if ($_POST['formName'] === 'modifyEmail') {
-                $modification = $this->modifyEmail();
-            }
-
-            if ($_POST['formName'] === 'modifyPassword') {
-                $modification = $this->modifyPassword();
-            }*/
-
             if (method_exists($this, $_POST['formName'])) {
                 $method = $_POST['formName'];
-                $modification = $this->{$method}();
+                $modification = $this->{$method}($user);
             }
 
             $datas['user'] = $userManager->modifyUser($user, $modification);
@@ -131,20 +123,24 @@ class PrivateController
         }
     }
 
-    public function modifyEmail()
+    public function modifyEmail(object $user)
     {
         if (isset($_POST['email'])) {
-            $modification = [
-                'email' => $_POST['email']
+            if ($user->getEmail() !== $_POST['email']) {
+                $modification = [
+                    'email' => $_POST['email']
                 ];
-
-            return $modification;
+            
+                return $modification;
+            } else {
+                throw new \Exception("L'ancien et le nouvel email sont identiques.");
+            }
         } else {
             throw new \Exception("Le champ n'est pas rempli.");
         }
     }
 
-    public function modifyPassword()
+    public function modifyPassword(object $user)
     {
         if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
             if (\password_verify($_POST['password0'], $user->getPassword())) {
