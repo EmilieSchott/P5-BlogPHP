@@ -27,7 +27,8 @@ date_default_timezone_set('Etc/UTC');
 if (isset($_SESSION['role'], $_SESSION['pseudo'])) {
     $datas['userSession'] = [
         'role' => $_SESSION['role'],
-        'pseudo' => $_SESSION['pseudo']
+        'pseudo' => $_SESSION['pseudo'],
+        'token' => $_SESSION['token']
     ];
 }
 
@@ -173,9 +174,13 @@ try {
             case 'modifyUser':
                 try {
                     if (isset($_SESSION['pseudo'])) {
-                        $privateController->modifyUser($userManager, $twig);
+                        if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
+                            $privateController->modifyUser($userManager, $twig);
+                        } else {
+                            throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
+                        }
                     } else {
-                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                        throw new \Exception("Vous ne pouvez effectuer cette action. Il faut vous identifier.");
                     }
                 } catch (\Exception $e) {
                     $_SESSION['connexionException'] = $e->getMessage();
@@ -230,7 +235,11 @@ try {
                         $datas['entity'] = isset($_GET['entity']) ? (string) $_GET['entity'] : null;
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
-                        $privateController->deleteEntity($postManager, $userManager, $twig, $datas);
+                        if (isset($_GET['token']) && $_GET['token'] === $_SESSION['token']) {
+                            $privateController->deleteEntity($postManager, $userManager, $twig, $datas);
+                        } else {
+                            throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
+                        }
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }
@@ -252,7 +261,11 @@ try {
                 break;
             case 'sendPostForm':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
-                    $privateController->sendPostForm($userManager, $postManager, $datas);
+                    if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
+                        $privateController->sendPostForm($userManager, $postManager, $datas);
+                    } else {
+                        throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
+                    }
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -276,7 +289,11 @@ try {
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['status'] = isset($_GET['status']) ? (string) $_GET['status'] : null;
-                        $privateController->modifyCommentStatus($commentManager, $datas);
+                        if (isset($_GET['token']) && $_GET['token'] === $_SESSION['token']) {
+                            $privateController->modifyCommentStatus($commentManager, $datas);
+                        } else {
+                            throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
+                        }
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }

@@ -62,7 +62,7 @@
                             <a class="btn btn-hard-primary btn-xl" href="index.php?action=managePosts" >Non, Annuler !</a> 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
-                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=post&amp;id={{ post.id }}" >Oui, Supprimer !</a> 
+                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=post&amp;id={{ post.id }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 
                         </div>
                     </div> 
                     {% elseif user is not empty %}
@@ -78,7 +78,7 @@
                             <a class="btn btn-hard-primary btn-xl" href="index.php?action=manageUsers" >Non, Annuler !</a> 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
-                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=user&amp;pseudo={{ user.pseudo }}" >Oui, Supprimer !</a> 
+                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=user&amp;pseudo={{ user.pseudo }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 
                         </div>
                     </div> 
                 {% endif %}

@@ -191,6 +191,7 @@
                     </h2>
                     <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" class="px-2" enctype="multipart/form-data">
                         {% if post is not empty %}<input type="hidden" name="postId" value="{{ post.id }}"/>{% else %}{% endif %}
+                        <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
                         <div class="row">
                             <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label>Titre :</label>
@@ -201,7 +202,7 @@
                         <div class="row">
                             <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label >Auteur :</label>
-                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}  {% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
+                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}{% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    

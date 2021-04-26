@@ -114,10 +114,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 col-sm-6">
-                                                    <a class="btn btn-red list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}" >Rejeter le commentaire</a> 
+                                                    <a class="btn btn-red list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Rejeter le commentaire</a> 
                                                 </div>
                                                 <div class="col-12 col-sm-6 text-sm-right">
-                                                    <a class="btn btn-primary list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}" >Valider le commentaire</a> 
+                                                    <a class="btn btn-primary list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Valider le commentaire</a> 
                                                 </div>
                                             </div> 
 
