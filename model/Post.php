@@ -45,7 +45,7 @@ class Post extends Hydrator
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }
@@ -104,8 +104,10 @@ class Post extends Hydrator
 
     public function setUpdatedAt(?string $updatedAt)
     {
-        $updatedAtDateTime = new \DateTime($updatedAt);
-        $this->updatedAt = $updatedAtDateTime->format('d-m-Y \à H\hi');
+        if (!is_null($updatedAt)) {
+            $updatedAtDateTime = new \DateTime($updatedAt);
+            $this->updatedAt = $updatedAtDateTime->format('d-m-Y \à H\hi');
+        }
     }
 
     public function setAuthor(string $author)

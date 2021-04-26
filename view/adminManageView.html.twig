@@ -83,8 +83,9 @@
 
                                             <div>
                                                 <h4 class="section-heading">
+                                                    <span class="section-heading-around">Posté le {{ post.createdAt }}</span>
                                                     <span class="section-heading-main"> {{ post.title }}</span> 
-                                                    <span class="section-heading-around">Posté le {{ post.createdAt }} </span>
+                                                    <span class="section-heading-around">Par {{ post.author }}{% if post.updatedAt is not null %} - Dernière mise à jour le {{ post.updatedAt }}{% endif %} </span>
                                                 </h4>
                                                 <p> {{ post.standfirst | raw }} </p>
                                             </div>

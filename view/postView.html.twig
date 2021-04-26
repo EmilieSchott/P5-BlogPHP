@@ -30,7 +30,7 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Publié le {{ post.createdAt }}</span>
                             <span class="section-heading-main">{{ post.title }}</span>
-                            <p class="subtitle">Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
+                            <p class="subtitle">Par {{ post.author }} {% if post.updatedAt is not null %}- Dernière mise à jour le {{ post.updatedAt }}{% endif %}</p>
                         </h2>
                         <p> <strong>{{ post.standFirst | raw }}</strong></p>
                         <p class="mb-0">{{ post.content | raw }}</p>

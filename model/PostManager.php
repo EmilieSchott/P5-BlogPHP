@@ -8,7 +8,7 @@ class PostManager extends Manager
     {
         $posts = [];
         $q=$this->db->query(
-            'SELECT id, title, standfirst, createdAt, picture, pictureDescription 
+            'SELECT id, title, standfirst, createdAt, updatedAt, author, picture, pictureDescription 
             FROM posts ORDER BY id DESC'
         );
         while ($datas = $q->fetch(\PDO::FETCH_ASSOC)) {
@@ -63,7 +63,7 @@ class PostManager extends Manager
 
         $query=$this->db->prepare(
             'UPDATE posts 
-            SET userId = :userId, title = :title, standfirst = :standfirst, content = :content, author = :author, picture = :picture, pictureDescription = :pictureDescription
+            SET userId = :userId, title = :title, standfirst = :standfirst, content = :content, updatedAt = NOW(), author = :author, picture = :picture, pictureDescription = :pictureDescription
             WHERE id = :id'
         );
         $query->bindValue(':id', $post->getId(), \PDO::PARAM_INT);

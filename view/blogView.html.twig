@@ -43,6 +43,7 @@
                     <h2 class="section-heading mb-0">
                         <span class="section-heading-around"> Publié le {{ post.createdAt }} </span>
                         <span class="section-heading-main">{{ post.title }} </span>
+                        {% if post.updatedAt is not null %}<span class="section-heading-around">Dernière mise à jour le {{ post.updatedAt }}</span>{% endif %}
                     </h2>
                 </div>
             </div>

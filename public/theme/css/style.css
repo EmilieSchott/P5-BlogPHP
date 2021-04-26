@@ -30,6 +30,7 @@ p {
 
 .subtitle {
     font-weight:700;
+    margin-bottom:0px;
 }
 
 @media (min-width: 1200px) {
