@@ -85,53 +85,52 @@
                             {% if posts is not empty %}
                                 {% for post in posts %}
                                     <li class="list-item d-flex flex-column">
-
-                                            <div>
-                                                <h4 class="section-heading">
-                                                    <span class="section-heading-around">Posté le {{ post.createdAt }}</span>
-                                                    <span class="section-heading-main"> {{ post.title }}</span> 
-                                                    <span class="section-heading-around">Par {{ post.author }}{% if post.updatedAt is not null %} - Dernière mise à jour le {{ post.updatedAt }}{% endif %} </span>
-                                                </h4>
-                                                <p> {{ post.standfirst | raw }} </p>
+                                        <div>
+                                            <h4 class="section-heading">
+                                                <span class="section-heading-around">Posté le {{ post.createdAt }}</span>
+                                                <span class="section-heading-main"> {{ post.title }}</span> 
+                                                <span class="section-heading-around">Par {{ post.author }}{% if post.updatedAt is not null %} - Dernière mise à jour le {{ post.updatedAt }}{% endif %} </span>
+                                            </h4>
+                                            <p> {{ post.standfirst | raw }} </p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a class="btn btn-red list-button" href="index.php?action=confirmDeletion&amp;entity=post&amp;id={{ post.id }}" >Supprimer le billet</a> 
                                             </div>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <a class="btn btn-red list-button" href="index.php?action=confirmDeletion&amp;entity=post&amp;id={{ post.id }}" >Supprimer le billet</a> 
-                                                </div>
-                                                <div class="col-6 text-right">
-                                                    <a class="btn btn-primary list-button" href="index.php?action=postFormPage&amp;post={{ post.id }}" >Modifier le billet</a> 
-                                                </div>
-                                            </div> 
-
+                                            <div class="col-6 text-right">
+                                                <a class="btn btn-primary list-button" href="index.php?action=postFormPage&amp;post={{ post.id }}" >Modifier le billet</a> 
+                                            </div>
+                                        </div> 
                                     </li>
                                 {% endfor %}
                             {% elseif comments is not empty %}
                                 {% for comment in comments %}
                                     <li class="list-item d-flex flex-column">
-
-                                            <div>
-                                                <h4 class="section-heading">
-                                                    <span class="section-heading-around">En réponse au billet :  </span>
-                                                    <span class="section-heading-main"> "{{ comment.postTitle }}"</span> 
-                                                    <span class="section-heading-around">{{ comment.datas.author }} a écrit, le {{ comment.datas.createdAt }}" :  </span>
-                                                </h4>
-                                                <p> "{{ comment.datas.content }}" </p>
+                                        <div>
+                                            <h4 class="section-heading">
+                                                <span class="section-heading-around">En réponse au billet :  </span>
+                                                <span class="section-heading-main"> "{{ comment.postTitle }}"</span> 
+                                                <span class="section-heading-around">{{ comment.datas.author }} a écrit, le {{ comment.datas.createdAt }}" :  </span>
+                                            </h4>
+                                            <p> "{{ comment.datas.content }}" </p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6">
+                                                <a class="btn btn-red list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Rejeter le commentaire</a> 
                                             </div>
-                                            <div class="row">
-                                                <div class="col-12 col-sm-6">
-                                                    <a class="btn btn-red list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=rejected&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Rejeter le commentaire</a> 
-                                                </div>
-                                                <div class="col-12 col-sm-6 text-sm-right">
-                                                    <a class="btn btn-primary list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Valider le commentaire</a> 
-                                                </div>
-                                            </div> 
-
+                                            <div class="col-12 col-sm-6 text-sm-right">
+                                                <a class="btn btn-primary list-button mb-3 mb-sm-2 mt-0" href="index.php?action=modifyCommentStatus&amp;status=validated&amp;id={{ comment.datas.id }}&amp;token={{ userSession.token }}" >Valider le commentaire</a> 
+                                            </div>
+                                        </div> 
                                     </li>
                                 {% endfor %}
                             {% elseif users is not empty %}
                                 {% for user in users %}
                                     <li class="list-item d-flex flex-column">
                                         <div class="col-12 admin-group text-center">
+                                            <h3 class="section-heading">
+                                                <span class="section-heading-main"> {{ user.pseudo }} </span> 
+                                            </h3>
                                             <ul class="pl-0 px-1">
                                                 <li class="list-item d-flex">
                                                     Rôle :
