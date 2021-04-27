@@ -94,9 +94,10 @@ class PublicController
         header('Location: index.php');
     }
 
-    public function blog(PostManager $postManager, Environment $twig, array $datas)
+    public function blog(Environment $twig, array $datas)
     {
         try {
+            $postManager = new PostManager();
             $posts = $postManager->getList();
             $postsPages = $this->paginator($posts, 3);
             $datas['pagesNumber'] = $postsPages['pagesNumber'];
@@ -108,11 +109,11 @@ class PublicController
         }
     }
  
-    public function post(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
+    public function post(Environment $twig, array $datas)
     {
         if ($datas['id'] > 0) {
             try {
-                $this->getPostAndComments($postManager, $commentManager, $datas);
+                $this->getPostAndComments($datas);
             } catch (\Exception $e) {
                 $datas['commentsException'] = $e->getMessage();
             }
@@ -126,13 +127,15 @@ class PublicController
         }
     }
 
-    private function getPostAndComments(PostManager $postManager, CommentManager $commentManager, array &$datas)
+    private function getPostAndComments(array &$datas)
     {
+        $postManager = new PostManager();
         $post = $postManager->getPost($datas['id']);
         $datas['post'] = $post;
         if (is_null($datas['post'])) {
             throw new \Exception("Le billet demandé n'a pas pu être récupéré.");
         }
+        $commentManager = new CommentManager();
         $comments = $commentManager->getComments($datas['id']);
         if (!empty($comments)) {
             $commentsPages = $this->paginator($comments, 5);
@@ -141,7 +144,7 @@ class PublicController
         }
     }
 
-    public function addComment(CommentManager $commentManager): void
+    public function addComment(): void
     {
         $datas = [
             'author' => $_POST['author'],
@@ -151,6 +154,7 @@ class PublicController
         $datas['status'] = $_SESSION['role'] === 'Admin'  ? 'Validé' : 'En attente';
 
         try {
+            $commentManager = new CommentManager();
             $commentManager->addComment($datas);
         } catch (\PDOException $PDO) {
             header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=0&#addComment');

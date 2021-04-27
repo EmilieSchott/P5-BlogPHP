@@ -4,9 +4,6 @@ session_start();
 
 use EmilieSchott\BlogPHP\Controller\PrivateController;
 use EmilieSchott\BlogPHP\Controller\PublicController;
-use EmilieSchott\BlogPHP\Model\CommentManager;
-use EmilieSchott\BlogPHP\Model\PostManager;
-use EmilieSchott\BlogPHP\Model\UserManager;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -18,9 +15,6 @@ $twig = new Environment($loader, [
 ]);
 $publicController = new PublicController();
 $privateController = new PrivateController();
-$postManager = new PostManager();
-$commentManager = new CommentManager();
-$userManager = new UserManager();
 
 date_default_timezone_set('Etc/UTC');
 
@@ -67,7 +61,7 @@ try {
                     $datas['blogException'] = $_SESSION['blogException'];
                     unset($_SESSION['blogException']);
                 }
-                $publicController->blog($postManager, $twig, $datas);
+                $publicController->blog($twig, $datas);
 
                 break;
             case 'post':
@@ -81,7 +75,7 @@ try {
                             $datas['commentException'] = $_SESSION['commentException'];
                             unset($_SESSION['commentException']);
                         }
-                        $publicController->post($postManager, $commentManager, $twig, $datas);
+                        $publicController->post($twig, $datas);
                     } else {
                         throw new Exception("aucun identifiant de billet n'a été indiqué.");
                     }
@@ -92,7 +86,7 @@ try {
 
                 break;
             case 'addComment':
-                $publicController->addComment($commentManager);
+                $publicController->addComment();
 
                 break;
             case 'connexion':
@@ -107,13 +101,13 @@ try {
 
                 break;
             case 'getConnexion':
-                $privateController->getConnexion($userManager);
+                $privateController->getConnexion();
 
                 break;
             case 'account':
                 try {
                     if (isset($_SESSION['pseudo'])) {
-                        $privateController->accountPage($twig, $userManager, $datas);
+                        $privateController->accountPage($twig, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
@@ -136,7 +130,7 @@ try {
 
                 break;
             case 'getInscription':
-                $privateController->getInscription($userManager);
+                $privateController->getInscription();
 
                 break;
             case 'disconnect':
@@ -156,12 +150,12 @@ try {
                 try {
                     if (isset($_SESSION['pseudo'])) {
                         $datas['pseudo'] = ($_SESSION['role'] === 'Admin' && isset($_GET['pseudo'])) ?  (string) $_GET['pseudo'] : $_SESSION['pseudo'];
-                        if (isset($_SESSION['modificationException'])) {
-                            $datas['modificationException'] = $_SESSION['modificationException'];
-                            unset($_SESSION['modificationException']);
+                        if (isset($_SESSION['exceptionMessage'])) {
+                            $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                            unset($_SESSION['exceptionMessage']);
                         }
                         $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
-                        $privateController->modifyDatas($userManager, $twig, $datas);
+                        $privateController->modifyDatas($twig, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
@@ -175,7 +169,7 @@ try {
                 try {
                     if (isset($_SESSION['pseudo'])) {
                         if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
-                            $privateController->modifyUser($userManager, $twig);
+                            $privateController->modifyUser();
                         } else {
                             throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
                         }
@@ -196,7 +190,7 @@ try {
                             $datas['commentException'] = $_SESSION['commentException'];
                             unset($_SESSION['commentException']);
                         }
-                        $privateController->myComments($commentManager, $postManager, $twig, $datas);
+                        $privateController->myComments($twig, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
@@ -213,7 +207,7 @@ try {
                         $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
                         unset($_SESSION['exceptionMessage']);
                     }
-                    $privateController->managePosts($postManager, $twig, $datas);
+                    $privateController->managePosts($twig, $datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -224,7 +218,7 @@ try {
                         $datas['entity'] = isset($_GET['entity']) ? (string) $_GET['entity'] : null;
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
-                        $privateController->confirmDeletion($postManager, $userManager, $twig, $datas);
+                        $privateController->confirmDeletion($twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }
@@ -236,7 +230,7 @@ try {
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
                         if (isset($_GET['token']) && $_GET['token'] === $_SESSION['token']) {
-                            $privateController->deleteEntity($postManager, $userManager, $twig, $datas);
+                            $privateController->deleteEntity($twig, $datas);
                         } else {
                             throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
                         }
@@ -253,7 +247,7 @@ try {
                         $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
                         unset($_SESSION['exceptionMessage']);
                     }
-                    $privateController->postFormPage($postManager, $twig, $datas);
+                    $privateController->postFormPage($twig, $datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -262,7 +256,7 @@ try {
             case 'sendPostForm':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
-                        $privateController->sendPostForm($userManager, $postManager, $datas);
+                        $privateController->sendPostForm($datas);
                     } else {
                         throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
                     }
@@ -279,7 +273,7 @@ try {
                         $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
                         unset($_SESSION['exceptionMessage']);
                     }
-                    $privateController->manageComments($commentManager, $postManager, $twig, $datas);
+                    $privateController->manageComments($twig, $datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -290,7 +284,7 @@ try {
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['status'] = isset($_GET['status']) ? (string) $_GET['status'] : null;
                         if (isset($_GET['token']) && $_GET['token'] === $_SESSION['token']) {
-                            $privateController->modifyCommentStatus($commentManager, $datas);
+                            $privateController->modifyCommentStatus($datas);
                         } else {
                             throw new \Exception("Vous ne pouvez effectuer cette action. Le jeton de session ne correspond pas.");
                         }
@@ -307,7 +301,7 @@ try {
                             $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
                             unset($_SESSION['exceptionMessage']);
                         }
-                        $privateController->manageUsers($userManager, $twig, $datas);
+                        $privateController->manageUsers($twig, $datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }
