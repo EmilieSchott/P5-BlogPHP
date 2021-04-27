@@ -45,9 +45,14 @@
                             </span>
                         </h2>
                     </div>
-                    <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=manageComments">Réessayer ? </a>
-                    </div> 
+                {% elseif success is empty and modificationException is not empty %} 
+                    <div class=" text-center mt-5 mb-2" id="message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> {{ modificationException }}   </span>
+                            <span class="section-heading-around">Nous sommes désolés de cet incident.</span>
+                        </h2>
+                    </div>
                 {% else %}     
                     <div class="row">
                         <div class=" col-12 col-xl-8">
