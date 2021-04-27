@@ -1,0 +1,61 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} Connexion {% endblock %}
+{% block description %} Page permettant de s'identifier sur le blog Web-Link {% endblock %}
+{% block image %} <img src="public/theme/Web-Link.jpg" alt="Web-Link, le blog d'une développeuse - Image par geralt de pixabay"/>  {% endblock %}
+{% block type %} website {% endblock %}
+{% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <section class="page-section">
+        <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
+            <div class="back-content offset-lg-1 bg-faded rounded ">
+                <h2 class="section-heading mb-4">
+                    <span class="section-heading-around">Mon compte</span>
+                    <span class="section-heading-main">Mes informations</span>
+                </h2>
+                <ul class="list text-left mx-auto">
+                    <li class="list-item d-flex">
+                        Rôle :
+                        <span class="ml-auto"> {{ user.role }} </span>
+                    </li>
+                    <li class="list-item d-flex">
+                        Pseudo :
+                        <span class="ml-auto"> {{ user.pseudo }} </span>
+                    </li>
+                    <li class="list-item d-flex">
+                        Nom :
+                        <span class="ml-auto"> {{ user.name }} </span>
+                    </li>
+                    <li class="list-item d-flex">
+                        Prénom :
+                        <span class="ml-auto"> {{ user.firstName }} </span>
+                    </li>
+                    <li class="list-item d-flex">
+                        Email :
+                        <span class="ml-auto"> {{ user.email }}</span>
+                    </li>
+                    <div class="d-flex justify-content-center justify-content-lg-end">
+                        <a class="btn btn-primary list-button mt-3" href="index.php?action=modifyMyDatas" >Modifier mes informations</a> 
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

@@ -26,8 +26,8 @@
                 <div class="row">
                     <div class="bg-faded col-10 col-lg-7 col-xl-8 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 pb-4 pb-lg-5 rounded">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Publié le {{ post.createdAt }}</span>
-                            <span class="section-heading-lower">{{ post.title | raw }}</span>
+                            <span class="section-heading-around">Publié le {{ post.createdAt }}</span>
+                            <span class="section-heading-main">{{ post.title | raw }}</span>
                             <p>Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
                         </h2>
                         <p> <strong>{{ post.standFirst | raw }}</strong></p>
@@ -48,11 +48,11 @@
     <section class="page-section comments clearfix">
         <div class="container">
             <div class="comment-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded" id="addComment">
-                {% if entry is not empty and entry == 1 %} 
-                    <div class="comment-message" id="commentForm">
+                {% if success is not empty and success == 1 %} 
+                    <div class="message" id="commentForm">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Merci !</span>
-                            <span class="section-heading-lower">Votre commentaire a bien été enregistré.</span>
+                            <span class="section-heading-around">Merci !</span>
+                            <span class="section-heading-main">Votre commentaire a bien été enregistré.</span>
                             <p>
                                 Il sera publié une fois validé par un administrateur.
                             </p>
@@ -61,11 +61,11 @@
                     <div class="row">
                         <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">En poster un autre ? </a>
                     </div> 
-                {% elseif entry is not empty and entry == 0 %} 
-                    <div class="comment-message" >
+                {% elseif success is not empty and success == 0 %} 
+                    <div class="message" id="commentForm">
                         <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Un problème est survenu :</span>
-                            <span class="section-heading-lower"> Votre commentaire n'a pas pu être enregistré. </span>
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> Votre commentaire n'a pas pu être enregistré. </span>
                             <p>
                                 {% if commentException is empty %} Nous sommes désolés de cet incident. {% else %} {{ commentException }} {% endif %} 
                             </p>
@@ -76,8 +76,8 @@
                     </div> 
                 {% else %}
                     <h2 class="section-heading mb-4 ">
-                        <span class="section-heading-upper">Laisser un</span>
-                        <span class="section-heading-lower">commentaire</span>
+                        <span class="section-heading-around">Laisser un</span>
+                        <span class="section-heading-main">commentaire</span>
                         <p>
                             Il sera soumis à validation avant publication.
                         </p>
@@ -85,8 +85,8 @@
                     <form name="sentComment" id="commentForm" action="index.php?action=addComment" method="post">
                         <div class="row">
                             <div class="form-group col-xl-12 mx-auto col-xs-12 floating-label-form-group controls">
-                                <label>Nom</label>
-                                <input type="text" class="form-control" placeholder="Nom" name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
+                                <label >Pseudo</label>
+                                <input  class="form-control" {% if user.pseudo is not empty %} type="hidden" value="{{ user.pseudo }}" {% else %} type="hidden" placeholder="Pseudo" {% endif %} name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
@@ -109,13 +109,13 @@
                 {% if invalidCommentsPage is not empty %}
                     <div class="my-4 d-flex justify-content-center">
                         <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
-                            <h2 class="section-heading">
-                                <span class="section-heading-upper text-center" >Un problème est survenu :</span>
-                                <span class="section-heading-lower text-center"> {{ invalidCommentsPage }} </span>
+                            <h3 class="section-heading">
+                                <span class="section-heading-around text-center" >Un problème est survenu :</span>
+                                <span class="section-heading-main text-center"> {{ invalidCommentsPage }} </span>
                                 <p class="text-center">
                                     Vous avez été redirigé.
                                 </p>
-                            </h2>
+                            </h3>
                         </div>
                     </div>
                 {% endif %}
@@ -123,24 +123,24 @@
                     {% for comment in comments %}
                         <div class="my-4 {% if loop.index is odd %} {% else %}d-flex justify-content-end {% endif %}">
                             <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
-                                <h2 class="section-heading">
-                                    <span class="section-heading-upper">Le {{ comment.createdAt }}</span>
-                                    <span class="section-heading-lower">{{ comment.author }}</span>
-                                </h2>
-                                <p class="mb-3"> {{ comment.content }} </p>
+                                <h3 class="section-heading">
+                                    <span class="section-heading-around">Le {{ comment.createdAt }}</span>
+                                    <span class="section-heading-main">{{ comment.author }}</span>
+                                </h3>
+                                <p class="mb-3"> "{{ comment.content }}" </p>
                             </div>
                         </div>
                     {% endfor %}
                     {% if commentsException is not empty %}
                         <div class="my-4 d-flex justify-content-center">
                             <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
-                                <h2 class="section-heading">
-                                    <span class="section-heading-upper text-center" >Un problème est survenu :</span>
-                                    <span class="section-heading-lower text-center"> {{ commentsException }} </span>
+                                <h3 class="section-heading">
+                                    <span class="section-heading-around text-center" >Un problème est survenu :</span>
+                                    <span class="section-heading-main text-center"> {{ commentsException }} </span>
                                     <p class="text-center">
                                          Nous sommes désolés de cet incident.
                                     </p>
-                                </h2>
+                                </h3>
                             </div>
                         </div>
                     {% endif %}

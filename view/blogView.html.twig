@@ -28,8 +28,8 @@
                 <div class="post-item">
                     <div class="bg-faded col-10 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 rounded">
                         <h2 class="section-heading text-center">
-                            <span class="section-heading-upper">Nous sommes désolés :</span>
-                            <span class="section-heading-lower"> {{ blogException }}</span>
+                            <span class="section-heading-around">Nous sommes désolés :</span>
+                            <span class="section-heading-main"> {{ blogException }}</span>
                         </h2>
                     </div>
                 </div>
@@ -45,8 +45,8 @@
                 class="post-item-title d-flex col-10 col-lg-auto p-0 mx-auto {% if loop.index is odd %} ml-sm-3 mr-lg-auto {% else %} justify-content-sm-end mr-sm-3 ml-sm-auto {% endif %}">
                 <div class="bg-faded d-flex p-3 p-md-4 p-xl-5 rounded">
                     <h2 class="section-heading mb-0">
-                        <span class="section-heading-upper"> Publié le {{ post.createdAt }} </span>
-                        <span class="section-heading-lower">{{ post.title }} </span>
+                        <span class="section-heading-around"> Publié le {{ post.createdAt }} </span>
+                        <span class="section-heading-main">{{ post.title }} </span>
                     </h2>
                 </div>
             </div>

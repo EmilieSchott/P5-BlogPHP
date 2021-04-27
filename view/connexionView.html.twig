@@ -19,21 +19,21 @@
 {% endblock %}
 
 {% block content %}
-    <section class="page-section backAccess clearfix">
+    <section class="page-section back-access clearfix">
         <div class="container">
-            <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
+            <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-5 rounded">
                 <div class="makeChoice" id="makeChoice">
                     <a class="item current" href="index.php?action=connexion#makeChoice">
                         <h2 class="section-heading ">
-                            <span class="section-heading-upper">Se</span>
-                            <span class="section-heading-lower">connecter</span>
+                            <span class="section-heading-around">Se</span>
+                            <span class="section-heading-main">connecter</span>
                         </h2>
                     </a>
                     <div class="item"> / </div>
                     <a class="item" href="index.php?action=inscription#makeChoice">
                         <h2 class="section-heading">
-                            <span class="section-heading-upper">S'</span>
-                            <span class="section-heading-lower">inscrire</span>
+                            <span class="section-heading-around">S'</span>
+                            <span class="section-heading-main">inscrire</span>
                         </h2>
                     </a>
                 </div>
@@ -59,10 +59,10 @@
             </div>
             {% if connexionException is not empty %}
                 <div class="my-4 d-flex justify-content-center">
-                    <div class="backAccess-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
+                    <div class="back-access-inner text-center p-3 p-md-4 p-lg-5 mb-4 rounded" id="exceptionMessage">
                         <h2 class="section-heading">
-                            <span class="section-heading-upper text-center" >Attention !</span>
-                            <span class="section-heading-lower text-center"> {{ connexionException }} </span>
+                            <span class="section-heading-around text-center" >Attention !</span>
+                            <span class="section-heading-main text-center"> {{ connexionException }} </span>
                         </h2>
                     </div>
                 </div>

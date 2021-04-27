@@ -31,15 +31,16 @@ class PostManager extends Manager
         return $postsPage;
     }
 
-    public function getPost(int $id): array
+    public function getPost(int $id): object
     {
-        $post = [];
-        $q = $this->db->prepare('SELECT * FROM posts WHERE id = ?');
-        $q->execute([$id]);
-        $r = $q->fetch();
-        $post[] = new Post($r);
+        $query = $this->db->prepare('SELECT * FROM posts WHERE id = ?');
+        $query->execute([$id]);
 
-        return $post;
+        if (false === ($data = $query->fetch())) {
+            throw new \Exception("Ce post n'existe pas.");
+        }
+
+        return new Post($data);
     }
 
     // Add a post

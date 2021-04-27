@@ -120,8 +120,8 @@ class PublicController
         if ($datas['id'] > 0) {
             $this->getPostAndComments($postManager, $commentManager, $datas);
             
-            if (array_key_exists('entry', $datas) && ($datas['entry'] < 0 || $datas['entry'] > 1)) {
-                unset($datas['entry']);
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
             }
 
             echo $twig->render('postView.html.twig', $datas);
@@ -133,7 +133,7 @@ class PublicController
     private function getPostAndComments(PostManager $postManager, CommentManager $commentManager, array &$datas)
     {
         $post = $postManager->getPost($datas['id']);
-        $datas['post'] = $post[0];
+        $datas['post'] = $post;
         if (is_null($datas['post'])) {
             throw new \Exception("Le billet demandé n'a pas pu être récupéré.");
         }
@@ -172,8 +172,8 @@ class PublicController
         try {
             $commentManager->addComment($datas);
         } catch (\PDOException $PDO) {
-            header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
+            header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=0&#addComment');
         }
-        header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=1&#addComment');
+        header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=1&#addComment');
     }
 }

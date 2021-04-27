@@ -105,13 +105,13 @@ a:hover, .current {
     text-transform: uppercase;
 }
 
-.section-heading .section-heading-upper {
+.section-heading .section-heading-around {
     display: block;
     font-size: 16px;
     font-weight: 700;
 }
 
-.section-heading .section-heading-lower {
+.section-heading .section-heading-main {
     display: block;
     font-size: 1.8rem;
     font-weight: 100;
@@ -120,11 +120,11 @@ a:hover, .current {
 
 
 @media (min-width: 992px) {
-    .section-heading .section-heading-upper {
+    .section-heading .section-heading-around {
         font-size: 22px;
     }
     
-    .section-heading .section-heading-lower {
+    .section-heading .section-heading-main {
         font-size: 3rem;
         font-weight: 100;
     }
@@ -139,28 +139,28 @@ a:hover, .current {
     font-family: 'Raleway';
 }
 
-#mainNav .navbar-brand {
+.navbar-brand {
     color: #006699;
 }
 
-#mainNav .navbar-nav .nav-item .nav-link {
+.navbar-nav .nav-item .nav-link {
     color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
     font-size: 1rem;
 }
 
-#mainNav .navbar-nav .nav-item.active .nav-link {
+.navbar-nav .nav-item .nav-link.active {
     color: #7b858e;
 }
 
 @media (min-width: 1200px) {
-    #mainNav .navbar-nav .nav-item .nav-link {
+    .navbar-nav .nav-item .nav-link {
         font-size: 1.3rem;
     }
-    #mainNav .navbar-nav .nav-item .nav-link:hover {
+    .navbar-nav .nav-item .nav-link:hover {
         color: #7b858e;
     }
-    #mainNav .navbar-nav .nav-item.active .nav-link:hover {
+    .navbar-nav .nav-item.active .nav-link:hover {
         color: #7b858e;
     }
 }
@@ -252,43 +252,6 @@ a:hover, .current {
     z-index: -1;
 }
 
-@media (min-width: 992px) {
-    .about-heading .about-heading-img {
-        position: relative;
-        z-index: 0;
-    }
-
-    .about-heading .about-heading-content {
-        margin-top: -5rem;
-        position: relative;
-        z-index: 1;
-    }
-}
-
-
-.list-hours {
-    font-size: 0.9rem;
-}
-
-.list-hours .list-hours-item {
-    border-bottom: 1px solid rgba(230, 167, 86, 0.5);
-    padding-bottom: .25rem;
-    margin-bottom: 1rem;
-    font-style: italic;
-}
-
-.list-hours .list-hours-item.today {
-    font-weight: bold;
-    color: #006699;
-}
-
-@media (min-width: 992px) {
-    .list-hours {
-        width: 50%;
-        font-size: 1.1rem;
-    }
-}
-
 .address strong {
     font-size: 1.2rem;
 }
@@ -323,6 +286,11 @@ a:hover, .current {
     font-weight: 100 !important;
 }
 
+.message {
+    margin-top: 77px;
+    margin-bottom: 77px;
+}
+
 /* Form */
 .contact {
     padding-top: 5rem;
@@ -332,7 +300,7 @@ a:hover, .current {
     position: relative;
 }
 
-.backAccess {
+.back-access {
     padding-top: 5rem;
     padding-bottom:3rem;
     background-color: rgba(0, 102, 153, 0.85);
@@ -347,7 +315,7 @@ a:hover, .current {
     position: relative;
 }
 
-.contact .contact-inner, .backAccess .backAccess-inner {
+.contact .contact-inner, .back-access .back-access-inner {
     position: relative;
     margin: 0.5rem;
     margin-bottom: 53px;
@@ -362,7 +330,7 @@ a:hover, .current {
 
 .contact .contact-inner:before, 
 .comments .comment-inner:before, 
-.backAccess .backAccess-inner:before {
+.back-access .back-access-inner:before {
     border-radius: 0.5rem;
     content: '';
     position: absolute;
@@ -375,7 +343,7 @@ a:hover, .current {
 }
 
 @media (min-width: 768px) {   
-    .contact .contact-inner, .backAccess .backAccess-inner {
+    .contact .contact-inner, .back-access .back-access-inner {
         margin-bottom: 30px;
     }
 }
@@ -386,13 +354,13 @@ a:hover, .current {
         padding-bottom:4rem;
     }
 
-    .contact .contact-inner, .backAccess .backAccess-inner {
+    .contact .contact-inner, .back-access .back-access-inner {
         margin-bottom: 0px;
     }
 }
 
 @media (min-width:1200px) {
-    .contact, .backAccess {
+    .contact, .back-access {
         padding-bottom: 3rem;
     }
 
@@ -401,7 +369,7 @@ a:hover, .current {
         padding-bottom:5rem;
     }
     
-    .contact .contact-inner, .backAccess .backAccess-inner {
+    .contact .contact-inner, .back-access .back-access-inner {
         padding: 3rem;
         margin-bottom: -40px;
     }
@@ -455,7 +423,6 @@ a:hover, .current {
 .floating-label-form-group-with-focus label {
     color: #18BC9C;
 }
-
 
 .contact .submit-button, .contact .retry-button {   
     width:50%;
@@ -681,6 +648,10 @@ g:active .intern {
     color: white;
 }
 
+.back .page-number {
+    color:#7b858e;
+}
+
 @media (min-width: 992px) {
     .page-number {
         font-size: 1.5rem;
@@ -688,10 +659,6 @@ g:active .intern {
 }
 
 /* Post page */
-.comment-message {
-    margin-top: 77px;
-    margin-bottom: 77px;
-}
 
 .post-button {
     width: 100%;
@@ -783,6 +750,138 @@ g:active .intern {
     }
 }
 
+/* Back office pages */
+
+
+.back-nav {
+    background-color: rgba(0, 102, 153, 0.75);
+    font-family: 'Raleway';
+    margin-top: 40px;
+
+}
+
+@media (min-width: 992px) {
+    .back-nav {
+        position: fixed;
+        top: 350px;
+        z-index:2;
+        margin-top: 0px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .back-nav {
+        top: 485px;
+    }
+}
+
+.list {
+    font-size: 0.9rem;
+    padding: 0px;
+}
+
+.list .list-item {
+    border-bottom: 1px solid rgba(0, 102, 153, 0.75);
+    padding-bottom: .25rem;
+    padding-top: 1rem;
+    font-style: italic;
+}
+
+.back-content {
+    padding:20px;
+}
+
+@media (min-width: 992px) {
+    .intro .intro-img {
+        width: 50%;
+        float: right;
+        
+    }
+
+    .back-content {
+        padding:20px;
+        padding-left: 40px;
+    }
+
+    .list {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .back-nav {
+        padding:40px;
+    }    
+    
+    .back-content {
+        padding:40px;
+        padding-left: 80px;
+    }
+
+    .list {
+        padding:40px;
+        padding-left: 40px;
+    }
+
+    .intro .intro-text .intro-button {
+        margin-left: 5rem;
+        bottom: -2rem;
+    }
+}
+
+.hidden {
+    margin-top:-7px;
+}
+
+.input-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 992px) {
+    .input-group * {
+        width:100%
+    }
+
+    .list-button {
+        margin-top: -10px;
+    }
+}
+
+.list-floating-label-form-group {
+    border-bottom: 1px solid rgba(0, 102, 153, 0.75);
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+    font-style: italic;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.list-floating-label-form-group input,
+.list-floating-label-form-group label {
+    z-index: 1;
+    position: relative;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: none;
+    font-family: 'Lora';
+    font-size: 14px;
+    background: none;
+    box-shadow: none !important;
+    resize: none;
+}
+
+@media (min-width: 992px) {
+
+
+    .list-floating-label-form-group input,
+    .list-floating-label-form-group label {
+    font-size: 1.1rem;
+    }
+}
+
+
+
 
 /* Footer */
 
@@ -794,4 +893,3 @@ g:active .intern {
     color:rgba(255, 255, 255, 0.3);
     text-align: center;
 }
-

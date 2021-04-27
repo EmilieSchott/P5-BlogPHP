@@ -24,6 +24,13 @@ $userManager = new UserManager();
 
 date_default_timezone_set('Etc/UTC');
 
+if (isset($_SESSION['role'], $_SESSION['pseudo'])) {
+    $datas['user'] = [
+        'role' => $_SESSION['role'],
+        'pseudo' => $_SESSION['pseudo']
+    ];
+}
+
 try {
     if (isset($_GET['action'])) {
         $datas['action'] = htmlspecialchars($_GET['action']);
@@ -70,8 +77,8 @@ try {
                         if (isset($_GET['blogPage'])) {
                             $datas['blogPage'] = (int) $_GET['blogPage'];
                         }
-                        if (isset($_GET['entry'])) {
-                            $datas['entry'] = (int) $_GET['entry'];
+                        if (isset($_GET['success'])) {
+                            $datas['success'] = (int) $_GET['success'];
                         }
                         if (isset($_SESSION['commentException'])) {
                             $datas['commentException'] = $_SESSION['commentException'];
@@ -92,6 +99,9 @@ try {
 
                 break;
             case 'connexion':
+                if (isset($_SESSION['pseudo'])) {
+                    header('Location: index.php?action=account');
+                }
                 if (isset($_SESSION['connexionException'])) {
                     $datas['connexionException'] = $_SESSION['connexionException'];
                     unset($_SESSION['connexionException']);
@@ -105,8 +115,8 @@ try {
                 break;
             case 'account':
                 try {
-                    if (isset($_SESSION['id'])) {
-                        $privateController->accountPage($twig);
+                    if (isset($_SESSION['pseudo'])) {
+                        $privateController->accountPage($twig, $userManager, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
@@ -117,6 +127,9 @@ try {
 
                 break;
             case 'inscription':
+                if (isset($_SESSION['pseudo'])) {
+                    header('Location: index.php?action=account');
+                }
                 if (isset($_SESSION['inscriptionException'])) {
                     $datas['inscriptionException'] = $_SESSION['inscriptionException'];
                     unset($_SESSION['inscriptionException']);
@@ -131,13 +144,77 @@ try {
                 $privateController->getInscription($userManager);
 
                 break;
+            case 'disconnect':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $privateController->disconnect();
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'modifyMyDatas':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        if (isset($_SESSION['modificationException'])) {
+                            $datas['modificationException'] = $_SESSION['modificationException'];
+                            unset($_SESSION['modificationException']);
+                        }
+                        if (isset($_GET['success'])) {
+                            $datas['success'] = (int) $_GET['success'];
+                        }
+                        $privateController->modifyMyDatas($userManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'modifyUser':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $privateController->modifyUser($userManager, $twig);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'myComments':
+                try {
+                    if (isset($_SESSION['pseudo'])) {
+                        $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                        if (isset($_SESSION['commentException'])) {
+                            $datas['commentException'] = $_SESSION['commentException'];
+                            unset($_SESSION['commentException']);
+                        }
+                        $privateController->myComments($commentManager, $postManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
+                    }
+                } catch (\Exception $e) {
+                    $_SESSION['connexionException'] = $e->getMessage();
+                    header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
                 break;
         }
     } else {
-        throw new \Exception("Aucune action n'a été indiquée.");
+        header('Location: index.php?action=homePage');
     }
 } catch (\Exception $e) {
     $_SESSION['homePageException'] = $e->getMessage();
