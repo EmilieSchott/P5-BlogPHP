@@ -4,10 +4,10 @@ namespace EmilieSchott\BlogPHP\Model;
 
 class CommentManager extends Manager
 {
-    public function getList()
+    public function getList(): array
     {
         $comments = [];
-        $query=$this->db->query(
+        $query=$this->database->query(
             'SELECT id, postId, author, content, createdAt, status 
             FROM comments WHERE status = "En attente" ORDER BY id'
         );
@@ -25,7 +25,7 @@ class CommentManager extends Manager
     public function getComments(int $id): array
     {
         $comments = [];
-        $query=$this->db->prepare(
+        $query=$this->database->prepare(
             'SELECT id, postId, author, content, createdAt, status 
             FROM comments WHERE postId=? AND status = "Validé" ORDER BY id'
         );
@@ -46,7 +46,7 @@ class CommentManager extends Manager
             header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
         }
 
-        $query=$this->db->prepare('INSERT INTO comments (postId, author, content, status) VALUES (:postId, :author, :content, :status)');
+        $query=$this->database->prepare('INSERT INTO comments (postId, author, content, status) VALUES (:postId, :author, :content, :status)');
         $query->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
         $query->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
         $query->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
@@ -57,7 +57,7 @@ class CommentManager extends Manager
     public function getUserCommments(string $pseudo): array
     {
         $comments = [];
-        $query=$this->db->prepare(
+        $query=$this->database->prepare(
             'SELECT id, postId, author, content, createdAt, status
             FROM comments WHERE author=? ORDER BY id DESC'
         );
@@ -73,7 +73,7 @@ class CommentManager extends Manager
     {
         $comment->hydrate($datasToModify);
 
-        $query = $this->db->prepare(
+        $query = $this->database->prepare(
             'UPDATE comments 
             SET id = :id, postId = :postId, author =:author, content = :content, status = :status
             WHERE id = :id'
@@ -88,7 +88,7 @@ class CommentManager extends Manager
 
     public function getComment(int $id): object
     {
-        $query = $this->db->prepare(
+        $query = $this->database->prepare(
             'SELECT * 
             FROM comments 
             WHERE Id=?'

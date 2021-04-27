@@ -4,10 +4,10 @@ namespace EmilieSchott\BlogPHP\Model;
 
 class UserManager extends Manager
 {
-    public function getList($pseudo)
+    public function getList(string $pseudo): array
     {
         $users = [];
-        $query = $this->db->prepare(
+        $query = $this->database->prepare(
             'SELECT * FROM users WHERE pseudo != ?'
         );
         $query->execute([$pseudo]);
@@ -22,42 +22,39 @@ class UserManager extends Manager
         return $users;
     }
     
-    public function getUser(string $pseudo)
+    public function getUser(string $pseudo): object
     {
-        $query = $this->db->prepare('SELECT * FROM users WHERE pseudo = ?');
+        $query = $this->database->prepare('SELECT * FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
 
-        $datas = $query->fetch();
-
-        return !empty($datas) ? new User($datas) : false;
+        return new User($query->fetch());
     }
 
     public function addUser(array $datas): void
     {
         try {
             $user = new User($datas);
+            $query=$this->database->prepare('INSERT INTO users (role, pseudo, name, firstName, email, password) VALUES (:role, :pseudo, :name, :firstName, :email, :password)');
+            $query->bindValue(':role', $user->getRole(), \PDO::PARAM_STR);
+            $query->bindValue(':pseudo', $user->getPseudo(), \PDO::PARAM_STR);
+            $query->bindValue(':name', $user->getName(), \PDO::PARAM_STR);
+            $query->bindValue(':firstName', $user->getFirstName(), \PDO::PARAM_STR);
+            $query->bindValue(':email', $user->getEmail(), \PDO::PARAM_STR);
+            $query->bindValue(':password', $user->getPassword(), \PDO::PARAM_STR);
+
+            $query->execute();
         } catch (\Exception $e) {
             $_SESSION['inscriptionException'] = $e->getMessage();
             header('Location: index.php?action=inscription#exceptionMessage');
         }
-
-        $query=$this->db->prepare('INSERT INTO users (role, pseudo, name, firstName, email, password) VALUES (:role, :pseudo, :name, :firstName, :email, :password)');
-        $query->bindValue(':role', $user->getRole(), \PDO::PARAM_STR);
-        $query->bindValue(':pseudo', $user->getPseudo(), \PDO::PARAM_STR);
-        $query->bindValue(':name', $user->getName(), \PDO::PARAM_STR);
-        $query->bindValue(':firstName', $user->getFirstName(), \PDO::PARAM_STR);
-        $query->bindValue(':email', $user->getEmail(), \PDO::PARAM_STR);
-        $query->bindValue(':password', $user->getPassword(), \PDO::PARAM_STR);
-
-        $query->execute();
     }
 
-    public function modifyUser($user, $modification): object
+    public function modifyUser(User $user, array $modification): object
     {
         try {
             $user->hydrate($modification);
 
-            $query=$this->db->prepare(
+            $query=$this->database->prepare(
                 'UPDATE users 
                 SET role = :role, name = :name, firstName = :firstName, email = :email, password = :password 
                 WHERE pseudo = :pseudo'
@@ -80,7 +77,7 @@ class UserManager extends Manager
 
     public function deleteUser(string $pseudo): void
     {
-        $query = $this->db->prepare('DELETE FROM users WHERE pseudo = ?');
+        $query = $this->database->prepare('DELETE FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
     }
 }

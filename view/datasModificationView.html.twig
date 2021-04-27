@@ -23,7 +23,7 @@
         <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
             <div class="back-content offset-lg-1 bg-faded rounded" id="list">
                 {% if success is not empty and success == 1 %} 
-                    <div class=" text-center mt-5 mb-2" id="message">
+                    <div class=" text-center mt-5 mb-5 mb-2" id="message">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">La modification a bien été enregistrée.</span>
@@ -31,7 +31,7 @@
                         </h2>
                     </div>
                 {% elseif success is not empty and success == 0 %} 
-                    <div class=" text-center mt-5 mb-2" id="message">
+                    <div class=" text-center mt-5 mb-5 mb-2" id="message">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main"> {% if ExceptionMessage is empty %} La modification n'a pas pu être enregistrée. {% else %} {{ modificationException }} {% endif %} </span>
