@@ -219,13 +219,13 @@ try {
                 }
 
                 break;
-            case 'confirmDeletion':
+            case 'confirmDeletionPage':
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                         $datas['entity'] = isset($_GET['entity']) ? (string) $_GET['entity'] : null;
                         $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
                         $datas['pseudo'] = isset($_GET['pseudo']) ? (string) $_GET['pseudo'] : null;
                         $privateController = new PrivateController();
-                        $privateController->confirmDeletion($datas);
+                        $privateController->confirmDeletionPage($datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }

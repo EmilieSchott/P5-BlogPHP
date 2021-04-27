@@ -226,15 +226,15 @@ class PrivateController extends Controller
         }
     }
 
-    public function confirmDeletion(array $datas): void
+    public function confirmDeletionPage(array $datas): void
     {
         $datas['office'] = 'back';
         
         try {
             if ($datas['entity'] === 'post') {
-                $this->confirmPostSuppression($datas);
+                $this->confirmPostDeletionPage($datas);
             } elseif ($datas['entity'] === 'user') {
-                $this->confirmUserSuppression($datas);
+                $this->confirmUserDeletionPage($datas);
             } else {
                 throw new \Exception("L'action entreprise n'est pas valide.");
             }
@@ -244,7 +244,7 @@ class PrivateController extends Controller
         }
     }
 
-    private function confirmPostSuppression(array $datas): void
+    private function confirmPostDeletionPage(array $datas): void
     {
         if (!empty($datas['id'])) {
             $postManager = new PostManager();
@@ -259,7 +259,7 @@ class PrivateController extends Controller
         }
     }
 
-    private function confirmUserSuppression(array $datas): void
+    private function confirmUserDeletionPage(array $datas): void
     {
         if (!empty($datas['pseudo'])) {
             $userManager = new UserManager();
