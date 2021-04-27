@@ -48,17 +48,17 @@ try {
                 }
                 
                 break;
-            case 'blog':
+            case 'blogIndex':
                 $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                 if (isset($_SESSION['blogException'])) {
                     $datas['blogException'] = $_SESSION['blogException'];
                     unset($_SESSION['blogException']);
                 }
                 $publicController = new PublicController();
-                $publicController->blog($datas);
+                $publicController->blogIndex($datas);
 
                 break;
-            case 'post':
+            case 'postPage':
                 try {
                     if (isset($_GET['id'])) {
                         $datas['id'] = (int) $_GET['id'];
@@ -70,13 +70,13 @@ try {
                             unset($_SESSION['commentException']);
                         }
                         $publicController = new PublicController();
-                        $publicController->post($datas);
+                        $publicController->postPage($datas);
                     } else {
                         throw new Exception("aucun identifiant de billet n'a été indiqué.");
                     }
                 } catch (\Exception $blogException) {
                     $_SESSION['blogException'] = $blogException;
-                    header('Location: index.php?action=blog&page=1');
+                    header('Location: index.php?action=blogIndex&page=1');
                 }
 
                 break;
@@ -87,7 +87,7 @@ try {
                 break;
             case 'connexion':
                 if (isset($_SESSION['pseudo'])) {
-                    header('Location: index.php?action=account');
+                    header('Location: index.php?action=accountPage');
                 }
                 if (isset($_SESSION['connexionException'])) {
                     $datas['connexionException'] = $_SESSION['connexionException'];
@@ -102,7 +102,7 @@ try {
                 $privateController->getConnexion();
 
                 break;
-            case 'account':
+            case 'accountPage':
                 try {
                     if (isset($_SESSION['pseudo'])) {
                         $privateController = new PrivateController();
@@ -118,7 +118,7 @@ try {
                 break;
             case 'inscription':
                 if (isset($_SESSION['pseudo'])) {
-                    header('Location: index.php?action=account');
+                    header('Location: index.php?action=accountPage');
                 }
                 if (isset($_SESSION['inscriptionException'])) {
                     $datas['inscriptionException'] = $_SESSION['inscriptionException'];
@@ -186,7 +186,7 @@ try {
                 }
 
                 break;
-            case 'myComments':
+            case 'myCommentsPage':
                 try {
                     if (isset($_SESSION['pseudo'])) {
                         $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -195,7 +195,7 @@ try {
                             unset($_SESSION['commentException']);
                         }
                         $privateController = new PrivateController();
-                        $privateController->myComments($datas);
+                        $privateController->myCommentsPage($datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
                     }
@@ -205,7 +205,7 @@ try {
                 }
 
                 break;
-            case 'managePosts':
+            case 'managePostsPage':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     if (isset($_SESSION['exceptionMessage'])) {
@@ -213,7 +213,7 @@ try {
                         unset($_SESSION['exceptionMessage']);
                     }
                     $privateController = new PrivateController();
-                    $privateController->managePosts($datas);
+                    $privateController->managePostsPage($datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -275,7 +275,7 @@ try {
                 }
 
                 break;
-            case 'manageComments':
+            case 'manageCommentsPage':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                     $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
@@ -284,7 +284,7 @@ try {
                         unset($_SESSION['exceptionMessage']);
                     }
                     $privateController = new PrivateController();
-                    $privateController->manageComments($datas);
+                    $privateController->manageCommentsPage($datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
@@ -305,7 +305,7 @@ try {
                     }
     
                     break;
-                case 'manageUsers':
+                case 'manageUsersPage':
                     if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
                         $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                         $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
@@ -314,7 +314,7 @@ try {
                             unset($_SESSION['exceptionMessage']);
                         }
                         $privateController = new PrivateController();
-                        $privateController->manageUsers($datas);
+                        $privateController->manageUsersPage($datas);
                     } else {
                         throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                     }

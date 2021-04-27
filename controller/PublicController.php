@@ -90,7 +90,7 @@ class PublicController extends Controller
         header('Location: index.php');
     }
 
-    public function blog(array $datas): void
+    public function blogIndex(array $datas): void
     {
         try {
             $postManager = new PostManager();
@@ -105,7 +105,7 @@ class PublicController extends Controller
         }
     }
  
-    public function post(array $datas): void
+    public function postPage(array $datas): void
     {
         if ($datas['id'] > 0) {
             try {
@@ -153,8 +153,8 @@ class PublicController extends Controller
             $commentManager = new CommentManager();
             $commentManager->addComment($datas);
         } catch (\PDOException $PDO) {
-            header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=0&#addComment');
+            header('Location: index.php?action=postPage&id=' . $datas['postId'] . '&success=0&#addComment');
         }
-        header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=1&#addComment');
+        header('Location: index.php?action=postPage&id=' . $datas['postId'] . '&success=1&#addComment');
     }
 }

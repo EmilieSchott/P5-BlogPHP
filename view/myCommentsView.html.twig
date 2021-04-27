@@ -69,7 +69,7 @@
                     {% if pagesNumber is not empty %} 
                         <div class="container text-center pt-4 pt-lg-5">           
                             <div class=" back text-center d-inline-flex">
-                                {% if page > 1 %} <a href="index.php?action=myComments&amp;page={{ page-1 }}#comments"> {% else  %} {% endif  %}
+                                {% if page > 1 %} <a href="index.php?action=myCommentsPage&amp;page={{ page-1 }}#comments"> {% else  %} {% endif  %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                         <g>
                                             <path class="{% if page > 1 %} contour {% else  %} disable-contour {% endif  %}" d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 
@@ -82,7 +82,7 @@
         
                                 <div class="page-number mx-3 mt-2 mt-lg-1">{{ page }} / {{ pagesNumber }}</div>
         
-                                {% if page < pagesNumber %} <a href="index.php?action=myComments&amp;page={{ page+1 }}#comments"> {% else  %} {% endif  %}
+                                {% if page < pagesNumber %} <a href="index.php?action=myCommentsPage&amp;page={{ page+1 }}#comments"> {% else  %} {% endif  %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                         <g>
                                             <path class="{% if page < pagesNumber %} contour {% else  %} disable-contour {% endif  %}"  d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 

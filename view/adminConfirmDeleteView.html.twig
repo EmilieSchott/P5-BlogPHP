@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="row mb-5">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePosts">Revenir à la page "gérer les billets". </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
                     </div> 
                 {% elseif deleteSuccess is not empty and deleteSuccess == 1 %}
                     <div class="mt-5 d-flex justify-content-center">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="row mb-5">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePosts">Revenir à la page "gérer les billets". </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
                     </div> 
                 {% elseif post is not empty %}
                     <div class=" text-center mt-5 mb-2" id="message">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="row mb-5 mt-5">
                         <div class="col-12 col-sm-6 text-center text-sm-right mb-1 mt-1">
-                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=managePosts" >Non, Annuler !</a> 
+                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=managePostsPage" >Non, Annuler !</a> 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
                             <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=post&amp;id={{ post.id }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 
@@ -75,7 +75,7 @@
                     </div>
                     <div class="row mb-5 mt-5">
                         <div class="col-12 col-sm-6 text-center text-sm-right mb-1 mt-1">
-                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=manageUsers" >Non, Annuler !</a> 
+                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=manageUsersPage" >Non, Annuler !</a> 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
                             <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=user&amp;pseudo={{ user.pseudo }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 

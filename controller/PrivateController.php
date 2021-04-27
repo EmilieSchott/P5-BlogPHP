@@ -34,7 +34,7 @@ class PrivateController extends Controller
                 $_SESSION['pseudo'] = $user->getPseudo();
                 $_SESSION['token'] = md5(bin2hex(\openssl_random_pseudo_bytes(6)));
 
-                header('Location: index.php?action=account');
+                header('Location: index.php?action=accountPage');
             } else {
                 throw new \Exception("Le pseudo ou le mot de passe est invalide.");
             }
@@ -176,7 +176,7 @@ class PrivateController extends Controller
         return $modification;
     }
 
-    public function myComments(array $datas): void
+    public function myCommentsPage(array $datas): void
     {
         $datas['office'] = 'back';
         
@@ -209,7 +209,7 @@ class PrivateController extends Controller
         return $datas['comments'];
     }
 
-    public function managePosts(array $datas): void
+    public function managePostsPage(array $datas): void
     {
         $datas['office'] = 'back';
 
@@ -408,7 +408,7 @@ class PrivateController extends Controller
         }
     }
     
-    public function manageComments(array $datas): void
+    public function manageCommentsPage(array $datas): void
     {
         $datas['office'] = 'back';
 
@@ -457,14 +457,14 @@ class PrivateController extends Controller
             }
 
             $commentManager->modifyComment($comment, $datasToModify);
-            header('Location: index.php?action=manageComments&success=1#message');
+            header('Location: index.php?action=manageCommentsPage&success=1#message');
         } catch (\Exception $e) {
             $_SESSION['exceptionMessage'] = $e->getMessage();
-            header('Location: index.php?action=manageComments&success=0#message');
+            header('Location: index.php?action=manageCommentsPage&success=0#message');
         }
     }
 
-    public function manageUsers(array $datas): void
+    public function manageUsersPage(array $datas): void
     {
         $datas['office'] = 'back';
 
