@@ -167,6 +167,19 @@ class PrivateController
         }
     }
 
+    public function modifyRole(object $user): array
+    {
+        if ($user->getRole() !== $_POST['role']) {
+            $modification = [
+            'role' => $_POST['role']
+            ];
+        } else {
+            throw new \Exception("L'untilisateur a déjà le rôle que vous essayez de lui donner.");
+        }
+
+        return $modification;
+    }
+
     public function myComments(Environment $twig, array $datas): void
     {
         $datas['office'] = 'back';
@@ -464,7 +477,7 @@ class PrivateController
                 unset($datas['success']);
             }
             $userManager = new UserManager();
-            $users = $userManager->getList();
+            $users = $userManager->getList($datas['userSession']['pseudo']);
             $usersPages = $this->paginator($users, 10);
             $datas['pagesNumber'] = $usersPages['pagesNumber'];
             $datas['users'] =  $this->displayPage($usersPages, $datas['page']);
