@@ -153,28 +153,19 @@ class PrivateController
         
         try {
             $comments = $commentManager->getUserCommments($_SESSION['pseudo']);
+            $commentsPages = $this->paginator($comments, 5);
+            $datas['pagesNumber'] = $commentsPages['pagesNumber'];
+            $commentsPage = $this->displayPage($commentsPages, $datas['page']);
+            $datas['comments'] = $this->getCommentPostTitle($commentsPage, $postManager);
+            echo $twig->render('myCommentsView.html.twig', $datas);
         } catch (\Exception $e) {
-            $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
+            $datas['commentsException'] = $e->getMessage();
+            echo $twig->render('myCommentsView.html.twig', $datas);
         }
+    }
 
-        $commentsPages = $this->paginator($comments, 5);
-        if (!is_null($commentsPages['pagesNbr'])) {
-            $datas['pagesNbr'] = $commentsPages['pagesNbr'];
-
-            try {
-                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
-                    throw new \Exception("La page de commentaires indiquée n'existe pas.");
-                }
-            } catch (\Exception $e) {
-                $datas['invalidCommentsPage'] = $e->getMessage();
-                $datas['page'] = 1;
-            }
-
-            $commentsPage = $this->displayPage($commentsPages['datasPages'], $datas['page']);
-        } elseif (array_key_exists('page', $datas)) {
-            unset($datas['page']);
-        }
-
+    public function getCommentPostTitle(array $commentsPage, PostManager $postManager): array
+    {
         foreach ($commentsPage as $comment) {
             $post = $postManager->getPost($comment->getPostId());
             $postTitle = $post->getTitle();
@@ -184,34 +175,23 @@ class PrivateController
             ];
         }
 
-        echo $twig->render('myCommentsView.html.twig', $datas);
+        return $datas['comments'];
     }
 
     public function managePosts(PostManager $postManager, Environment $twig, array $datas)
     {
         $datas['office'] = 'back';
-        
+
         try {
             $posts = $postManager->getList();
+            $postsPages = $this->paginator($posts, 5);
+            $datas['pagesNumber'] = $postsPages['pagesNumber'];
+            $datas['posts'] =  $this->displayPage($postsPages, $datas['page']);
+            echo $twig->render('adminManageView.html.twig', $datas);
         } catch (\Exception $e) {
-            $datas['postException'] ="Le(s) post(s) n'a/ont pas pu être récupéré(s)";
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $twig->render('adminManageView.html.twig', $datas);
         }
-        $postsPages = $this->paginator($posts, 5);
-        $datas['posts'] = $postsPages['datasPages'];
-        $datas['pagesNbr'] = $postsPages['pagesNbr'];
-
-        try {
-            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
-                $datas['page'] = 1;
-
-                throw new \Exception("La page indiquée n'existe pas.");
-            }
-        } catch (\Exception $e) {
-            $datas['invalidPostPage'] = $e->getMessage();
-        }
-
-        $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
-        echo $twig->render('adminManagePostsView.html.twig', $datas);
     }
 
     public function deletePostPage($postManager, Environment $twig, array $datas)
@@ -224,10 +204,10 @@ class PrivateController
                 if ($datas['post'] instanceof Post) {
                     echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
                 } else {
-                    throw new \Exception("Le post n'a pas pu être récupéré");
+                    throw new \Exception("Le billet n'a pas pu être récupéré");
                 }
             } else {
-                throw new \Exception("Aucun post valide n'a été spécifié.");
+                throw new \Exception("Aucun billet valide n'a été spécifié.");
             }
         } catch (\Exception $e) {
             $datas['postException']=$e->getMessage();
@@ -266,16 +246,13 @@ class PrivateController
             }
 
             echo $twig->render('adminPostFormView.html.twig', $datas);
-        } catch (\PDOException $PDO) {
-            $datas['exceptionMessage'] = 'PDOException';
-            echo $twig->render('adminManagePostsView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['exceptionMessage'] = $e->getMessage();
-            echo $twig->render('adminManagePostsView.html.twig', $datas);
+            echo $twig->render('adminManageView.html.twig', $datas);
         }
     }
 
-    public function sendPostForm(UserManager $userManager, PostManager $postManager, Environment $twig, array $datas)
+    public function sendPostForm(UserManager $userManager, PostManager $postManager, array $datas)
     {
         $datas = [
             'title' => $_POST['title'],
@@ -334,6 +311,60 @@ class PrivateController
             }
         } else {
             throw new \Exception("Le fichier image n'a pas pu être uploadé.");
+        }
+    }
+
+    public function manageComments(CommentManager $commentManager, PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+
+        try {
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
+            }
+            $comments = $commentManager->getList();
+            $commentsPages = $this->paginator($comments, 5);
+            $datas['pagesNumber'] = $commentsPages['pagesNumber'];
+            $commentsPage =  $this->displayPage($commentsPages, $datas['page']);
+            $datas['comments'] = $this->getCommentPostTitle($commentsPage, $postManager);
+            echo $twig->render('adminManageView.html.twig', $datas);
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $twig->render('adminManageView.html.twig', $datas);
+        }
+    }
+
+    public function modifyCommentStatus(CommentManager $commentManager, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            if (!empty($datas['id']) && $datas['id'] > 0) {
+                $comment = $commentManager->getComment($datas['id']);
+                $datasToModify['id'] = $datas['id'];
+                switch ($datas['status']) {
+                    case 'rejected':
+                        $datasToModify['status'] = "Rejeté";
+
+                        break;
+                    case 'validated':
+                        $datasToModify['status'] = "Validé";
+
+                        break;
+                    default:
+                        throw new \Exception("Le nouveau statut n'est pas valide.");
+
+                        break;
+                }
+            } else {
+                throw new \Exception("Le commentaire indiqué n'est pas valide.");
+            }
+
+            $commentManager->modifyComment($comment, $datasToModify);
+            header('Location: index.php?action=manageComments&success=1#message');
+        } catch (\Exception $e) {
+            $_SESSION['exceptionMessage'] = $e->getMessage();
+            header('Location: index.php?action=manageComments&success=0#message');
         }
     }
 }

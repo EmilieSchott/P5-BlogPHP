@@ -46,11 +46,10 @@ class CommentManager extends Manager
             header('Location: index.php?action=post&id=' . $datas['postId'] . '&entry=0&#addComment');
         }
 
-        $query=$this->db->prepare('INSERT INTO comments (postId, author, content, status) VALUES (:postId, :author, :content, :status)');
+        $query=$this->db->prepare('INSERT INTO comments (postId, author, content) VALUES (:postId, :author, :content)');
         $query->bindValue(':postId', $comment->getPostId(), \PDO::PARAM_INT);
         $query->bindValue(':author', $comment->getAuthor(), \PDO::PARAM_STR);
         $query->bindValue(':content', $comment->getContent(), \PDO::PARAM_STR);
-        $query->bindValue(':status', $comment->getStatus(), \PDO::PARAM_STR);
         $query->execute();
     }
 
@@ -67,6 +66,14 @@ class CommentManager extends Manager
         }
 
         return $comments;
+    }
+<<<<<<< HEAD
+=======
+
+    public function deletePostComments(int $postId): void
+    {
+        $query = $this->db->prepare('DELETE FROM comments WHERE postId = ?');
+        $query->execute([$postId]);
     }
 
     public function modifyComment(Comment $comment, array $datasToModify): void
@@ -101,4 +108,5 @@ class CommentManager extends Manager
 
         return new Comment($data);
     }
+>>>>>>> f3e4f86 (add comment management functionality + displayPage() modifications in Hydrator to check datas and controllers modification according to + adminManagePostsView.html.twig become generic and renamed in adminManageView.html.twig)
 }

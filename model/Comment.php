@@ -56,7 +56,7 @@ class Comment extends Hydrator
     public function setAuthor(string $author)
     {
         if (\strlen($author) <= 45) {
-            $secure = htmlspecialchars($author);
+            $secure = \strip_tags($author);
             $this->author = $secure;
         } else {
             throw new Exception('Le nom de l\'auteur doit faire moins de 45 caractères.');
@@ -65,7 +65,7 @@ class Comment extends Hydrator
 
     public function setContent(string $content)
     {
-        $secure = htmlspecialchars($content);
+        $secure = \strip_tags($content);
         $this->content = $secure;
     }
 

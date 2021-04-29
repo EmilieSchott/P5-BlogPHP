@@ -98,32 +98,24 @@ class PublicController
     {
         try {
             $posts = $postManager->getList();
+            $postsPages = $this->paginator($posts, 3);
+            $datas['pagesNumber'] = $postsPages['pagesNumber'];
+            $datas['posts'] =  $this->displayPage($postsPages, $datas['page']);
+            echo $twig->render('blogView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['blogException'] = $e->getMessage();
+            echo $twig->render('blogView.html.twig', $datas);
         }
-        $postsPages = $this->paginator($posts, 3);
-        $datas['posts'] = $postsPages['datasPages'];
-        $datas['pagesNbr'] = $postsPages['pagesNbr'];
-
-        try {
-            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
-                $datas['page'] = 1;
-
-                throw new \Exception("La page indiquée n'existe pas.");
-            }
-        } catch (\Exception $e) {
-            $datas['blogException'] = $e->getMessage();
-        }
-
-        $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
-        echo $twig->render('blogView.html.twig', $datas);
     }
  
     public function post(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
     {
         if ($datas['id'] > 0) {
-            $this->getPostAndComments($postManager, $commentManager, $datas);
-            
+            try {
+                $this->getPostAndComments($postManager, $commentManager, $datas);
+            } catch (\Exception $e) {
+                $datas['commentsException'] = $e->getMessage();
+            }
             if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
                 unset($datas['success']);
             }
@@ -141,28 +133,11 @@ class PublicController
         if (is_null($datas['post'])) {
             throw new \Exception("Le billet demandé n'a pas pu être récupéré.");
         }
-        
-        try {
-            $comments = $commentManager->getComments($datas['id']);
-        } catch (\Exception $e) {
-            $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
-        }
-
-        $commentsPages = $this->paginator($comments, 5);
-        if (!is_null($commentsPages['pagesNbr'])) {
-            $datas['pagesNbr'] = $commentsPages['pagesNbr'];
-
-            try {
-                if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
-                    throw new \Exception("La page de commentaires indiquée n'existe pas.");
-                }
-            } catch (\Exception $e) {
-                $datas['invalidCommentsPage'] = $e->getMessage();
-                $datas['page'] = 1;
-            }
-            $datas['comments'] = $this->displayPage($commentsPages['datasPages'], $datas['page']);
-        } elseif (array_key_exists('page', $datas)) {
-            unset($datas['page']);
+        $comments = $commentManager->getComments($datas['id']);
+        if (!empty($comments)) {
+            $commentsPages = $this->paginator($comments, 5);
+            $datas['pagesNumber'] = $commentsPages['pagesNumber'];
+            $datas['comments'] = $this->displayPage($commentsPages, $datas['page']);
         }
     }
 
@@ -173,6 +148,7 @@ class PublicController
             'content' => $_POST['content'],
             'postId' => $_POST['postId']
         ];
+        $datas['status'] = $_SESSION['role'] === 'Admin'  ? 'Validé' : 'En attente';
 
         try {
             $commentManager->addComment($datas);

@@ -9,22 +9,35 @@ trait Paginator
         $datasPages = \array_chunk($datas, $itemsPerPage);
         \array_unshift($datasPages, '');
         unset($datasPages[0]);
-        $pagesNbr = \array_key_last($datasPages);
+        $pagesNumber = \array_key_last($datasPages);
 
-        $paginator = [
+        $pages = [
         'datasPages' => $datasPages,
-        'pagesNbr' => $pagesNbr
+        'pagesNumber' => $pagesNumber
         ];
 
-        return $paginator;
+        return $pages;
     }
 
-    public function displayPage(array $datasPages, int $page): array
+    public function displayPage(array $pages, int $pageRequested): array
     {
-        $offset = $page - 1;
-        $datasPage = array_slice($datasPages, $offset, 1);
-        $datasPage = $datasPage[0];
+        if (!is_null($pages['pagesNumber'])) {
+            try {
+                if ($pageRequested <= 0 || $pageRequested > $pages['pagesNumber']) {
+                    throw new \Exception("La page indiquée n'existe pas.");
+                }
+            } catch (\Exception $e) {
+                $datas['invalidPage'] = $e->getMessage();
+                $pageRequested = 1;
+            }
 
-        return $datasPage;
+            $offset = $pageRequested - 1;
+            $datasPage = array_slice($pages['datasPages'], $offset, 1);
+            $datasPage = $datasPage[0];
+    
+            return $datasPage;
+        } else {
+            throw new \Exception("Il n'existe aucune donnée à afficher.");
+        }
     }
 }

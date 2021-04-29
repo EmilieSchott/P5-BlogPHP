@@ -247,12 +247,36 @@ try {
                 break;
             case 'sendPostForm':
                 if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
-                    $privateController->sendPostForm($userManager, $postManager, $twig, $datas);
+                    $privateController->sendPostForm($userManager, $postManager, $datas);
                 } else {
                     throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
 
                 break;
+            case 'manageComments':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                    $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
+                    if (isset($_SESSION['commentException'])) {
+                        $datas['commentException'] = $_SESSION['commentException'];
+                        unset($_SESSION['commentException']);
+                    }
+                    $privateController->manageComments($commentManager, $postManager, $twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                }
+
+                break;
+                case 'modifyCommentStatus':
+                    if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                        $datas['id'] = isset($_GET['id']) ? (int) $_GET['id'] : null;
+                        $datas['status'] = isset($_GET['status']) ? (string) $_GET['status'] : null;
+                        $privateController->modifyCommentStatus($commentManager, $datas);
+                    } else {
+                        throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                    }
+    
+                    break;
             default:
                 throw new Exception("L'action indiquée n'est pas valide.");
 
