@@ -74,19 +74,15 @@ try {
                     if (isset($_GET['id'])) {
                         $datas['id'] = (int) $_GET['id'];
                         $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-                        if (isset($_GET['blogPage'])) {
-                            $datas['blogPage'] = (int) $_GET['blogPage'];
-                        }
-                        if (isset($_GET['success'])) {
-                            $datas['success'] = (int) $_GET['success'];
-                        }
+                        $datas['blogPage'] = isset($_GET['blogPage']) ? (int) $_GET['blogPage'] : null;
+                        $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
                         if (isset($_SESSION['commentException'])) {
                             $datas['commentException'] = $_SESSION['commentException'];
                             unset($_SESSION['commentException']);
                         }
                         $publicController->post($postManager, $commentManager, $twig, $datas);
                     } else {
-                        throw new Exception('aucun identifiant de billet n\'a été indiqué.');
+                        throw new Exception("aucun identifiant de billet n'a été indiqué.");
                     }
                 } catch (\Exception $blogException) {
                     $_SESSION['blogException'] = $blogException;
@@ -134,9 +130,7 @@ try {
                     $datas['inscriptionException'] = $_SESSION['inscriptionException'];
                     unset($_SESSION['inscriptionException']);
                 }
-                if (isset($_GET['success'])) {
-                    $datas['success'] = (int) $_GET['success'];
-                }
+                $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
                 $privateController->inscriptionPage($twig, $datas);
 
                 break;
@@ -164,9 +158,7 @@ try {
                             $datas['modificationException'] = $_SESSION['modificationException'];
                             unset($_SESSION['modificationException']);
                         }
-                        if (isset($_GET['success'])) {
-                            $datas['success'] = (int) $_GET['success'];
-                        }
+                        $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
                         $privateController->modifyMyDatas($userManager, $twig, $datas);
                     } else {
                         throw new \Exception("Vous ne pouvez accéder à cette page. Il faut vous identifier.");
@@ -205,6 +197,59 @@ try {
                 } catch (\Exception $e) {
                     $_SESSION['connexionException'] = $e->getMessage();
                     header('Location: index.php?action=connexion#exceptionMessage');
+                }
+
+                break;
+            case 'managePosts':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $datas['page'] = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+                    if (isset($_SESSION['postException'])) {
+                        $datas['postException'] = $_SESSION['postException'];
+                        unset($_SESSION['postException']);
+                    }
+                    $privateController->managePosts($postManager, $twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                }
+
+                break;
+            case 'deletePostPage':
+                    if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                        $datas['id'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
+                        $privateController->deletePostPage($postManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                    }
+    
+                break;
+            case 'deletePost':
+                    if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                        $datas['postId'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
+                        $privateController->deletePost($postManager, $twig, $datas);
+                    } else {
+                        throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                    }
+    
+                    break;
+            case 'postFormPage':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $datas['postId'] = isset($_GET['post']) ? (int) $_GET['post'] : null;
+                    $datas['success'] = isset($_GET['success']) ?  (int) $_GET['success'] : null;
+                    if (isset($_SESSION['exceptionMessage'])) {
+                        $datas['exceptionMessage'] = $_SESSION['exceptionMessage'];
+                        unset($_SESSION['exceptionMessage']);
+                    }
+                    $privateController->postFormPage($postManager, $twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
+                }
+
+                break;
+            case 'sendPostForm':
+                if (isset($_SESSION['pseudo']) and $_SESSION['role'] === 'Admin') {
+                    $privateController->sendPostForm($userManager, $postManager, $twig, $datas);
+                } else {
+                    throw new \Exception("Vous ne possédez pas les droits pour accéder à cette page.");
                 }
 
                 break;

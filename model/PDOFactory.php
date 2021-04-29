@@ -11,7 +11,12 @@ class PDOFactory
         if (self::$db instanceof \PDO) {
             return self::$db;
         }
-        self::$db = new \PDO('mysql:host=localhost;dbname=p5_blog_php;port=3308;charset=utf8', 'root', '');
+        
+        try {
+            self::$db = new \PDO('mysql:host=localhost;dbname=p5_blog_php;port=3308;charset=utf8', 'root', '');
+        } catch (PDOException $exception) {
+            die('Erreur :' . $exception->getMessage());
+        }
 
         return self::$db;
     }

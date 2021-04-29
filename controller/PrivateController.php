@@ -3,13 +3,17 @@
 namespace EmilieSchott\BlogPHP\Controller;
 
 use EmilieSchott\BlogPHP\Model\CommentManager;
+use EmilieSchott\BlogPHP\Model\Post;
 use EmilieSchott\BlogPHP\Model\PostManager;
 use EmilieSchott\BlogPHP\Model\User;
 use EmilieSchott\BlogPHP\Model\UserManager;
+use EmilieSchott\BlogPHP\Paginator\Paginator;
 use Twig\Environment;
 
 class PrivateController
 {
+    use Paginator;
+
     public function connexionPage(Environment $twig, array $datas): void
     {
         echo $twig->render('connexionView.html.twig', $datas);
@@ -148,11 +152,12 @@ class PrivateController
         $datas['office'] = 'back';
         
         try {
-            $commentsPages = $commentManager->getUserCommments($_SESSION['pseudo']);
+            $comments = $commentManager->getUserCommments($_SESSION['pseudo']);
         } catch (\Exception $e) {
             $datas['commentsException'] = "Le(s) commentaire(s) n'a/ont pas pu être récupéré(s)";
         }
 
+        $commentsPages = $this->paginator($comments, 5);
         if (!is_null($commentsPages['pagesNbr'])) {
             $datas['pagesNbr'] = $commentsPages['pagesNbr'];
 
@@ -165,7 +170,7 @@ class PrivateController
                 $datas['page'] = 1;
             }
 
-            $commentsPage = $commentManager->accessPage($commentsPages['datasPages'], $datas['page']);
+            $commentsPage = $this->displayPage($commentsPages['datasPages'], $datas['page']);
         } elseif (array_key_exists('page', $datas)) {
             unset($datas['page']);
         }
@@ -180,5 +185,155 @@ class PrivateController
         }
 
         echo $twig->render('myCommentsView.html.twig', $datas);
+    }
+
+    public function managePosts(PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            $posts = $postManager->getList();
+        } catch (\Exception $e) {
+            $datas['postException'] ="Le(s) post(s) n'a/ont pas pu être récupéré(s)";
+        }
+        $postsPages = $this->paginator($posts, 5);
+        $datas['posts'] = $postsPages['datasPages'];
+        $datas['pagesNbr'] = $postsPages['pagesNbr'];
+
+        try {
+            if ($datas['page'] <= 0 || $datas['page'] > $datas['pagesNbr']) {
+                $datas['page'] = 1;
+
+                throw new \Exception("La page indiquée n'existe pas.");
+            }
+        } catch (\Exception $e) {
+            $datas['invalidPostPage'] = $e->getMessage();
+        }
+
+        $datas['posts'] =  $this->displayPage($datas['posts'], $datas['page']);
+        echo $twig->render('adminManagePostsView.html.twig', $datas);
+    }
+
+    public function deletePostPage($postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+        
+        try {
+            if (!empty($datas['id'])) {
+                $datas['post'] = $postManager->getPost($datas['id']);
+                if ($datas['post'] instanceof Post) {
+                    echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+                } else {
+                    throw new \Exception("Le post n'a pas pu être récupéré");
+                }
+            } else {
+                throw new \Exception("Aucun post valide n'a été spécifié.");
+            }
+        } catch (\Exception $e) {
+            $datas['postException']=$e->getMessage();
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        }
+    }
+
+    public function deletePost(PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas['office'] = 'back';
+    
+        try {
+            if (!empty($datas['postId'])) {
+                $post = $postManager->getPost($datas['postId']);
+                \unlink('public/upload/img/post/' . $post->getPicture());
+                $postManager->deletePost($datas['postId']);
+                $datas['deleteSuccess']=1;
+                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("Aucun post n'a été spécifié.");
+            }
+        } catch (\Exception $e) {
+            $datas['postException']=$e->getMessage();
+            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+        }
+    }
+
+    public function postFormPage(PostManager $postManager, Environment $twig, array $datas)
+    {
+        try {
+            $datas['office'] = 'back';
+            $datas['post'] = !empty($datas['postId']) ? $postManager->getPost($datas['postId']) : null;
+
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
+            }
+
+            echo $twig->render('adminPostFormView.html.twig', $datas);
+        } catch (\PDOException $PDO) {
+            $datas['exceptionMessage'] = 'PDOException';
+            echo $twig->render('adminManagePostsView.html.twig', $datas);
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $twig->render('adminManagePostsView.html.twig', $datas);
+        }
+    }
+
+    public function sendPostForm(UserManager $userManager, PostManager $postManager, Environment $twig, array $datas)
+    {
+        $datas = [
+            'title' => $_POST['title'],
+            'author' => $_POST['author'],
+            'pictureDescription' => $_POST['pictureDescription'],
+            'standfirst' => $_POST['standfirst'],
+            'content' => $_POST['content']
+        ];
+        
+        try {
+            $user = $userManager->getUser($_SESSION['pseudo']);
+            $datas['userId'] = $user->getId();
+            if (!empty($_FILES['newPicture']['name'])) {
+                $datas['picture'] = $this->validateImageFile();
+                if (!empty($_POST['oldPicture'])) {
+                    \unlink('public/upload/img/post/' . $_POST['oldPicture']);
+                }
+            } else {
+                $datas['picture'] = $_POST['oldPicture'];
+            }
+
+            if (isset($_POST['postId'])) {
+                $datas['id'] = $_POST['postId'];
+                $postManager->modifyPost($datas);
+            } else {
+                $postManager->addPost($datas);
+            }
+        
+            header('Location: index.php?action=postFormPage&success=1#form');
+        } catch (\Exception $e) {
+            $_SESSION['exceptionMessage'] = $e->getMessage();
+            header('Location: index.php?action=postFormPage&success=0#form');
+        }
+    }
+
+    public function validateImageFile() : string
+    {
+        if ($_FILES['newPicture']['error'] === 0) {
+            if ($_FILES['newPicture']['size'] <= 2000000) {
+                $authorizedExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
+                $dataFile = \pathinfo($_FILES['newPicture']['name']);
+                $fileExtension = $dataFile['extension'];
+                if (in_array($fileExtension, $authorizedExtensions, true)) {
+                    $fileName = $dataFile['filename'];
+                    for ($i=1 ; file_exists('public/upload/img/post/' . $_FILES['newPicture']['name']) ; $i++) {
+                        $_FILES['newPicture']['name'] = $fileName . "--" . $i . "." . $fileExtension;
+                    }
+                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['name']);
+
+                    return $_FILES['newPicture']['name'];
+                } else {
+                    throw new \Exception("Le fichier image doit être au format .jpg, .png ou .gif.");
+                }
+            } else {
+                throw new \Exception("Le fichier image doit faire au maximum 2Mo.");
+            }
+        } else {
+            throw new \Exception("Le fichier image n'a pas pu être uploadé.");
+        }
     }
 }

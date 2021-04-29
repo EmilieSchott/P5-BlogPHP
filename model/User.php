@@ -2,7 +2,7 @@
 
 namespace EmilieSchott\BlogPHP\Model;
 
-class User extends Hydrate
+class User extends Hydrator
 {
     private $id;
     private $role;

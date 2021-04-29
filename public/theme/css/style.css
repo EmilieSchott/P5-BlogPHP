@@ -19,6 +19,8 @@ h4,
 h5,
 h6 {
     font-family: 'Raleway';
+    font-weight:100;
+    text-transform:uppercase;
 }
 
 p {
@@ -26,10 +28,14 @@ p {
     font-size: 0.9rem;
 }
 
+.subtitle {
+    font-weight:700;
+}
+
 @media (min-width: 1200px) {
     p {
         line-height: 1.75;
-        font-size: 16px;;
+        font-size: 16px;
     }
 }
 
@@ -153,7 +159,7 @@ a:hover, .current {
     color: #7b858e;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
     .navbar-nav .nav-item .nav-link {
         font-size: 1.3rem;
     }
@@ -272,14 +278,37 @@ a:hover, .current {
     box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
 }
    
+.btn-hard-red:hover, .btn-hard-red:focus, .btn-hard-red:active,
+.btn-hard-primary:hover, .btn-hard-primary:focus, .btn-hard-primary:active,
 .btn-primary {
     background-color: #7b858e;
     border-color: #7b858e;
+    color: white;
 }
 
+.btn-red {
+    background-color: #7b858e;
+    border-color: #7b858e;
+    color: #7a1212;
+}
+
+.btn-hard-red {
+    background-color: #7a1212;
+    border-color: #7a1212;
+    color: white;
+}
+
+.btn-red:hover, .btn-red:focus, .btn-red:active {
+    background-color: #7a1212;
+    border-color: #7a1212;
+    color: white;
+}
+
+.btn-hard-primary,
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background-color: #006699;
     border-color: #006699;
+    color: white;
 }
 
 .font-weight-light {
@@ -342,6 +371,20 @@ a:hover, .current {
     z-index: -1;
 }
 
+
+.admin-field:before{
+    border-radius: 0.5rem;
+    content: '';
+    position: absolute;
+    top: -0.2rem;
+    bottom: -0.2rem;
+    left: -0.2rem;
+    right: -0.2rem;
+    border: 0.25rem solid rgba(255, 255, 255, 0.85);
+    z-index: -1;
+}
+
+
 @media (min-width: 768px) {   
     .contact .contact-inner, .back-access .back-access-inner {
         margin-bottom: 30px;
@@ -359,6 +402,16 @@ a:hover, .current {
     }
 }
 
+
+@media (max-width:1199px) {
+    .admin-field {
+        padding: 5px;
+        margin: 5px;
+        padding-top: 10px;
+        margin-top: 1rem;
+    }
+}
+
 @media (min-width:1200px) {
     .contact, .back-access {
         padding-bottom: 3rem;
@@ -373,12 +426,19 @@ a:hover, .current {
         padding: 3rem;
         margin-bottom: -40px;
     }
+
+    .admin-field {
+        padding-top: 0.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 }
 
 .floating-label-form-group {
     position: relative;
     margin-bottom: 0;
 }
+
 
 .floating-label-form-group input,
 .floating-label-form-group textarea {
@@ -395,6 +455,7 @@ a:hover, .current {
 }
 
 @media (min-width: 992px) {
+
     .floating-label-form-group input,
     .floating-label-form-group textarea {
     font-size: 20px;
@@ -420,9 +481,66 @@ a:hover, .current {
     top: 0;
     opacity: 1;
 }
+
 .floating-label-form-group-with-focus label {
     color: #18BC9C;
 }
+
+.visible-label-form-group {
+    margin-bottom: 0;
+}
+
+.visible-label-form-group input,
+.visible-label-form-group textarea {
+    z-index: 1;
+    position: relative;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: none;
+    font-family: 'Lora';
+    font-size: 18px;
+    background: none;
+    box-shadow: none !important;
+    resize: none;
+}
+
+.visible-label-form-group label {
+    margin: 0;
+    font-size: 18px;
+    font-family: 'Lora';
+    padding-left: 5px;
+    color: #7b858e;
+}
+
+@media (min-width: 992px) {
+    .visible-label-form-group label,
+    .visible-label-form-group input,
+    .visible-label-form-group textarea {
+    font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .contact .submit-button, .contact .retry-button {   
     width:50%;
@@ -838,6 +956,14 @@ g:active .intern {
     flex-wrap: wrap;
 }
 
+.list-button {
+    text-transform: uppercase;
+    font-weight: 200;
+    font-family: "Raleway";
+    font-style: normal;
+    font-size: 15px;
+}
+
 @media (max-width: 992px) {
     .input-group * {
         width:100%
@@ -845,6 +971,12 @@ g:active .intern {
 
     .list-button {
         margin-top: -10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .list-button {
+        font-size: 20px;
     }
 }
 

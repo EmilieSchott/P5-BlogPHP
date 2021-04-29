@@ -2,7 +2,7 @@
 
 namespace EmilieSchott\BlogPHP\Model;
 
-abstract class Hydrate
+abstract class Hydrator
 {
     public function __construct(array $datas)
     {

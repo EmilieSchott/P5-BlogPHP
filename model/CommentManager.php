@@ -15,16 +15,8 @@ class CommentManager extends Manager
         while ($datas=$query->fetch()) {
             $comments[] = new Comment($datas);
         }
-        $commentsPages = $this->paginator->paginator($comments, 5);
 
-        return $commentsPages;
-    }
-
-    public function accessPage(array $commentsPages, int $page)
-    {
-        $commentsPage = $this->paginator->displayPage($commentsPages, $page);
-
-        return $commentsPage;
+        return $comments;
     }
 
     public function addComment(array $datas): void
@@ -55,10 +47,6 @@ class CommentManager extends Manager
             $comments[] = new Comment($datas);
         }
 
-        $commentsPages = $this->paginator->paginator($comments, 5);
-
-        return $commentsPages;
+        return $comments;
     }
-
-    //Delete a comment
 }
