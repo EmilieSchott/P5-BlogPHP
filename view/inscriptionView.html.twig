@@ -27,9 +27,9 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">Votre inscription a bien été enregistrée.</span>
-                            <p>
+                            <span class="section-heading-around">
                                 Connectez-vous pour accéder à votre compte.
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
@@ -40,9 +40,9 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main"> {% if inscriptionException is not empty %} {{ inscriptionException }} {% else %} Votre inscription n'a pas pu être enregistrée. {% endif %} </span>
-                            <p>
+                            <span class="section-heading-around">
                                 {% if inscriptionException is not empty %}  Votre inscription n'a pas pu être enregistrée. {% else %}  Nous sommes désolés de cet incident. {% endif %} 
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
@@ -64,7 +64,7 @@
                             </h2>
                         </a>
                     </div>
-                    <form name="inscriptionForm" id="inscriptionForm" action="index.php?action=getInscription" method="post">
+                    <form name="inscriptionForm" id="inscriptionForm" action="index.php?action=getInscription" requireSSL="true" method="post">
                         <div class="row">
                             <div class="form-group col-10 col-lg-7 col-xl-6 mx-auto floating-label-form-group controls">
                                 <label>Pseudo</label>

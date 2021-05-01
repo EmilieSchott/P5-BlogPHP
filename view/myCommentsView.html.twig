@@ -33,9 +33,9 @@
                                 <h3 class="section-heading">
                                     <span class="section-heading-around text-center" >Un problème est survenu :</span>
                                     <span class="section-heading-main text-center"> {{ invalidCommentsPage }} </span>
-                                    <p class="text-center">
+                                    <span class="section-heading-around">
                                         Vous avez été redirigé.
-                                    </p>
+                                    </span>
                                 </h3>
                             </div>
                         </div>
@@ -57,11 +57,11 @@
                         <div class="my-4 d-flex justify-content-center">
                             <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
                                 <h3 class="section-heading">
-                                    <span class="section-heading-around text-center" >Un problème est survenu :</span>
+                                    <span class="section-heading-around text-center" >{% if comments is empty %}On veut bien mais...{% else %}Un problème est survenu :{% endif %}</span>
                                     <span class="section-heading-main text-center"> {{ commentsException }} </span>
-                                    <p class="text-center">
-                                        Nous sommes désolés de cet incident.
-                                    </p>
+                                    <span class="section-heading-around text-center">
+                                        {% if comments is empty %}Il ne vous reste plus qu'à commenter un billet.{% else %}Nous sommes désolés de cet incident.{% endif %}
+                                    </span>
                                 </h3>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                     {% if pagesNumber is not empty %} 
                         <div class="container text-center pt-4 pt-lg-5">           
                             <div class=" back text-center d-inline-flex">
-                                {% if page > 1 %} <a href="index.php?action=myComments&amp;page={{ page-1 }}#comments"> {% else  %} {% endif  %}
+                                {% if page > 1 %} <a href="index.php?action=myCommentsPage&amp;page={{ page-1 }}#comments"> {% else  %} {% endif  %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                         <g>
                                             <path class="{% if page > 1 %} contour {% else  %} disable-contour {% endif  %}" d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 
@@ -82,7 +82,7 @@
         
                                 <div class="page-number mx-3 mt-2 mt-lg-1">{{ page }} / {{ pagesNumber }}</div>
         
-                                {% if page < pagesNumber %} <a href="index.php?action=myComments&amp;page={{ page+1 }}#comments"> {% else  %} {% endif  %}
+                                {% if page < pagesNumber %} <a href="index.php?action=myCommentsPage&amp;page={{ page+1 }}#comments"> {% else  %} {% endif  %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                         <g>
                                             <path class="{% if page < pagesNumber %} contour {% else  %} disable-contour {% endif  %}"  d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 

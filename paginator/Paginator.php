@@ -4,7 +4,7 @@ namespace EmilieSchott\BlogPHP\Paginator;
 
 trait Paginator
 {
-    public function paginator(array $datas, int $itemsPerPage): array
+    public function paginate(array $datas, int $itemsPerPage): array
     {
         $datasPages = \array_chunk($datas, $itemsPerPage);
         \array_unshift($datasPages, '');

@@ -8,7 +8,7 @@
 {% block description %} {{ post.standFirst }} {% endblock %}
 {% block image %}public/upload/img/post/{{ post.picture }}{% endblock %}
 {% block type %} article {% endblock %}
-{% block url %} <!-- TO  DO : Modify URL --> https://www.example.com/index.php?action=post&amp;id={{ post.id }}  {% endblock %}
+{% block url %} <!-- TO  DO : Modify URL --> https://www.example.com/index.php?action=postPage&amp;id={{ post.id }}  {% endblock %}
 {% block author %} {{ post.author }} {% endblock %}
 {% block script %}<script src="codesample-config/prism.js"></script>{% endblock %}
 
@@ -30,14 +30,14 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Publié le {{ post.createdAt }}</span>
                             <span class="section-heading-main">{{ post.title }}</span>
-                            <p class="subtitle">Par {{ post.author }} - Dernière mise à jour le {{ post.updatedAt }}</p>
+                            <p class="subtitle">Par {{ post.author }} {% if post.updatedAt is not null %}- Dernière mise à jour le {{ post.updatedAt }}{% endif %}</p>
                         </h2>
                         <p> <strong>{{ post.standFirst | raw }}</strong></p>
                         <p class="mb-0">{{ post.content | raw }}</p>
                         <div class="row post-button">
                             <a 
                                 class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" 
-                                href="index.php?action=blog&amp;{% if blogPage is not empty %}page={{ blogPage }}#{{ post.id }}{% else %}{% endif %}">
+                                href="index.php?action=blogIndex&amp;{% if blogPage is not empty %}page={{ blogPage }}#{{ post.id }}{% else %}{% endif %}">
                                 Lire un autre post ? 
                             </a>
                         </div> 
@@ -55,40 +55,40 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">Votre commentaire a bien été enregistré.</span>
-                            <p>
+                            <span class="section-heading-around">
                                 Il sera publié une fois validé par un administrateur.
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">En poster un autre ? </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=postPage&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">En poster un autre ? </a>
                     </div> 
                 {% elseif success is not empty and success == 0 %} 
                     <div class="message" id="commentForm">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main"> Votre commentaire n'a pas pu être enregistré. </span>
-                            <p>
+                            <span class="section-heading-around">
                                 {% if commentException is empty %} Nous sommes désolés de cet incident. {% else %} {{ commentException }} {% endif %} 
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=post&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">Réessayer ? </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=postPage&amp;id={{ post.id }}{% if blogPage is not empty %}&amp;blogPage={{ blogPage }}{% else %}{% endif %}#addComment">Réessayer ? </a>
                     </div> 
                 {% else %}
                     <h2 class="section-heading mb-4 ">
                         <span class="section-heading-around">Laisser un</span>
                         <span class="section-heading-main">commentaire</span>
-                        <p>
+                        <span class="section-heading-around">
                             Il sera soumis à validation avant publication.
-                        </p>
+                        </span>
                     </h2>
-                    <form name="sentComment" id="commentForm" action="index.php?action=addComment" method="post">
+                    <form name="sentComment" id="commentForm" action="index.php?action=addComment" requireSSL="true" method="post">
                         <div class="row">
                             <div class="form-group col-xl-12 mx-auto col-xs-12 floating-label-form-group controls">
                                 <label >Pseudo</label>
-                                <input  class="form-control" {% if user.pseudo is not empty %} type="hidden" value="{{ user.pseudo }}" {% else %} type="text" placeholder="Pseudo" {% endif %} name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
+                                <input  class="form-control" {% if userSession.pseudo is not empty %} type="hidden" value="{{ userSession.pseudo }}" {% else %} type="text" placeholder="Pseudo" {% endif %} name="author" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
@@ -114,9 +114,9 @@
                             <h3 class="section-heading">
                                 <span class="section-heading-around text-center" >Un problème est survenu :</span>
                                 <span class="section-heading-main text-center"> {{ invalidCommentsPage }} </span>
-                                <p class="text-center">
+                                <span class="section-heading-around">
                                     Vous avez été redirigé.
-                                </p>
+                                </span>
                             </h3>
                         </div>
                     </div>
@@ -139,9 +139,9 @@
                                 <h3 class="section-heading">
                                     <span class="section-heading-around text-center" >Un problème est survenu :</span>
                                     <span class="section-heading-main text-center"> {{ commentsException }} </span>
-                                    <p class="text-center">
+                                    <span class="section-heading-around">
                                          Nous sommes désolés de cet incident.
-                                    </p>
+                                    </span>
                                 </h3>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                 {% if pagesNumber is not empty %} 
                     <div class="container text-center pt-4 pt-lg-5">           
                         <div class="text-center d-inline-flex">
-                            {% if page > 1 %} <a href="index.php?action=post&amp;id={{ post.id }}&amp;{% if blogPage is not empty %}blogPage={{ blogPage }}&amp;{% else %}{% endif %}page={{ page-1 }}#commentsPage"> {% else  %} {% endif  %}
+                            {% if page > 1 %} <a href="index.php?action=postPage&amp;id={{ post.id }}&amp;{% if blogPage is not empty %}blogPage={{ blogPage }}&amp;{% else %}{% endif %}page={{ page-1 }}#commentsPage"> {% else  %} {% endif  %}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                     <g>
                                         <path class="{% if page > 1 %} contour {% else  %} disable-contour {% endif  %}" d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 
@@ -164,7 +164,7 @@
 
                             <div class="page-number mx-3 mt-2 mt-lg-1">{{ page }} / {{ pagesNumber }}</div>
 
-                            {% if page < pagesNumber %} <a href="index.php?action=post&amp;id={{ post.id }}&amp;{% if blogPage is not empty %}blogPage={{ blogPage }}&amp;{% else %}{% endif %}page={{ page+1 }}#commentsPage"> {% else  %} {% endif  %}
+                            {% if page < pagesNumber %} <a href="index.php?action=postPage&amp;id={{ post.id }}&amp;{% if blogPage is not empty %}blogPage={{ blogPage }}&amp;{% else %}{% endif %}page={{ page+1 }}#commentsPage"> {% else  %} {% endif  %}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                     <g>
                                         <path class="{% if page < pagesNumber %} contour {% else  %} disable-contour {% endif  %}"  d="M48.1 44.75c0 1.9-1.6 3.4-3.399 3.4H5.3c-1.9 0-3.4-1.6-3.4-3.4V5.25c0-1.9 1.6-3.4 3.399-3.4h39.4c1.899 0 3.399 1.601 3.399 3.4v39.5z" 

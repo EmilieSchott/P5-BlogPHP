@@ -7,19 +7,15 @@ use EmilieSchott\BlogPHP\Model\Post;
 use EmilieSchott\BlogPHP\Model\PostManager;
 use EmilieSchott\BlogPHP\Model\User;
 use EmilieSchott\BlogPHP\Model\UserManager;
-use EmilieSchott\BlogPHP\Paginator\Paginator;
-use Twig\Environment;
 
-class PrivateController
+class PrivateController extends Controller
 {
-    use Paginator;
-
-    public function connexionPage(Environment $twig, array $datas): void
+    public function connexionPage(array $datas): void
     {
-        echo $twig->render('connexionView.html.twig', $datas);
+        echo $this->twig->render('connexionView.html.twig', $datas);
     }
 
-    public function getConnexion(UserManager $userManager)
+    public function getConnexion(): void
     {
         $attempt = [
             'pseudo' => $_POST['pseudo'],
@@ -30,14 +26,15 @@ class PrivateController
             if (filter_var($attempt['pseudo'], FILTER_VALIDATE_EMAIL)) {
                 throw new \Exception("Vous avez entré un email. C'est votre pseudo qui est demandé.");
             }
-            
+            $userManager = new UserManager();
             $user = $userManager->getUser($attempt['pseudo']);
 
             if ($user instanceof User && \password_verify($attempt['password'], $user->getPassword())) {
                 $_SESSION['role'] = $user->getRole();
                 $_SESSION['pseudo'] = $user->getPseudo();
+                $_SESSION['token'] = md5(bin2hex(\openssl_random_pseudo_bytes(6)));
 
-                header('Location: index.php?action=account');
+                header('Location: index.php?action=accountPage');
             } else {
                 throw new \Exception("Le pseudo ou le mot de passe est invalide.");
             }
@@ -47,26 +44,27 @@ class PrivateController
         }
     }
 
-    public function accountPage(Environment $twig, UserManager $userManager, array $datas): void
+    public function accountPage(array $datas): void
     {
         $datas['office'] = 'back';
+        $userManager = new UserManager();
         $datas['user'] = $userManager->getUser($_SESSION['pseudo']);
-        echo $twig->render('accountView.html.twig', $datas);
+        echo $this->twig->render('accountView.html.twig', $datas);
     }
 
-    public function inscriptionPage(Environment $twig, array $datas): void
+    public function inscriptionPage(array $datas): void
     {
         if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
             unset($datas['success']);
         }
 
-        echo $twig->render('inscriptionView.html.twig', $datas);
+        echo $this->twig->render('inscriptionView.html.twig', $datas);
     }
 
-    public function getInscription(UserManager $userManager)
+    public function getInscription(): void
     {
         $datas = [
-            'role' => 'Reader',
+            'role' => 'Lecteur',
             'pseudo' => $_POST['pseudo'],
             'name' => $_POST['name'],
             'firstName' => $_POST['firstName'],
@@ -75,6 +73,7 @@ class PrivateController
         ];
 
         try {
+            $userManager = new UserManager();
             $verifyPseudo = $userManager->getUser($datas['pseudo']);
             if ($verifyPseudo instanceof User) {
                 throw new \Exception("Ce pseudo est déjà pris, choisissez-en un autre.");
@@ -88,85 +87,117 @@ class PrivateController
         }
     }
 
-    public function disconnect()
+    public function disconnect(): void
     {
         \session_destroy();
         header('Location: index.php?action=homePage');
     }
     
-    public function modifyMyDatas(UserManager $userManager, Environment $twig, array $datas)
+    public function modifyDatas(array $datas): void
     {
         $datas['office'] = 'back';
-        $datas['user'] = $userManager->getUser($_SESSION['pseudo']);
         if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
             unset($datas['success']);
         }
-
-        echo $twig->render('datasModificationView.html.twig', $datas);
+        $userManager = new UserManager;
+        $datas['user'] = $userManager->getUser($datas['pseudo']);
+        unset($datas['pseudo']);
+        echo $this->twig->render('datasModificationView.html.twig', $datas);
     }
 
-    public function modifyUser(UserManager $userManager, Environment $twig)
+    public function modifyUser(): void
     {
         try {
             $datas['office'] = 'back';
-            $user = $userManager->getUser($_SESSION['pseudo']);
+            $userManager = new UserManager();
+            $user = $userManager->getUser($_POST['pseudo']);
 
-            if ($_POST['formName'] === 'modifyEmail') {
-                if (isset($_POST['email'])) {
-                    $modification = [
-                        'email' => $_POST['email']
-                        ];
-                } else {
-                    throw new \Exception("Le champ n'est pas rempli.");
-                }
-            }
-
-            if ($_POST['formName'] === 'modifyPassword') {
-                if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
-                    if (\password_verify($_POST['password0'], $user->getPassword())) {
-                        if ($_POST['password1'] === $_POST['password2']) {
-                            $modification = [
-                                'password' => \password_hash($_POST['password1'], PASSWORD_DEFAULT)
-                            ];
-                        } else {
-                            throw new \Exception("Les nouveaux mots de passe ne sont pas identiques.");
-                        }
-                    } else {
-                        throw new \Exception("L'ancien mot de passe n'est pas correct.");
-                    }
-                } else {
-                    throw new \Exception("Les champs ne sont pas remplis.");
-                }
+            if (method_exists($this, $_POST['formName'])) {
+                $method = $_POST['formName'];
+                $modification = $this->{$method}($user);
             }
 
             $datas['user'] = $userManager->modifyUser($user, $modification);
-            header('Location: index.php?action=modifyMyDatas&success=1#message');
+            header('Location: index.php?action=modifyDatas&success=1#message');
         } catch (\Exception $e) {
-            $_SESSION['modificationException'] = $e->getMessage();
-            header('Location: index.php?action=modifyMyDatas&success=0#message');
+            $_SESSION['exceptionMessage'] = $e->getMessage();
+            header('Location: index.php?action=modifyDatas&success=0#message');
         }
     }
 
-    public function myComments(CommentManager $commentManager, PostManager $postManager, Environment $twig, array $datas)
+    private function modifyEmail(User $user): array
+    {
+        if (isset($_POST['email'])) {
+            if ($user->getEmail() !== $_POST['email']) {
+                $modification = [
+                    'email' => $_POST['email']
+                ];
+            
+                return $modification;
+            } else {
+                throw new \Exception("L'ancien et le nouvel email sont identiques.");
+            }
+        } else {
+            throw new \Exception("Le champ n'est pas rempli.");
+        }
+    }
+
+    private function modifyPassword(User $user): array
+    {
+        if (isset($_POST['password0'], $_POST['password1'], $_POST['password2'])) {
+            if (\password_verify($_POST['password0'], $user->getPassword())) {
+                if ($_POST['password1'] === $_POST['password2']) {
+                    $modification = [
+                        'password' => \password_hash($_POST['password1'], PASSWORD_DEFAULT)
+                    ];
+
+                    return $modification;
+                } else {
+                    throw new \Exception("Les nouveaux mots de passe ne sont pas identiques.");
+                }
+            } else {
+                throw new \Exception("L'ancien mot de passe n'est pas correct.");
+            }
+        } else {
+            throw new \Exception("Les champs ne sont pas remplis.");
+        }
+    }
+
+    private function modifyRole(User $user): array
+    {
+        if ($user->getRole() !== $_POST['role']) {
+            $modification = [
+            'role' => $_POST['role']
+            ];
+        } else {
+            throw new \Exception("L'untilisateur a déjà le rôle que vous essayez de lui donner.");
+        }
+
+        return $modification;
+    }
+
+    public function myCommentsPage(array $datas): void
     {
         $datas['office'] = 'back';
         
         try {
+            $commentManager = new CommentManager();
             $comments = $commentManager->getUserCommments($_SESSION['pseudo']);
-            $commentsPages = $this->paginator($comments, 5);
+            $commentsPages = $this->paginate($comments, 5);
             $datas['pagesNumber'] = $commentsPages['pagesNumber'];
             $commentsPage = $this->displayPage($commentsPages, $datas['page']);
-            $datas['comments'] = $this->getCommentPostTitle($commentsPage, $postManager);
-            echo $twig->render('myCommentsView.html.twig', $datas);
+            $datas['comments'] = $this->getCommentPostTitle($commentsPage);
+            echo $this->twig->render('myCommentsView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['commentsException'] = $e->getMessage();
-            echo $twig->render('myCommentsView.html.twig', $datas);
+            echo $this->twig->render('myCommentsView.html.twig', $datas);
         }
     }
 
-    public function getCommentPostTitle(array $commentsPage, PostManager $postManager): array
+    private function getCommentPostTitle(array $commentsPage): array
     {
         foreach ($commentsPage as $comment) {
+            $postManager = new PostManager();
             $post = $postManager->getPost($comment->getPostId());
             $postTitle = $post->getTitle();
             $datas['comments'][] = [
@@ -178,81 +209,134 @@ class PrivateController
         return $datas['comments'];
     }
 
-    public function managePosts(PostManager $postManager, Environment $twig, array $datas)
+    public function managePostsPage(array $datas): void
     {
         $datas['office'] = 'back';
 
         try {
+            $postManager = new PostManager();
             $posts = $postManager->getList();
-            $postsPages = $this->paginator($posts, 5);
+            $postsPages = $this->paginate($posts, 5);
             $datas['pagesNumber'] = $postsPages['pagesNumber'];
             $datas['posts'] =  $this->displayPage($postsPages, $datas['page']);
-            echo $twig->render('adminManageView.html.twig', $datas);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['exceptionMessage'] = $e->getMessage();
-            echo $twig->render('adminManageView.html.twig', $datas);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         }
     }
 
-    public function deletePostPage($postManager, Environment $twig, array $datas)
+    public function confirmDeletionPage(array $datas): void
     {
         $datas['office'] = 'back';
         
         try {
-            if (!empty($datas['id'])) {
-                $datas['post'] = $postManager->getPost($datas['id']);
-                if ($datas['post'] instanceof Post) {
-                    echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
-                } else {
-                    throw new \Exception("Le billet n'a pas pu être récupéré");
-                }
+            if ($datas['entity'] === 'post') {
+                $this->confirmPostDeletionPage($datas);
+            } elseif ($datas['entity'] === 'user') {
+                $this->confirmUserDeletionPage($datas);
             } else {
-                throw new \Exception("Aucun billet valide n'a été spécifié.");
+                throw new \Exception("L'action entreprise n'est pas valide.");
             }
         } catch (\Exception $e) {
-            $datas['postException']=$e->getMessage();
-            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            $datas['exceptionMessage']=$e->getMessage();
+            echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
         }
     }
 
-    public function deletePost(PostManager $postManager, Environment $twig, array $datas)
+    private function confirmPostDeletionPage(array $datas): void
+    {
+        if (!empty($datas['id'])) {
+            $postManager = new PostManager();
+            $datas['post'] = $postManager->getPost($datas['id']);
+            if ($datas['post'] instanceof Post) {
+                echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("Le billet n'a pas pu être récupéré");
+            }
+        } else {
+            throw new \Exception("Aucun billet valide n'a été spécifié.");
+        }
+    }
+
+    private function confirmUserDeletionPage(array $datas): void
+    {
+        if (!empty($datas['pseudo'])) {
+            $userManager = new UserManager();
+            $datas['user'] = $userManager->getUser($datas['pseudo']);
+            if ($datas['user'] instanceof User) {
+                echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
+            } else {
+                throw new \Exception("L'utilisateur n'a pas pu être récupéré");
+            }
+        } else {
+            throw new \Exception("Aucun utilisateur valide n'a été spécifié.");
+        }
+    }
+
+    public function deleteEntity(array $datas): void
     {
         $datas['office'] = 'back';
-    
+        
         try {
-            if (!empty($datas['postId'])) {
-                $post = $postManager->getPost($datas['postId']);
-                \unlink('public/upload/img/post/' . $post->getPicture());
-                $postManager->deletePost($datas['postId']);
-                $datas['deleteSuccess']=1;
-                echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            if ($datas['entity'] === 'post') {
+                $this->deletePost($datas);
+            } elseif ($datas['entity'] === 'user') {
+                $this->deleteUser($datas);
             } else {
-                throw new \Exception("Aucun post n'a été spécifié.");
+                throw new \Exception("L'action entreprise n'est pas valide.");
             }
         } catch (\Exception $e) {
-            $datas['postException']=$e->getMessage();
-            echo $twig->render('adminConfirmDeleteView.html.twig', $datas);
+            $datas['exceptionMessage']=$e->getMessage();
+            echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
         }
     }
 
-    public function postFormPage(PostManager $postManager, Environment $twig, array $datas)
+    private function deletePost(array $datas): void
+    {
+        if (!empty($datas['id'])) {
+            $postManager = new PostManager();
+            $post = $postManager->getPost($datas['id']);
+            \unlink('public/upload/img/post/' . $post->getPicture());
+            $postManager->deletePost($datas['id']);
+            $datas['deleteSuccess']=1;
+            echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
+        } else {
+            throw new \Exception("Aucun post n'a été spécifié.");
+        }
+    }
+
+    private function deleteUser(array $datas): void
+    {
+        if (!empty($datas['pseudo'])) {
+            $userManager = new UserManager();
+            $userManager->deleteUser($datas['pseudo']);
+            $datas['deleteSuccess']=1;
+            echo $this->twig->render('adminConfirmDeleteView.html.twig', $datas);
+        } else {
+            throw new \Exception("Aucun utilisateur n'a été spécifié.");
+        }
+    }
+
+    public function postFormPage(array $datas): void
     {
         try {
             $datas['office'] = 'back';
+            $postManager = new PostManager();
             $datas['post'] = !empty($datas['postId']) ? $postManager->getPost($datas['postId']) : null;
 
             if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
                 unset($datas['success']);
             }
 
-            echo $twig->render('adminPostFormView.html.twig', $datas);
+            echo $this->twig->render('adminPostFormView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['exceptionMessage'] = $e->getMessage();
-            echo $twig->render('adminManageView.html.twig', $datas);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         }
     }
 
-    public function sendPostForm(UserManager $userManager, PostManager $postManager, array $datas)
+    public function sendPostForm(array $datas): void
     {
         $datas = [
             'title' => $_POST['title'],
@@ -263,10 +347,12 @@ class PrivateController
         ];
         
         try {
+            $userManager = new UserManager();
             $user = $userManager->getUser($_SESSION['pseudo']);
             $datas['userId'] = $user->getId();
             if (!empty($_FILES['newPicture']['name'])) {
                 $datas['picture'] = $this->validateImageFile();
+
                 if (!empty($_POST['oldPicture'])) {
                     \unlink('public/upload/img/post/' . $_POST['oldPicture']);
                 }
@@ -274,6 +360,7 @@ class PrivateController
                 $datas['picture'] = $_POST['oldPicture'];
             }
 
+            $postManager = new PostManager();
             if (isset($_POST['postId'])) {
                 $datas['id'] = $_POST['postId'];
                 $postManager->modifyPost($datas);
@@ -288,21 +375,28 @@ class PrivateController
         }
     }
 
-    public function validateImageFile() : string
+    private function validateImageFile(): string
     {
         if ($_FILES['newPicture']['error'] === 0) {
             if ($_FILES['newPicture']['size'] <= 2000000) {
-                $authorizedExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
+                $authorizedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                 $dataFile = \pathinfo($_FILES['newPicture']['name']);
-                $fileExtension = $dataFile['extension'];
-                if (in_array($fileExtension, $authorizedExtensions, true)) {
-                    $fileName = $dataFile['filename'];
-                    for ($i=1 ; file_exists('public/upload/img/post/' . $_FILES['newPicture']['name']) ; $i++) {
-                        $_FILES['newPicture']['name'] = $fileName . "--" . $i . "." . $fileExtension;
-                    }
-                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $_FILES['newPicture']['name']);
+                $fileExtension = \strtolower($dataFile['extension']);
 
-                    return $_FILES['newPicture']['name'];
+                if (in_array($fileExtension, $authorizedExtensions, true)) {
+                    if (\strlen($_FILES['newPicture']['name']) >= 150) {
+                        $cutName = str_split($dataFile['filename'], 140);
+                        $fileName = $cutName[0];
+                    } else {
+                        $fileName = $dataFile['filename'];
+                    }
+
+                    $newFileName = bin2hex(\openssl_random_pseudo_bytes(6));
+                    $newFileName .= $fileName;
+                    $newFileName .= '.' . $fileExtension;
+                    \move_uploaded_file($_FILES['newPicture']['tmp_name'], 'public/upload/img/post/' . $newFileName);
+
+                    return $newFileName;
                 } else {
                     throw new \Exception("Le fichier image doit être au format .jpg, .png ou .gif.");
                 }
@@ -313,8 +407,8 @@ class PrivateController
             throw new \Exception("Le fichier image n'a pas pu être uploadé.");
         }
     }
-
-    public function manageComments(CommentManager $commentManager, PostManager $postManager, Environment $twig, array $datas)
+    
+    public function manageCommentsPage(array $datas): void
     {
         $datas['office'] = 'back';
 
@@ -322,23 +416,25 @@ class PrivateController
             if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
                 unset($datas['success']);
             }
+            $commentManager = new CommentManager();
             $comments = $commentManager->getList();
-            $commentsPages = $this->paginator($comments, 5);
+            $commentsPages = $this->paginate($comments, 5);
             $datas['pagesNumber'] = $commentsPages['pagesNumber'];
             $commentsPage =  $this->displayPage($commentsPages, $datas['page']);
-            $datas['comments'] = $this->getCommentPostTitle($commentsPage, $postManager);
-            echo $twig->render('adminManageView.html.twig', $datas);
+            $datas['comments'] = $this->getCommentPostTitle($commentsPage);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['exceptionMessage'] = $e->getMessage();
-            echo $twig->render('adminManageView.html.twig', $datas);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         }
     }
 
-    public function modifyCommentStatus(CommentManager $commentManager, array $datas)
+    public function modifyCommentStatus(array $datas): void
     {
         $datas['office'] = 'back';
         
         try {
+            $commentManager = new CommentManager();
             if (!empty($datas['id']) && $datas['id'] > 0) {
                 $comment = $commentManager->getComment($datas['id']);
                 $datasToModify['id'] = $datas['id'];
@@ -361,10 +457,30 @@ class PrivateController
             }
 
             $commentManager->modifyComment($comment, $datasToModify);
-            header('Location: index.php?action=manageComments&success=1#message');
+            header('Location: index.php?action=manageCommentsPage&success=1#message');
         } catch (\Exception $e) {
             $_SESSION['exceptionMessage'] = $e->getMessage();
-            header('Location: index.php?action=manageComments&success=0#message');
+            header('Location: index.php?action=manageCommentsPage&success=0#message');
+        }
+    }
+
+    public function manageUsersPage(array $datas): void
+    {
+        $datas['office'] = 'back';
+
+        try {
+            if (array_key_exists('success', $datas) && ($datas['success'] < 0 || $datas['success'] > 1)) {
+                unset($datas['success']);
+            }
+            $userManager = new UserManager();
+            $users = $userManager->getList($datas['userSession']['pseudo']);
+            $usersPages = $this->paginate($users, 10);
+            $datas['pagesNumber'] = $usersPages['pagesNumber'];
+            $datas['users'] =  $this->displayPage($usersPages, $datas['page']);
+            echo $this->twig->render('adminManageView.html.twig', $datas);
+        } catch (\Exception $e) {
+            $datas['exceptionMessage'] = $e->getMessage();
+            echo $this->twig->render('adminManageView.html.twig', $datas);
         }
     }
 }

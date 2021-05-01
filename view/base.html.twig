@@ -58,11 +58,11 @@
                                 <a  {% if action == 'homePage' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=homePage">A propos...</a>
                             </li>
                             <li class="nav-item px-lg-4">
-                                <a {% if action == 'blog' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blog&amp;page=1">Blog</a>
+                                <a {% if action == 'blogIndex' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blogIndex&amp;page=1">Blog</a>
                             </li>
-                            {% if user.role == ('Admin' or 'Lecteur') %}
+                            {% if userSession.role == ('Admin' or 'Lecteur') %}
                             <li class="nav-item px-lg-4">
-                                <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mon compte</a>
+                                <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=accountPage">Mon compte</a>
                             </li>
                             {% endif %}
                         </ul>
@@ -77,20 +77,20 @@
                 <nav class="back-nav col-10 col-lg-3 offset-1 rounded">
                     <ul class="navbar-nav mx-auto ">
                         <li  class="nav-item px-lg-4" >
-                            <a {% if action == 'account' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=account">Mes Informations</a>
+                            <a {% if action == 'accountPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=accountPage">Mes Informations</a>
                         </li>
                         <li  class="nav-item px-lg-4"  >
-                            <a {% if action == 'myComments' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=myComments">Mes commentaires</a>
+                            <a {% if action == 'myCommentsPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=myCommentsPage">Mes commentaires</a>
                         </li>
-                        {% if user.role == 'Admin' %}
+                        {% if userSession.role == 'Admin' %}
                         <li class="nav-item px-lg-4" >
-                            <a {% if action == 'managePosts' %} class="nav-link text-uppercase  active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=managePosts">Gérer les billets</a>
+                            <a {% if action == 'managePostsPage' %} class="nav-link text-uppercase  active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=managePostsPage">Gérer les billets</a>
                         </li>
                         <li  class="nav-item px-lg-4">
-                            <a {% if action == 'manageComments' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageComments">Gérer les commentaires</a>
+                            <a {% if action == 'manageCommentsPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageCommentsPage">Gérer les commentaires</a>
                         </li>
                         <li class="nav-item px-lg-4">
-                            <a {% if action == 'manageUsers' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageUsers">Gérer les utilisateurs</a>
+                            <a {% if action == 'manageUsersPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageUsersPage">Gérer les utilisateurs</a>
                         </li>
                         {% endif %}
                         <li class="nav-item px-lg-4">

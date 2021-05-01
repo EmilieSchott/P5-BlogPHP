@@ -4,10 +4,10 @@ namespace EmilieSchott\BlogPHP\Model;
 
 abstract class Manager
 {
-    protected $db;
+    protected $database;
     
     public function __construct()
     {
-        $this->db = PDOFactory::getDbConnection();
+        $this->database = PDOFactory::getDatabaseConnection();
     }
 }

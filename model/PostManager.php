@@ -7,8 +7,8 @@ class PostManager extends Manager
     public function getList(): array
     {
         $posts = [];
-        $q=$this->db->query(
-            'SELECT id, title, standfirst, createdAt, picture, pictureDescription 
+        $q=$this->database->query(
+            'SELECT id, title, standfirst, createdAt, updatedAt, author, picture, pictureDescription 
             FROM posts ORDER BY id DESC'
         );
         while ($datas = $q->fetch(\PDO::FETCH_ASSOC)) {
@@ -24,7 +24,7 @@ class PostManager extends Manager
 
     public function getPost(int $id): object
     {
-        $query = $this->db->prepare('SELECT * FROM posts WHERE id = ?');
+        $query = $this->database->prepare('SELECT * FROM posts WHERE id = ?');
         $query->execute([$id]);
 
         if (false === ($data = $query->fetch())) {
@@ -36,14 +36,14 @@ class PostManager extends Manager
 
     public function deletePost(int $id): void
     {
-        $query = $this->db->prepare('DELETE FROM posts WHERE id = ?');
+        $query = $this->database->prepare('DELETE FROM posts WHERE id = ?');
         $query->execute([$id]);
     }
     
     public function addPost(array $datas): void
     {
         $post = new Post($datas);
-        $query=$this->db->prepare(
+        $query=$this->database->prepare(
             'INSERT INTO posts (userId, title, standfirst, content, author, picture, pictureDescription) 
             VALUES (:userId, :title, :standfirst, :content, :author, :picture, :pictureDescription)'
         );
@@ -61,9 +61,9 @@ class PostManager extends Manager
     {
         $post = new Post($datas);
 
-        $query=$this->db->prepare(
+        $query=$this->database->prepare(
             'UPDATE posts 
-            SET userId = :userId, title = :title, standfirst = :standfirst, content = :content, author = :author, picture = :picture, pictureDescription = :pictureDescription
+            SET userId = :userId, title = :title, standfirst = :standfirst, content = :content, updatedAt = NOW(), author = :author, picture = :picture, pictureDescription = :pictureDescription
             WHERE id = :id'
         );
         $query->bindValue(':id', $post->getId(), \PDO::PARAM_INT);

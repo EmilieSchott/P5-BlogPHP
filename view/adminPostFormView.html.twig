@@ -163,50 +163,51 @@
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Merci !</span>
                             <span class="section-heading-main">Le billet a bien été enregistrée.</span>
-                            <p>
+                            <span class="section-heading-around text-center" >
                                 Vous pouvez reprendre une activité normale.
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row mb-5">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePosts">Revenir à la page "gérer les billets". </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
                     </div> 
                 {% elseif success is not empty and success == 0 %} 
                     <div class=" text-center mt-5 mb-2" id="message">
                         <h2 class="section-heading mb-4">
                             <span class="section-heading-around">Un problème est survenu :</span>
                             <span class="section-heading-main">{% if exceptionMessage is empty %} Le billet n'a pas pu être enregistrée. {% else %} {{ exceptionMessage }} {% endif %}.</span>
-                            <p>
+                            <span class="section-heading-around">
                                 {% if exceptionMessage is empty %} Nous sommes désolés de cet incident. {% else %} Le billet n'a pas pu être enregistrée.{% endif %} 
-                            </p>
+                            </span>
                         </h2>
                     </div>
                     <div class="row">
-                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePosts">Revenir à la page "gérer les billets". </a>
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
                     </div> 
                 {% else %}
                     <h2 class="section-heading mb-4">
                         <span class="section-heading-around">Panneau d'administration</span>
                         <span class="section-heading-main">{% if post is not empty %} Modifier {% else %} Créer {% endif %} un billet</span>
                     </h2>
-                    <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" class="px-2" enctype="multipart/form-data">
+                    <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" requireSSL="true" class="px-2" enctype="multipart/form-data">
                         {% if post is not empty %}<input type="hidden" name="postId" value="{{ post.id }}"/>{% else %}{% endif %}
+                        <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
                         <div class="row">
-                            <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label>Titre :</label>
                                 <input type="text" class="form-control" {% if post is not empty %} value="{{ post.title }}" {% else %}  {% endif %} placeholder="Donnez un titre au billet" name="title" id="title" required data-validation-required-message="Entrez un titre, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>  
                         <div class="row">
-                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label >Auteur :</label>
-                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}  {% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
+                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}{% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>    
                         <div class="row ">
-                            <div class="col-12 pl-0 mb-0 admin-field">
+                            <div class="col-12 pl-0 mb-0 admin-group">
                                 <div class="form-group col-12 mx-auto visible-label-form-group controls ">
                                     <label >Image :{% if post is not empty %} {{ post.picture }} {% else %}{% endif %}</label>
                                     {% if post is not empty %}<img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/upload/img/post/{{ post.picture }}" alt="{{ post.pictureDescription }}"> {% else %}{% endif %}
@@ -224,7 +225,7 @@
                             </div>
                         </div>   
                         <div class="row">
-                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label >Chapô :</label>
                                 <textarea rows="5"  class="form-control"  
                                 placeholder="Ecrivez un chapô (texte de présentation) à votre billet. Il sera affiché en gras au dessus de celui-ci et sera visible sur la page d'index du blog." 
@@ -234,7 +235,7 @@
                             </div>
                         </div>   
                         <div class="row">
-                            <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-field">
+                            <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
                                 <label>Contenu :</label>
                                 <textarea 
                                     rows="30" class="form-control editor" placeholder="Ecrivez le contenu de votre billet." name="content" id="content" 

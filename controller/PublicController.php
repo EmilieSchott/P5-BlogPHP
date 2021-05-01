@@ -4,26 +4,22 @@ namespace EmilieSchott\BlogPHP\Controller;
 
 use EmilieSchott\BlogPHP\Model\CommentManager;
 use EmilieSchott\BlogPHP\Model\PostManager;
-use EmilieSchott\BlogPHP\Paginator\Paginator;
 use League\OAuth2\Client\Provider\Google;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use Twig\Environment;
 
-class PublicController
+class PublicController extends Controller
 {
-    use Paginator;
-
-    public function homePage(Environment $twig, array $datas)
+    public function homePage(array $datas): void
     {
         if (array_key_exists('send', $datas) && ($datas['send'] < 0 || $datas['send'] > 1)) {
             unset($datas['send']);
         }
-        echo $twig->render('homeView.html.twig', $datas);
+        echo $this->twig->render('homeView.html.twig', $datas);
     }
     
-    public function contactMe()
+    public function contactMe(): void
     {
         if (
             empty($_POST['name']) ||
@@ -94,25 +90,26 @@ class PublicController
         header('Location: index.php');
     }
 
-    public function blog(PostManager $postManager, Environment $twig, array $datas)
+    public function blogIndex(array $datas): void
     {
         try {
+            $postManager = new PostManager();
             $posts = $postManager->getList();
-            $postsPages = $this->paginator($posts, 3);
+            $postsPages = $this->paginate($posts, 3);
             $datas['pagesNumber'] = $postsPages['pagesNumber'];
             $datas['posts'] =  $this->displayPage($postsPages, $datas['page']);
-            echo $twig->render('blogView.html.twig', $datas);
+            echo $this->twig->render('blogView.html.twig', $datas);
         } catch (\Exception $e) {
             $datas['blogException'] = $e->getMessage();
-            echo $twig->render('blogView.html.twig', $datas);
+            echo $this->twig->render('blogView.html.twig', $datas);
         }
     }
  
-    public function post(PostManager $postManager, CommentManager $commentManager, Environment $twig, array $datas)
+    public function postPage(array $datas): void
     {
         if ($datas['id'] > 0) {
             try {
-                $this->getPostAndComments($postManager, $commentManager, $datas);
+                $this->getPostAndComments($datas);
             } catch (\Exception $e) {
                 $datas['commentsException'] = $e->getMessage();
             }
@@ -120,28 +117,30 @@ class PublicController
                 unset($datas['success']);
             }
 
-            echo $twig->render('postView.html.twig', $datas);
+            echo $this->twig->render('postView.html.twig', $datas);
         } else {
             throw new \Exception("L'identifiant du billet indiqué n'est pas valide.");
         }
     }
 
-    private function getPostAndComments(PostManager $postManager, CommentManager $commentManager, array &$datas)
+    private function getPostAndComments(array &$datas): void
     {
+        $postManager = new PostManager();
         $post = $postManager->getPost($datas['id']);
         $datas['post'] = $post;
         if (is_null($datas['post'])) {
             throw new \Exception("Le billet demandé n'a pas pu être récupéré.");
         }
+        $commentManager = new CommentManager();
         $comments = $commentManager->getComments($datas['id']);
         if (!empty($comments)) {
-            $commentsPages = $this->paginator($comments, 5);
+            $commentsPages = $this->paginate($comments, 5);
             $datas['pagesNumber'] = $commentsPages['pagesNumber'];
             $datas['comments'] = $this->displayPage($commentsPages, $datas['page']);
         }
     }
 
-    public function addComment(CommentManager $commentManager): void
+    public function addComment(): void
     {
         $datas = [
             'author' => $_POST['author'],
@@ -151,10 +150,11 @@ class PublicController
         $datas['status'] = $_SESSION['role'] === 'Admin'  ? 'Validé' : 'En attente';
 
         try {
+            $commentManager = new CommentManager();
             $commentManager->addComment($datas);
         } catch (\PDOException $PDO) {
-            header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=0&#addComment');
+            header('Location: index.php?action=postPage&id=' . $datas['postId'] . '&success=0&#addComment');
         }
-        header('Location: index.php?action=post&id=' . $datas['postId'] . '&success=1&#addComment');
+        header('Location: index.php?action=postPage&id=' . $datas['postId'] . '&success=1&#addComment');
     }
 }
