@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} Confirmation suppression {% endblock %}
+{% block description %} Panneau d'administration demandant confirmation de la suppression. {% endblock %}
+{% block image %}public/theme/Web-Link.jpg{% endblock %}
+{% block type %} website {% endblock %}
+{% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <section class="page-section">
+        <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
+            <div class="back-content offset-lg-1 bg-faded rounded" id="list">
+                {% if exceptionMessage is not empty %}
+                    <div class="mt-5 d-flex justify-content-center">
+                        <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                            <h4 class="section-heading">
+                                <span class="section-heading-around text-center" >Un problème est survenu :</span>
+                                <span class="section-heading-main text-center"> {{ exceptionMessage }} </span>
+                                <span class="section-heading-around text-center" >
+                                    Nous sommes désolés de cet incident.
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
+                    </div> 
+                {% elseif deleteSuccess is not empty and deleteSuccess == 1 %}
+                    <div class="mt-5 d-flex justify-content-center">
+                        <div class="comment-inner col-10 col-md-7 p-3 p-md-4 p-lg-4  rounded ">
+                            <h4 class="section-heading">
+                                <span class="section-heading-around text-center" >Action effectuée avec succès :</span>
+                                <span class="section-heading-main text-center"> L'entité a bien été supprimée. </span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
+                    </div> 
+                {% elseif post is not empty %}
+                    <div class=" text-center mt-5 mb-2" id="message">
+                        <h4 class="section-heading">
+                            <span class="section-heading-around">Voulez-vous vraiment supprimer le billet : </span>
+                            <span class="section-heading-main"> {{ post.title }}</span> 
+                            <span class="section-heading-around">posté le {{ post.createdAt }} ? </span>
+                        </h4>
+                    </div>
+                    <div class="row mb-5 mt-5">
+                        <div class="col-12 col-sm-6 text-center text-sm-right mb-1 mt-1">
+                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=managePostsPage" >Non, Annuler !</a> 
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
+                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=post&amp;id={{ post.id }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 
+                        </div>
+                    </div> 
+                    {% elseif user is not empty %}
+                    <div class=" text-center mt-5 mb-2" id="message">
+                        <h4 class="section-heading">
+                            <span class="section-heading-around">Voulez-vous vraiment supprimer l'utilisateur dont le pseudo est : </span>
+                            <span class="section-heading-main"> {{ user.pseudo }}</span> 
+                            <span class="section-heading-around"> ? </span>
+                        </h4>
+                    </div>
+                    <div class="row mb-5 mt-5">
+                        <div class="col-12 col-sm-6 text-center text-sm-right mb-1 mt-1">
+                            <a class="btn btn-hard-primary btn-xl" href="index.php?action=manageUsersPage" >Non, Annuler !</a> 
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-left mb-1 mt-1">
+                            <a class="btn btn-hard-red btn-xl" href="index.php?action=deleteEntity&amp;entity=user&amp;pseudo={{ user.pseudo }}&amp;token={{ userSession.token }}" >Oui, Supprimer !</a> 
+                        </div>
+                    </div> 
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}<link href="public/theme/css/style.css" rel="stylesheet">{% endblock %} 
+{% block title %}Accueil{% endblock %}
+{% block description %}Si vous souhaitez en apprendre plus sur l'autrice de ce blog, vous trouverez tout ce qu'il vous faut sur cette page.{% endblock %}
+{% block image %}public/theme/Web-Link.jpg{% endblock %}
+{% block type %}website{% endblock %}
+{% block url %}<!-- Site URL to complete : http://www.example.com/ -->{% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    {% if homePageException is not empty %}
+        <section class="page-section">
+            <div class="container">
+                <div class="post-item">
+                    <div class="bg-faded col-10 mx-auto p-3 offset-1 offset-lg-0 p-3 p-md-4 p-xl-5 rounded">
+                        <h2 class="section-heading text-center">
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> {{ homePageException }}</span>
+                            <span class="section-heading-around">
+                                Vous avez été redirigé.
+                            </span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+
+    <section class="page-section clearfix">
+        <div class="container">
+            <div class="intro">
+                <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="public/theme/img/portrait ES.jpg" alt="Portrait d'Emilie Schott"/>
+                <div class="intro-text col-11 text-center bg-faded mx-auto left-md-0 p-3 p-md-4 p-lg-5 rounded">
+                    <h2 class="section-heading mb-4">
+                        <span class="section-heading-around">Développeuse de solutions</span>
+                        <span class="section-heading-main">Emilie Schott</span>
+                    </h2>
+                    <p class="mb-3">Accessible par tous, tout le temps et avec facilité, le web est créateur de lien entre les gens tout autour du monde. 
+                        <br><br>
+                        C’est une ressource formidable, un outil puissant, qui rendra les fonctionnalités dont vous avez besoin pour vos projets disponibles où que vous, ou vos collaborateurs, soyez.
+                        Si vous avez un projet, le web peut lui apporter sa solution.
+                        <br><br>
+                        C’est cette conviction qui m'a poussée à me spécialiser dans le développement web, et si vous aussi vous partagez cette vision, peut être serons-nous amenés à travailler ensemble, qui sait ?
+                    </p>
+                    <div class="intro-button">
+                        <a class="btn btn-primary btn-xl" href="public/download/CV_Emilie_Schott.pdf">Télécharger mon CV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section contact clearfix">
+        <div class="container">
+            <div class="contact-tool" id="contact-tool">
+                <div class="contact-inner text-center p-3 pb-5 p-md-4 p-lg-5 rounded">
+                    {% if contactFormMessage is not empty and send == 0 %}                         
+                        <div class="message" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-around">Un problème est survenu :</span>
+                                <span class="section-heading-main"> {{ contactFormMessage }} </span>
+                                <span class="section-heading-around">
+                                    Nous sommes désolés de cet incident.
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="row">
+                            <a class="btn btn-primary btn-xl retry-button" href="index.php?action=homePage#contact-tool">Réessayer ? </a>
+                        </div> 
+                    {% elseif send == 1 %}                         
+                        <div class="message" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-around">Merci !</span>
+                                <span class="section-heading-main"> Votre message a bien été envoyé. </span>
+                                <span class="section-heading-around">
+                                    Nous vous répondrons dès que possible.
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="row">
+                            <a class="btn btn-primary btn-xl retry-button" href="index.php?action=homePage#contact-tool">Réessayer ? </a>
+                        </div> 
+                    {% else %}
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Me</span>
+                            <span class="section-heading-main">contacter</span>
+                        </h2>
+                        <form name="sentMessage" id="contactForm" action="index.php?action=contactMe" requireSSL="true" method="post">
+                            <div class="row">
+                                <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Nom</label>
+                                        <input type="text" class="form-control" placeholder="Nom" name="name" id="name" required data-validation-required-message="Entrez votre nom, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Prénom</label>
+                                        <input type="text" class="form-control" placeholder="Prénom" name="firstName" id="firstName" required data-validation-required-message="Entrez votre prénom, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="form-group floating-label-form-group controls">
+                                        <label>Addresse email </label>
+                                        <input type="email" class="form-control" placeholder="Addresse Email" name="email" id="email" required data-validation-required-message="Entrez votre email, s'il vous plait.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-6 mx-auto col-xs-12 floating-label-form-group controls">
+                                    <label>Message</label>
+                                    <textarea rows="5" class="form-control" placeholder="Message" name="message" id="message" required data-validation-required-message="Tapez un message, s'il vous plait."></textarea>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>    
+                            <div class="row">
+                                <button type="submit" class="btn btn-primary btn-xl submit-button">Envoyer</button>
+                            </div>            
+                        </form>
+                    {% endif %}
+                </div>
+            
+                <div class="RS-border col-10 offset-1 col-md-6 offset-md-5 col-xl-6 offset-xl-4  rounded ">
+                    <div class="contact-RS text-center p-3  rounded">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Me suivre sur les</span>
+                            <span class="section-heading-main">réseaux sociaux</span>
+                        </h2>
+
+                        <a href="https://github.com/EmilieSchott/">
+                            <svg xmlns="http://www.w3.org/2000/svg"   viewBox="20 20.2 50 50">
+                                <g>
+                                    <path class="contour" d="M68.2 65c0 1.9-1.6 3.4-3.4 3.4H25.2c-1.9 0-3.4-1.6-3.4-3.4V25.3c0-1.9 1.6-3.4 3.4-3.4h39.6c1.9 0 3.4 1.6 3.4 3.4V65z" 
+                                    stroke-width="2.784" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                    <path class="intern" d="M58.8 37.6c-1.4-2.5-3.4-4.4-5.8-5.8-2.5-1.4-5.1-2.1-8-2.1-2.9 0-5.6.7-8 2.1-2.5 1.4-4.4 3.4-5.8 5.8-1.4 2.5-2.1 5.1-2.1 8 0 3.5 1 6.6 3 9.4 2.1 2.7 4.7 4.7 7.9 5.8.3.1.6 0 .8-.1.2-.1.3-.3.3-.6V59v-1.9l-.5.1c-.3.1-.7.1-1.2.1s-1-.1-1.4-.1c-.5-.1-1-.3-1.4-.6-.4-.3-.8-.8-.9-1.3l-.2-.5c-.1-.3-.3-.7-.7-1-.3-.4-.6-.6-.9-.8l-.1-.2c-.1-.1-.2-.1-.3-.3-.1-.1-.1-.2-.2-.3-.1-.1 0-.2.1-.2.1-.1.3-.1.6-.1l.4.1c.3.1.6.2 1 .5s.8.6 1 1.1c.3.5.7 1 1.2 1.3.5.3.9.5 1.4.5.5 0 .8-.1 1.2-.1.3-.1.6-.2 1-.3.1-1 .5-1.6 1-2.1-.8-.1-1.5-.2-2.1-.3-.6-.1-1.3-.4-1.9-.8-.7-.3-1.2-.8-1.6-1.4-.4-.5-.8-1.3-1.1-2.2-.3-.9-.4-1.9-.4-3.1 0-1.6.5-3.1 1.6-4.3-.5-1.2-.5-2.7.1-4.3.4-.1 1 0 1.8.3s1.4.5 1.7.8c.3.2.7.4.9.5 1.3-.3 2.6-.5 4-.5s2.7.2 4 .5l.8-.5c.5-.3 1.2-.6 1.9-.9.8-.3 1.3-.3 1.7-.2.6 1.6.7 3 .1 4.3 1.1 1.2 1.6 2.6 1.6 4.3 0 1.2-.1 2.2-.4 3.2-.3.9-.6 1.6-1.1 2.2-.5.6-1 1-1.7 1.4-.7.3-1.3.6-1.9.8-.6.1-1.4.3-2.1.3.7.6 1.1 1.6 1.1 3v4.4c0 .3.1.5.3.6.2.1.5.2.8.1 3.2-1.1 5.8-3 7.8-5.8 2.1-2.7 3-5.9 3-9.4-.2-3.3-.9-5.9-2.3-8.3z"/>
+                                </g>
+                            </svg>
+                        </a>
+
+                        <a href="https://www.linkedin.com/in/emilie-schott-91bb61192/">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="20 20.2 50 50">
+                                <g>    
+                                    <path class="contour" d="M68.1 64.8c0 1.9-1.6 3.4-3.4 3.4H25.3c-1.9 0-3.4-1.6-3.4-3.4V25.3c0-1.9 1.6-3.4 3.4-3.4h39.4c1.9 0 3.4 1.6 3.4 3.4v39.5z" 
+                                    stroke-width="2.772" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                    <path class="intern" d="M35.9 38.3c-1.4 0-2.3-1.1-2.3-2.1 0-1.2.8-2.4 2.3-2.4 1.3 0 2.3 1 2.3 2.3 0 1.3-.9 2.2-2.3 2.2z"/>
+                                    <path class="intern" d="M35.9 34.1c1.1 0 1.9.8 1.9 1.9 0 1-.5 1.9-1.9 1.9-1.2 0-1.9-.9-1.9-1.8 0-1 .7-2 1.9-2m0-.7c-1.6 0-2.6 1.3-2.6 2.7 0 1.3 1 2.5 2.6 2.5 1.7 0 2.6-1.2 2.6-2.6 0-1.4-1-2.6-2.6-2.6z"/>
+                                    <path class="intern" d="M33.6 40.2h4.5v16.2h-4.5z"/>
+                                    <path class="intern" d="M37.8 40.6v15.5H34V40.6h3.8m.7-.7h-5.2v16.9h5.2V39.9z"/>
+                                    <path class="intern" d="M51.8 56.4v-8.6c0-2.5-1.1-4-2.9-4-1.8 0-2.5 1.6-2.8 2.3-.1.5-.1.9-.1 1.4v8.9h-4.5V45.6c0-1-.1-2.1-.1-2.9 0-.6-.1-1.2-.1-1.8h4l.3 2.2h.6l.1-.1c.3-.5 1.8-2.5 4.6-2.5 3.4 0 5.3 2.5 5.3 6.6v9.2l-4.4.1z"/>
+                                    <path class="intern" d="M50.9 40.8c3.2 0 5 2.3 5 6.3V56h-3.8v-8.2c0-2.7-1.2-4.3-3.3-4.3-2.1 0-2.8 1.8-3.1 2.5-.1.5-.1 1-.1 1.5V56h-3.8V45.6c0-1.1-.1-2.1-.1-2.9 0-.5-.1-1-.1-1.4H45l.2 1.6.1.6h1.1l.2-.3c.3-.6 1.7-2.4 4.3-2.4m0-.7c-2.7 0-4.3 1.6-4.9 2.6h-.1l-.3-2.2H41c0 1.4.1 3.1.1 5.1v11.1h5.2v-9.2c0-.5 0-.9.1-1.3.4-.9 1-2.1 2.5-2.1 1.8 0 2.6 1.6 2.6 3.6v9h5.2v-9.6c0-4.7-2.5-7-5.8-7z"/>
+                                </g>
+                            </svg>
+                        </a>
+
+                        <a href="https://twitter.com/SchottEmilie1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="20 20.2 50 50">
+                                <g>    
+                                    <path class="contour" d="M68.3 65c0 1.9-1.6 3.4-3.4 3.4H25.3c-1.9 0-3.4-1.6-3.4-3.4V25.5c0-1.9 1.6-3.4 3.4-3.4h39.5c1.9 0 3.4 1.6 3.4 3.4V65z" 
+                                    stroke-width="2.78" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+                                    <path class="intern" d="M30.9 54.3c3.2.3 5.9-.5 8.4-2.3-.5-.1-1-.2-1.4-.3-1.7-.5-2.9-1.6-3.6-3.3-.2-.5-.2-.5.3-.5s1.1.1 1.8-.1c-1-.3-1.9-.8-2.5-1.4-1.1-1.1-1.8-2.4-1.9-3.9-.1-.6 0-.7.5-.4.5.3 1.1.4 1.8.4-.4-.5-.9-.8-1.2-1.3-1.3-1.9-1.5-3.8-.6-5.9.2-.5.3-.5.8-.1 2 2.2 4.3 3.8 7.1 4.8 1.2.4 2.5.7 3.8.8.7.1.8 0 .6-.7-.3-2.3 1-4.7 3.2-5.8 2.1-1.1 4.9-.8 6.6.8.3.3.7.3 1.1.3.9-.3 1.8-.5 2.6-1 .1-.1.3-.2.5-.1-.4 1.2-1.2 2.2-2.2 3 1-.1 1.9-.4 2.9-.8 0 .3-.2.5-.3.7-.6.8-1.2 1.4-2 2-.3.3-.5.5-.5 1 .1 3.9-1.2 7.4-3.5 10.5-2.7 3.7-6.5 5.8-11 6.3-3.8.5-7.3-.3-10.6-2.1-.1-.1-.2-.1-.3-.2-.3-.2-.3-.3-.4-.4z"/>
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

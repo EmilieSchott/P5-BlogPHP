@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        {% block head %}
+
+            {% block script %}{% endblock %}
+
+            <meta charset="utf-8">
+
+            <title>Blog Web-Link - {{ block('title') }}</title>
+
+            <meta name="author" content="{{ block('author') }}">
+            <meta name="description" content="{{ block('description') }}"/> 
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
+
+            <meta itemprop="name" content="{{ block('title') }}">
+            <meta itemprop="description" content="{{ block('description') }}">
+            <meta itemprop="image" content="{{ block('image') }}">
+
+            <meta name="twitter:card" content="{{ block('description') }}">
+            <meta name="twitter:site" content="{{ block('author') }}">
+            <meta name="twitter:title" content="{{ block('title') }}">
+            <meta name="twitter:image" content="{{ block('image') }}">
+
+            <meta property="og:title" content="{{ block('title') }}"/>
+            <meta property="og:type" content="{{ block('type') }}"/> 
+            <meta property="og:url" content="{{ block('url') }}"/> 
+            <meta property="og:image" content="{{ block('image') }}"/>
+            <meta property="og:description" content="{{ block('description') }}"/>
+
+            <link href="public/theme/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
+            {{ block('stylesheet') }}
+
+            <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">  
+
+            {% endblock %}
+    </head>
+
+    <body>
+        <header>
+{% block header %}  
+            <h1 class="site-heading text-center text-white">
+                <span class="site-heading-upper mb-3">Le blog d'une développeuse</span>
+                <span class="site-heading-lower">Web-Link</span>
+            </h1>
+
+            <nav class="navbar navbar-expand-lg navbar-dark py-lg-3" id="mainNav">
+                <div class="container">
+                    <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item px-lg-4">
+                                <a  {% if action == 'homePage' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=homePage">A propos...</a>
+                            </li>
+                            <li class="nav-item px-lg-4">
+                                <a {% if action == 'blogIndex' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=blogIndex&amp;page=1">Blog</a>
+                            </li>
+                            {% if userSession.role == ('Admin' or 'Lecteur') %}
+                            <li class="nav-item px-lg-4">
+                                <a {% if office == 'back' %} class="nav-link text-uppercase text-expanded active" aria-current="page"{% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=accountPage">Mon compte</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+{% endblock %}
+        </header>
+
+        <div id="content">
+            {% if office == 'back' %}
+                <nav class="back-nav col-10 col-lg-3 offset-1 rounded">
+                    <ul class="navbar-nav mx-auto ">
+                        <li  class="nav-item px-lg-4" >
+                            <a {% if action == 'accountPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=accountPage">Mes Informations</a>
+                        </li>
+                        <li  class="nav-item px-lg-4"  >
+                            <a {% if action == 'myCommentsPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=myCommentsPage">Mes commentaires</a>
+                        </li>
+                        {% if userSession.role == 'Admin' %}
+                        <li class="nav-item px-lg-4" >
+                            <a {% if action == 'managePostsPage' %} class="nav-link text-uppercase  active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=managePostsPage">Gérer les billets</a>
+                        </li>
+                        <li  class="nav-item px-lg-4">
+                            <a {% if action == 'manageCommentsPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageCommentsPage">Gérer les commentaires</a>
+                        </li>
+                        <li class="nav-item px-lg-4">
+                            <a {% if action == 'manageUsersPage' %} class="nav-link text-uppercase active" aria-current="page" {% else %} class="nav-link text-uppercase text-expanded" {% endif %} href="index.php?action=manageUsersPage">Gérer les utilisateurs</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="index.php?action=disconnect">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+            {{ block('content') }}
+        </div>
+
+        <footer>
+            {% block footer %}
+            <div class="container">
+                <p class="m-0 small">Thème "Business Casual" par startbootstrap.com - Copyright &copy; Emilie Schott 2021 - <a href="index.php?action=connexion">Se connecter</a></p>
+            </div>
+            {% endblock %}
+        </footer>
+
+        <script src="public/theme/vendor/jquery/jquery.min.js"></script>
+        <script src="public/theme/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+
+</html>

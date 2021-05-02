@@ -1,0 +1,258 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} {% if post is not empty %} Modifier {% else %} Créer {% endif %} un billet {% endblock %}
+{% block description %}Panneau d'administration permettant de {% if post is not empty %} Modifier {% else %} Créer {% endif %} un billet.{% endblock %}
+{% block image %}public/theme/Web-Link.jpg{% endblock %}
+{% block type %} website {% endblock %}
+{% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+{% block script %}
+<script src="vendor/tinymce/tinymce/tinymce.min.js"></script>
+<script type="text/javascript"> tinymce.init({
+    selector: '.editor',
+    setup: function (editor) {
+        editor.on('change', function () {
+            editor.save();
+        });
+    },
+    menubar : false,
+    toolbar_mode: 'wrap',
+    plugins: ['lists preview code media codesample emoticons link table quickbars searchreplace wordcount'],
+    toolbar: [
+        {
+        name: 'history', items: [ 'undo', 'redo' ]
+        },
+        {
+        name: 'styles', items: [ 'styleselect' ]
+        },
+        {
+        name: 'select', items: [ 'fontselect', 'fontsizeselect', 'lineheight', 'removeformat']
+        },
+        {
+        name: 'formatting', items: [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'codeformat' ]
+        },
+        {
+        name: 'alignment', items: [ 'alignleft', 'aligncenter', 'alignright', 'alignjustify']
+        },
+        {
+        name: 'list', items: [ 'bullist', 'numlist']
+        },
+        {
+        name: 'decorations', items: [ 'forecolor', 'backcolor', 'emoticons']
+        },
+        {
+        name: 'code', items: [ 'codesample', 'outdent', 'indent', 'code' ]
+        },
+        {
+        name: 'insert', items: [ 'quickimage','media', 'table' ]
+        },
+        {
+        name: 'link', items: [ 'link', 'openlink', 'unlink' ]
+        },
+        {
+        name: 'tools', items: [ 'searchreplace','wordcount','preview' ]
+        }
+    ],
+    spellchecker_language: 'fr_FR',
+    spellchecker_languages: 'Français=fr_FR,Anglais=en',
+    font_formats: 'Lora=Lora;Raleway=Raleway',
+    fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 40pt 44pt 48pt',
+    preview_styles: 'font-size font-weight color background-color border border-radius outline text-shadow',
+    content_style:  'p {line-height: 1.75; font-size: 16px; font-family: "Lora";}' +
+                    'h1 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h2 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h3 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h4 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h5 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'h6 {text-transform: uppercase; font-family: "Raleway"; font-weight :100;}' +
+                    'a {color:#7b858e;}' +
+                    'a:hover, .current {color: #006699; text-decoration: none;}' +
+                    '.section-heading-main {font-size: 1.8rem; font-weight: 100; text-transform: uppercase;}' +
+                    '.section-heading-around {display: block; font-size: 16px; font-weight: 700;}',
+    color_map: [
+        '#BFEDD2', 'Light Green',
+        '#FBEEB8', 'Light Yellow',
+        '#F8CAC6', 'Light Red',
+        '#ECCAFA', 'Light Purple',
+        '#C2E0F4', 'Light Blue',
+    
+        '#2DC26B', 'Green',
+        '#F1C40F', 'Yellow',
+        '#E03E2D', 'Red',
+        '#B96AD9', 'Purple',
+        '#3598DB', 'Blue',
+    
+        '#169179', 'Dark Turquoise',
+        '#E67E23', 'Orange',
+        '#BA372A', 'Dark Red',
+        '#843FA1', 'Dark Purple',
+        '#236FA1', 'Dark Blue',
+    
+        '#ECF0F1', 'Light Gray',
+        '#CED4D9', 'Medium Gray',
+        '#95A5A6', 'Gray',
+        '#7E8C8D', 'Dark Gray',
+        '#34495E', 'Navy Blue',
+
+        '#7b858e', 'Website Gray',
+        '#d9e6ed', 'Website Grayish White',
+        '#006699', 'Website Blue',
+        
+        '#000000', 'Black',
+        '#ffffff', 'White'
+    ],
+    codesample_languages: [
+    {text: 'HTML/XML', value: 'markup'},
+    {text: 'JavaScript', value: 'javascript'},
+    {text: 'CSS', value: 'css'},
+    {text: 'PHP', value: 'php'},
+    {text: 'Ruby', value: 'ruby'},
+    {text: 'Python', value: 'python'},
+    {text: 'Java', value: 'java'},
+    {text: 'Twig', value: 'twig'},
+    {text: 'C', value: 'c'},
+    {text: 'C#', value: 'csharp'},
+    {text: 'C++', value: 'cpp'}
+],
+    style_formats: [
+    { title: 'Headings', items: [
+        { title: 'Heading 1', format: 'h1' },
+        { title: 'Heading 2', format: 'h2' },
+        { title: 'Heading 3', format: 'h3' },
+        { title: 'Heading 4', format: 'h4' },
+        { title: 'Heading 5', format: 'h5' },
+        { title: 'Heading 6', format: 'h6' }
+    ]},
+    { title: 'Blocks', items: [
+        { title: 'Paragraph', format: 'p' },
+        { title: 'Blockquote', format: 'blockquote' },
+        { title: 'Div', format: 'div' },
+        { title: 'Pre', format: 'pre' }
+    ]},
+    { title: 'Containers', items: [
+      { title: 'section', block: 'section', wrapper: true, merge_siblings: false },
+      { title: 'article', block: 'article', wrapper: true, merge_siblings: false },
+      { title: 'blockquote', block: 'blockquote', wrapper: true },
+      { title: 'hgroup', block: 'hgroup', wrapper: true },
+      { title: 'aside', block: 'aside', wrapper: true },
+      { title: 'figure', block: 'figure', wrapper: true }
+    ] }
+    ]
+    
+}); </script>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <section class="page-section">
+        <div class="container col-12 col-lg-8 offset-lg-3">
+            <div class="back-content offset-lg-1 bg-faded rounded " id="form">
+                {% if success is not empty and success == 1 %} 
+                    <div class=" text-center mt-5 mb-2" id="message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Merci !</span>
+                            <span class="section-heading-main">Le billet a bien été enregistrée.</span>
+                            <span class="section-heading-around text-center" >
+                                Vous pouvez reprendre une activité normale.
+                            </span>
+                        </h2>
+                    </div>
+                    <div class="row mb-5">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
+                    </div> 
+                {% elseif success is not empty and success == 0 %} 
+                    <div class=" text-center mt-5 mb-2" id="message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main">{% if exceptionMessage is empty %} Le billet n'a pas pu être enregistrée. {% else %} {{ exceptionMessage }} {% endif %}.</span>
+                            <span class="section-heading-around">
+                                {% if exceptionMessage is empty %} Nous sommes désolés de cet incident. {% else %} Le billet n'a pas pu être enregistrée.{% endif %} 
+                            </span>
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <a class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3" href="index.php?action=managePostsPage">Revenir à la page "gérer les billets". </a>
+                    </div> 
+                {% else %}
+                    <h2 class="section-heading mb-4">
+                        <span class="section-heading-around">Panneau d'administration</span>
+                        <span class="section-heading-main">{% if post is not empty %} Modifier {% else %} Créer {% endif %} un billet</span>
+                    </h2>
+                    <form name="sentPost" id="postForm" action="index.php?action=sendPostForm" method="post" requireSSL="true" class="px-2" enctype="multipart/form-data">
+                        {% if post is not empty %}<input type="hidden" name="postId" value="{{ post.id }}"/>{% else %}{% endif %}
+                        <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
+                        <div class="row">
+                            <div class="form-group col-xl-12 mx-auto col-xs-11  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
+                                <label>Titre :</label>
+                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.title }}" {% else %}  {% endif %} placeholder="Donnez un titre au billet" name="title" id="title" required data-validation-required-message="Entrez un titre, s'il vous plait." />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
+                                <label >Auteur :</label>
+                                <input type="text" class="form-control" {% if post is not empty %} value="{{ post.author }}" {% else %}{% endif %} placeholder="Qui est l'auteur du billet ?" name="author" id="author" required data-validation-required-message="Entrez un auteur, s'il vous plait." />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>    
+                        <div class="row ">
+                            <div class="col-12 pl-0 mb-0 admin-group">
+                                <div class="form-group col-12 mx-auto visible-label-form-group controls ">
+                                    <label >Image :{% if post is not empty %} {{ post.picture }} {% else %}{% endif %}</label>
+                                    {% if post is not empty %}<img class="post-item-img img-fluid rounded  mx-auto d-flex mb-lg-0" src="public/upload/img/post/{{ post.picture }}" alt="{{ post.pictureDescription }}"> {% else %}{% endif %}
+                                    {% if post is not empty %}<input type="hidden" class="form-control" value="{{ post.picture }}" name="oldPicture" id="oldPicture"> {% else %}{% endif %} 
+                                    {% if post is not empty %} <br><label>Si vous souhaitez remplacez l'image :</label> {% else %}{% endif %}
+                                    <input type="file" class="form-control" placeholder="Téléversez une image" name="newPicture" id="newPicture" {% if post is not empty %} {% else %} required data-validation-required-message="Téléverser une image, s'il vous plait."{% endif %} > 
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group col-12 mx-auto   {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls ">
+                                    <label >Description de l'image :</label>
+                                    <textarea rows="3" class="form-control" placeholder="Décrivez l'image avec maximum 250 caractères." name="pictureDescription" id="pictureDescription" 
+                                    required data-validation-required-message="Entrez une description à l'image, s'il vous plait." >{% if post is not empty %} {{ post.pictureDescription }} {% else %}{% endif %}</textarea>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                        </div>   
+                        <div class="row">
+                            <div class="form-group col-12 mx-auto  {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
+                                <label >Chapô :</label>
+                                <textarea rows="5"  class="form-control"  
+                                placeholder="Ecrivez un chapô (texte de présentation) à votre billet. Il sera affiché en gras au dessus de celui-ci et sera visible sur la page d'index du blog." 
+                                name="standfirst" id="standfirst" 
+                                required data-validation-required-message="Entrez un chapô s'il vous plait.">{% if post is not empty %}{{ post.standfirst }}{% else %}{% endif %}</textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>   
+                        <div class="row">
+                            <div class="form-group col-12 mx-auto {% if post is not empty %} visible-label-form-group {% else %} floating-label-form-group  {% endif %} controls admin-group">
+                                <label>Contenu :</label>
+                                <textarea 
+                                    rows="30" class="form-control editor" placeholder="Ecrivez le contenu de votre billet." name="content" id="content" 
+                                    required data-validation-required-message="Tapez un contenu, s'il vous plait.">{% if post is not empty %}{{ post.content }}{% else %}{% endif %}</textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>    
+                        <div class="row mt-3 mt-lg-1 mt-xl-4">
+                            <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3">Envoyer</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

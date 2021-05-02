@@ -1,0 +1,130 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheet %}
+    <link href="public/theme/css/style.css" rel="stylesheet">
+{% endblock %}
+{% block title %} Modifier mes informations {% endblock %}
+{% block description %} Page permettant la modification des données personnelles. {% endblock %}
+{% block image %}public/theme/Web-Link.jpg{% endblock %}
+{% block type %} website {% endblock %}
+{% block url %} <!-- Site URL to complete : http://www.example.com/--> {% endblock %}
+{% block author %}Emilie Schott{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <section class="page-section">
+        <div class="container col-10 col-lg-8  offset-1 offset-lg-3">
+            <div class="back-content offset-lg-1 bg-faded rounded" id="list">
+                {% if success is not empty and success == 1 %} 
+                    <div class=" text-center mt-5 mb-5 mb-2" id="message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Merci !</span>
+                            <span class="section-heading-main">La modification a bien été enregistrée.</span>
+                            <span class="section-heading-around">Vous pouvez reprendre une activité normale.</span>
+                        </h2>
+                    </div>
+                {% elseif success is not empty and success == 0 %} 
+                    <div class=" text-center mt-5 mb-5 mb-2" id="message">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-around">Un problème est survenu :</span>
+                            <span class="section-heading-main"> {% if ExceptionMessage is empty %} La modification n'a pas pu être enregistrée. {% else %} {{ modificationException }} {% endif %} </span>
+                            <span class="section-heading-around">
+                                {% if exceptionMessage is empty %} Nous sommes désolés de cet incident. {% else %} La modification n'a pas pu être enregistrée. {% endif %} 
+                            </span>
+                        </h2>
+                    </div>
+                {% else %}
+                    <h2 class="section-heading mb-4">
+                        <span class="section-heading-around">Mon compte</span>
+                        <span class="section-heading-main">Modifier {% if userSession.role == 'Admin' and  userSession.pseudo != user.pseudo %}les{% else %}mes{% endif %} informations{% if userSession.role == 'Admin' and  userSession.pseudo != user.pseudo %} de  l'utilisateur "{{ user.pseudo }}"{% endif %}</span>
+                    </h2>
+                    <form name="modifyEmail" id="modifyEmail" action="index.php?action=modifyUser" requireSSL="true" method="post">
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>formName</label>
+                            <input type="hidden" class="form-control" value="modifyEmail" name="formName" id="formName">
+                        </div>
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>token</label>
+                            <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
+                        </div>
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>pseudo</label>
+                            <input type="hidden" class="form-control" value="{{ user.pseudo }}" name="pseudo" id="pseudo">
+                        </div>
+                        <div class=" d-flex flex-wrap flex-xl-nowrap align-items-end form-group list-floating-label-form-group controls">
+                            <label class="col-12 col-xl-2">Email :</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Nouvel email" name="email" id="email" required="required" data-validation-required-message="Entrez votre nouvel email, s'il vous plait.">
+                                <p class="help-block text-danger"></p>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary list-button">Envoyer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+                    <form name="modifyPassword" id="modifyPassword" action="index.php?action=modifyUser" requireSSL="true" method="post">
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>formName</label>
+                            <input type="hidden" class="form-control" value="modifyPassword" name="formName" id="formName">
+                        </div>
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>token</label>
+                            <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
+                        </div>
+                        <div class="form-group floating-label-form-group controls hidden">
+                            <label>pseudo</label>
+                            <input type="hidden" class="form-control" value="{{ user.pseudo }}" name="pseudo" id="pseudo">
+                        </div>
+                        <div class="d-flex flex-wrap flex-xl-nowrap align-items-end form-group list-floating-label-form-group controls">
+                            <label class="col-12 col-xl-2">Mot de passe :</label>
+                            <div class="input-group d-flex flex-wrap">
+                                <input type="password" class="form-control" placeholder="Ancien" name="password0" id="password0" required="required" data-validation-required-message="Entrez votre nouveau mot de passe, s'il vous plait.">
+                                <input type="password" class="form-control" placeholder="Nouveau" name="password1" id="password1" required="required" data-validation-required-message="Entrez votre nouveau mot de passe, s'il vous plait.">
+                                <input type="password" class="form-control" placeholder="Nouveau" name="password2" id="password2" required="required" data-validation-required-message="Entrez votre nouveau mot de passe, s'il vous plait.">
+                                <p class="help-block text-danger"></p>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary list-button">Envoyer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+                    {% if userSession.role == 'Admin' and  userSession.pseudo != user.pseudo %} 
+                        <form name="modifyPassword" id="modifyPassword" action="index.php?action=modifyUser" requireSSL="true" method="post">
+                            <div class="form-group floating-label-form-group controls hidden">
+                                <label>formName</label>
+                                <input type="hidden" class="form-control" value="modifyRole" name="formName" id="formName">
+                            </div>
+                            <div class="form-group floating-label-form-group controls hidden">
+                                <label>token</label>
+                                <input type="hidden" class="form-control" value="{{ userSession.token }}" name="token" id="token">
+                            </div>
+                            <div class="form-group floating-label-form-group controls hidden">
+                                <label>pseudo</label>
+                                <input type="hidden" class="form-control" value="{{ user.pseudo }}" name="pseudo" id="pseudo">
+                            </div>
+                            <div class="form-group floating-label-form-group controls hidden">
+                                <label>role</label>
+                                <input type="hidden" class="form-control" value={% if user.role == 'Lecteur' %}"Admin"{% elseif user.role == 'Admin' %}"Lecteur"{% endif %} name="role" id="role">
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary btn-xl col-10 col-lg-7 col-xl-6 mx-auto mt-1 mt-md-2 mt-lg-3">Passer l'utilisateur au statut {% if user.role == 'Lecteur' %}"Admin"{% elseif user.role == 'Admin' %}"Lecteur"{% endif %}</button>
+                            </div>
+                        </form> 
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

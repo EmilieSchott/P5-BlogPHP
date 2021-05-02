@@ -1,0 +1,24 @@
+{
+    "name": "emilie-schott/p5-blog-php",
+    "description": "Project 5 for Openclassrooms's formation : developper PHP / Symfony",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Emilie Schott",
+            "email": "emilie.schott@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php" : ">=7.3.12",
+        "twig/twig": "^3.1",
+        "phpmailer/phpmailer": "^6.2",
+        "league/oauth2-google": "^3.0",
+        "tinymce/tinymce": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "EmilieSchott\\BlogPHP\\": ""
+        }
+    }
+}
