@@ -10,7 +10,11 @@ You can consult digramms folder to see UML diagramms of the project.
 
 1) Clone this repository on your computer. 
 2) Run Composer, place yourself in the folder where you cloned this repository and run "composer install" command. 
-3) Install the database/scriptSql on your database with CLI : "mysql -u *username* -p *DBName* < *pathToFile.sql*"
+3) To create the database, tables and datas : 
+- Use phpmyadmin to import database/p5_blog_php.sql 
+OR 
+- Use a CLI, place you in the folder where is your current version mySQL on your computer (ex : C:\wamp64\bin\mysql\mysql8.0.18\bin\mysql) and run this command line : 
+"mysql -u *username* -p < C:\path\to\your\file\p5_blog_php.sql"
 4) Change connexion to database informations in Manager/PDOFactory.php
 5) Configure contact form sending in controller/PublicController.php in contactMe() method.
 
