@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `p5_blog_php`
 --
+CREATE DATABASE p5_blog_php;
+USE p5_blog_php; 
 
 -- --------------------------------------------------------
 
