@@ -1,4 +1,7 @@
 # A blog website with homepage to tell about you, blog index and administration pannel
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/990e76ea822c4f2ea2676140e1320b82)](https://app.codacy.com/gh/EmilieSchott/P5-BlogPHP?utm_source=github.com&utm_medium=referral&utm_content=EmilieSchott/P5-BlogPHP&utm_campaign=Badge_Grade_Settings)
+
 ========================================================================================
 
 ## Overview of the project
