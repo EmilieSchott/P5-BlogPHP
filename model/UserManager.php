@@ -22,12 +22,17 @@ class UserManager extends Manager
         return $users;
     }
     
-    public function getUser(string $pseudo): object
+    public function getUser(string $pseudo)
     {
         $query = $this->database->prepare('SELECT * FROM users WHERE pseudo = ?');
         $query->execute([$pseudo]);
+        $data = $query->fetch();
 
-        return new User($query->fetch());
+        if ($data === false) {
+            return $data;
+        }
+
+        return new User($data);
     }
 
     public function addUser(array $datas): void
